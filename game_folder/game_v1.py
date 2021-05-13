@@ -6,10 +6,8 @@ pygame.init()  # inicializa as rotinas do PyGame
 
 surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
 
-file = os.path.join("sprites", "SPRITE SPIDER MAN - Copia.png")
-
 try:
-    image = pygame.image.load("file")
+    image = pygame.image.load("SPRITE SPIDER MAN - Copia.png")
 except pygame.error:
     print("Erro ao tentar ler imagem: SPRITE SPIDER MAN - Copia.png")
     sys.exit()
