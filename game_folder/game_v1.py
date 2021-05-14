@@ -24,40 +24,72 @@ def main():
 
     clock = pygame.time.Clock()
 
-    position = [0, 0]  # lista fria
-    velocity = [0.2, 0.27]  # variável fria
+
+    spiderman_position = [0, 0]  # lista fria
+    spiderman_velocity = [0.2, 0.27]  # variável fria
+
+    circle_position = [250,250]
+    circle_var = {"left": 0, "right": 0, "up": 0, "down": 0}
+    circle_velocity = 0.3
+    
+    BLACK = (0,0,0)
+    RED = (255,0,0)
 
     while True:  # Loop infinito do game
         time = clock.tick(60)  # segura a taxa de quadros em 60 por segundo
         events = pygame.event.get()
         for event in events:
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 pygame.quit()  # termina o pygame
                 sys.exit()  # sai do jogo sem aparecer mensagem de erro
-        surface.fill((0,0,0))  # preenche o display em preto
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    circle_var["left"] = 1
+                elif event.key == pygame.K_RIGHT:
+                    circle_var["right"] = 1
+                elif event.key == pygame.K_UP:
+                    circle_var["up"] = 1
+                elif event.key == pygame.K_DOWN:
+                    circle_var["down"] = 1
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    circle_var["left"] = 0
+                elif event.key == pygame.K_RIGHT:
+                    circle_var["right"] = 0
+                elif event.key == pygame.K_UP:
+                    circle_var["up"] = 0
+                elif event.key == pygame.K_DOWN:
+                    circle_var["down"] = 0
+
+        circle_position[0] += (circle_var["right"] - circle_var["left"]) * circle_velocity * time
+        circle_position[1] += (circle_var["down"] - circle_var["up"]) * circle_velocity * time
+
+        surface.fill(BLACK)  # preenche o display em preto
         
-        position[0] += velocity[0] * time # faz com que a imagem se mova a cada atualização
-        position[1] += velocity[1] * time # faz com que a imagem se mova a cada atualização
+        spiderman_position[0] += spiderman_velocity[0] * time # faz com que a imagem se mova a cada atualização
+        spiderman_position[1] += spiderman_velocity[1] * time # faz com que a imagem se mova a cada atualização
 
-        if position[0] > (surface.get_width())-(image.get_width()):
-            velocity[0] = -(velocity[0])
-            position[0] = (surface.get_width())-(image.get_width())
+        if spiderman_position[0] > (surface.get_width())-(image.get_width()):
+            spiderman_velocity[0] = -(spiderman_velocity[0])
+            spiderman_position[0] = (surface.get_width())-(image.get_width())
 
-        elif position[0] < 0:
-            velocity[0] = -(velocity[0])
-            position[0] = 0
+        elif spiderman_position[0] < 0:
+            spiderman_velocity[0] = -(spiderman_velocity[0])
+            spiderman_position[0] = 0
         
-        if position[1] > (surface.get_height())-(image.get_height()):
-            velocity[1] = -(velocity[1])
-            position[1] = (surface.get_height())-(image.get_height())
+        if spiderman_position[1] > (surface.get_height())-(image.get_height()):
+            spiderman_velocity[1] = -(spiderman_velocity[1])
+            spiderman_position[1] = (surface.get_height())-(image.get_height())
 
-        elif position[1] < 0:
-            velocity[1] = -(velocity[1])
-            position[1] = 0
+        elif spiderman_position[1] < 0:
+            spiderman_velocity[1] = -(spiderman_velocity[1])
+            spiderman_position[1] = 0
 
-        surface.blit(image, position)  # mostra a imagem na tela
+        surface.blit(image, spiderman_position)  # mostra a imagem na tela
         
-        pygame.draw.circle(surface, (255,0,0), (250,250), 50)  # cria um círculo vermelho
+        pygame.draw.circle(surface, RED, circle_position, 50)  # cria um círculo vermelho
         pygame.display.flip()  # atualiza o que é mostrado na tela
 
 if __name__ == '__main__':
