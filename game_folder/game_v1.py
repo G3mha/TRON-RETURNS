@@ -14,16 +14,18 @@ def main():
 
     surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
 
+    pygame.display.set_caption("Spider Man Game")
+
     try:
-        image = pygame.image.load("SPRITE SPIDER MAN - Copia.png")
+        image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
     except pygame.error:
         print("Erro ao tentar ler imagem: SPRITE SPIDER MAN - Copia.png")
         sys.exit()
 
     clock = pygame.time.Clock()
 
-    position = 0  # variável fria
-    velocity = 0  # variável fria
+    position = [0, 0]  # lista fria
+    velocity = [0.2, 0.27]  # variável fria
 
     while True:  # Loop infinito do game
         time = clock.tick(60)  # segura a taxa de quadros em 60 por segundo
@@ -34,13 +36,26 @@ def main():
                 sys.exit()  # sai do jogo sem aparecer mensagem de erro
         surface.fill((0,0,0))  # preenche o display em preto
         
-        position += 0.2 * time # faz com que a imagem se mova a cada atualização
-        if position > 400-image.get_width():
-            velocity = -velocity
-        if position < 0:
-            velocity = -velocity
+        position[0] += velocity[0] * time # faz com que a imagem se mova a cada atualização
+        position[1] += velocity[1] * time # faz com que a imagem se mova a cada atualização
 
-        surface.blit(image, [position,0])  # mostra a imagem na tela
+        if position[0] > (surface.get_width())-(image.get_width()):
+            velocity[0] = -(velocity[0])
+            position[0] = (surface.get_width())-(image.get_width())
+
+        elif position[0] < 0:
+            velocity[0] = -(velocity[0])
+            position[0] = 0
+        
+        if position[1] > (surface.get_height())-(image.get_height()):
+            velocity[1] = -(velocity[1])
+            position[1] = (surface.get_height())-(image.get_height())
+
+        elif position[1] < 0:
+            velocity[1] = -(velocity[1])
+            position[1] = 0
+
+        surface.blit(image, position)  # mostra a imagem na tela
         
         pygame.draw.circle(surface, (255,0,0), (250,250), 50)  # cria um círculo vermelho
         pygame.display.flip()  # atualiza o que é mostrado na tela
