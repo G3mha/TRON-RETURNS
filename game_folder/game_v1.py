@@ -15,15 +15,35 @@ RED = (255,0,0)
 YELLOW = (255,255,0)
 
 
-class SpiderMan:
+class SpiderMan(pygame.sprite.Sprite):
     def __init__(self):
+        super().__init__()
         try:
             self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
         except pygame.error:
             print("Erro ao tentar ler imagem: SPRITE SPIDER MAN - Copia.png")
             sys.exit()
-        self.spiderman_velocity = [0.2, 0.27]  # lista de velocidades horizontal e vertical
-        self.rect = self.image.get_rect(
+        self.velocity = [0.2, 0.27]  # lista de velocidades horizontal e vertical
+        self.rect = self.image.get_rect()
+    
+    def update(self, time):
+        width, height = pygame.display.get_surface().get_size()
+        self.rect.x += self.velocity[0] * time
+        self.rect.y += self.velocity[1] * time
+        # regula o movimento do Spider Man horizontalmente, para que ele não saia da tela
+        if self.rect.x > width-(self.rect.width):
+            self.velocity[0] = -(self.velocity[0])
+            self.rect.x = width-(self.rect.width)
+        elif self.rect.x < 0:
+            self.velocity[0] = -(self.velocity[0])
+            self.rect.x = 0
+        # regula o movimento do Spider Man verticalmente, para que ele não saia da tela
+        if self.rect.y > height-(self.rect.height):
+            self.velocity[1] = -(self.velocity[1])
+            self.rect.y = height-(self.rect.height)
+        elif self.rect.y < 0:
+            self.velocity[1] = -(self.velocity[1])
+            self.rect.y = 0
 
 
 def main():
@@ -39,6 +59,7 @@ def main():
     circle_velocity = 0.3
     circle_click = False  # variável fria
 
+    spiderman = SpiderMan()
 
     # variável que absorve o clock do jogo
     clock = pygame.time.Clock()
@@ -90,27 +111,10 @@ def main():
             pygame.draw.circle(surface, YELLOW, circle_position, 50)  # desenha um círculo amarelo
         else:
             pygame.draw.circle(surface, RED, circle_position, 50)  # desenha um círculo vermelho
-
         
-        # faz com que o Spider Man se mova a cada atualização, respectivamente na horizontal e vertical
-        rect.x += spiderman_velocity[0] * time
-        rect.y += spiderman_velocity[1] * time
-        # regula o movimento do Spider Man horizontalmente, para que ele não saia da tela
-        if rect.x > (surface.get_width())-(rect.width):
-            spiderman_velocity[0] = -(spiderman_velocity[0])
-            rect.x = (surface.get_width())-(rect.width)
-        elif rect.x < 0:
-            spiderman_velocity[0] = -(spiderman_velocity[0])
-            rect.x = 0
-        # regula o movimento do Spider Man verticalmente, para que ele não saia da tela
-        if rect.y > (surface.get_height())-(rect.height):
-            spiderman_velocity[1] = -(spiderman_velocity[1])
-            rect.y = (surface.get_height())-(rect.height)
-        elif rect.y < 0:
-            spiderman_velocity[1] = -(spiderman_velocity[1])
-            rect.y = 0
         # mostra o Spider Man na tela
-        surface.blit(image, rect)
+        spiderman.update(time)
+        surface.blit(spiderman.image, spiderman.rect)
 
 
         # Ajustes finos na tela
