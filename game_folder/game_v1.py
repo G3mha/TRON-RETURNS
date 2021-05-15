@@ -8,26 +8,30 @@ import os
 import sys
 import pygame
 
+
+# variáveis de cores
+BLACK = (0,0,0)
+RED = (255,0,0)
+YELLOW = (255,255,0)
+
+
+class SpiderMan:
+    def __init__(self):
+        try:
+            self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
+        except pygame.error:
+            print("Erro ao tentar ler imagem: SPRITE SPIDER MAN - Copia.png")
+            sys.exit()
+        self.spiderman_velocity = [0.2, 0.27]  # lista de velocidades horizontal e vertical
+        self.rect = self.image.get_rect(
+
+
 def main():
     """Rotina principal do jogo"""
     pygame.init()  # inicializa as rotinas do PyGame
-
     surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
-
     pygame.display.set_caption("Spider Man Game")
 
-    try:
-        image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
-    except pygame.error:
-        print("Erro ao tentar ler imagem: SPRITE SPIDER MAN - Copia.png")
-        sys.exit()
-
-    # variável que absorve o clock do jogo
-    clock = pygame.time.Clock()
-
-    # variáveis iniciais do circulo
-    spiderman_position = [0, 0]  # lista fria
-    spiderman_velocity = [0.2, 0.27]  # variável fria
 
     # variáveis iniciais do circulo
     circle_position = [250,250]
@@ -35,9 +39,10 @@ def main():
     circle_velocity = 0.3
     circle_click = False  # variável fria
 
-    BLACK = (0,0,0)
-    RED = (255,0,0)
-    YELLOW = (255,255,0)
+
+    # variável que absorve o clock do jogo
+    clock = pygame.time.Clock()
+
 
     while True:  # Loop infinito do game
         time = clock.tick(60)  # segura a taxa de quadros em 60 por segundo
@@ -88,24 +93,24 @@ def main():
 
         
         # faz com que o Spider Man se mova a cada atualização, respectivamente na horizontal e vertical
-        spiderman_position[0] += spiderman_velocity[0] * time
-        spiderman_position[1] += spiderman_velocity[1] * time
+        rect.x += spiderman_velocity[0] * time
+        rect.y += spiderman_velocity[1] * time
         # regula o movimento do Spider Man horizontalmente, para que ele não saia da tela
-        if spiderman_position[0] > (surface.get_width())-(image.get_width()):
+        if rect.x > (surface.get_width())-(rect.width):
             spiderman_velocity[0] = -(spiderman_velocity[0])
-            spiderman_position[0] = (surface.get_width())-(image.get_width())
-        elif spiderman_position[0] < 0:
+            rect.x = (surface.get_width())-(rect.width)
+        elif rect.x < 0:
             spiderman_velocity[0] = -(spiderman_velocity[0])
-            spiderman_position[0] = 0
+            rect.x = 0
         # regula o movimento do Spider Man verticalmente, para que ele não saia da tela
-        if spiderman_position[1] > (surface.get_height())-(image.get_height()):
+        if rect.y > (surface.get_height())-(rect.height):
             spiderman_velocity[1] = -(spiderman_velocity[1])
-            spiderman_position[1] = (surface.get_height())-(image.get_height())
-        elif spiderman_position[1] < 0:
+            rect.y = (surface.get_height())-(rect.height)
+        elif rect.y < 0:
             spiderman_velocity[1] = -(spiderman_velocity[1])
-            spiderman_position[1] = 0
+            rect.y = 0
         # mostra o Spider Man na tela
-        surface.blit(image, spiderman_position)
+        surface.blit(image, rect)
 
 
         # Ajustes finos na tela
