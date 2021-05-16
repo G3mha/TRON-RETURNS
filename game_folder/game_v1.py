@@ -60,6 +60,13 @@ def main():
     circle_click = False  # variável fria
 
     spiderman = SpiderMan()
+    spiderman_2 = SpiderMan()
+
+    spiderman_2.rect.x = 100
+
+    sprites = pygame.sprite.Group()
+    sprites.add(spiderman)
+    sprites.add(spiderman_2)
 
     # variável que absorve o clock do jogo
     clock = pygame.time.Clock()
@@ -113,8 +120,8 @@ def main():
             pygame.draw.circle(surface, RED, circle_position, 50)  # desenha um círculo vermelho
         
         # mostra o Spider Man na tela
-        spiderman.update(time)
-        surface.blit(spiderman.image, spiderman.rect)
+        sprites.update(time)
+        sprites.draw(surface)
 
 
         # Ajustes finos na tela
