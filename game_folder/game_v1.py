@@ -18,11 +18,7 @@ WHITE = (255,255,255)
 class SpiderMan(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
-        try:
-            self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
-        except pygame.error:
-            print("Erro ao tentar ler imagem: SPRITE SPIDER MAN - Copia.png")
-            sys.exit()
+        self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
         self.velocity = [0.2, 0.27]  # lista de velocidades horizontal e vertical
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
@@ -53,9 +49,11 @@ def main():
     surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
     pygame.display.set_caption("Spider Man Game")
 
+    # Rotinas de aúdio
     pygame.mixer.music.load("Spiderman.mp3")
     pygame.mixer.music.set_volume(0.05)
     pygame.mixer.music.play(-1)
+    shot_sound = pygame.mixer.Sound("preview.mp3")
 
     font = pygame.font.Font(pygame.font.get_default_font(), 18)
 
@@ -137,6 +135,7 @@ def main():
         # Mudança na cor do círculo, conforme pressionamento da BARRA DE ESPAÇO
         if click and (current - last > 500):
             last = current
+            shot_sound.play()
             pygame.draw.circle(surface, YELLOW, circle_position, 4)  # desenha um círculo amarelo
 
             for sprite in sprites:
