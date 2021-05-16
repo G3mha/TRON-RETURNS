@@ -13,7 +13,7 @@ import pygame
 BLACK = (0,0,0)
 RED = (255,0,0)
 YELLOW = (255,255,0)
-
+WHITE = (255,255,255)
 
 class SpiderMan(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -25,6 +25,7 @@ class SpiderMan(pygame.sprite.Sprite):
             sys.exit()
         self.velocity = [0.2, 0.27]  # lista de velocidades horizontal e vertical
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
     
     def update(self, time):
         width, height = pygame.display.get_surface().get_size()
@@ -52,6 +53,7 @@ def main():
     surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
     pygame.display.set_caption("Spider Man Game")
 
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)
 
     # variáveis iniciais do circulo
     circle_position = [250,250]
@@ -67,6 +69,9 @@ def main():
 
     pygame.time.set_timer(pygame.USEREVENT, 1000)  # timer de 1 segundo para cada evento
 
+    last = 0
+    score = 0
+    
     while True:  # Loop infinito do game
         time = clock.tick(60)  # segura a taxa de quadros em 60 por segundo
         surface.fill(BLACK)  # preenche o display em preto
@@ -115,26 +120,32 @@ def main():
             if event.type == pygame.USEREVENT:
                 SpiderMan(sprites)  # cria sprite do Spider Man e coloca no Sprites
 
+        sprites.update(time)
+        sprites.draw(surface)
         # Mudança no posicionamento do círculo, conforme pressionamento de tecla
         circle_position[0] += (circle_var["right"] - circle_var["left"]) * circle_velocity * time
         circle_position[1] += (circle_var["down"] - circle_var["up"]) * circle_velocity * time
         
         click = space_bar or mouse_button
+
+        current = pygame.time.get_ticks()
+
         # Mudança na cor do círculo, conforme pressionamento da BARRA DE ESPAÇO
-        if click:
+        if click and (current - last > 500):
+            last = current
             pygame.draw.circle(surface, YELLOW, circle_position, 4)  # desenha um círculo amarelo
 
             for sprite in sprites:
                 if sprite.rect.collidepoint(circle_position):
-                    sprite.kill()
+                    mask_point = [int(circle_position[0] - sprite.rect.x), int(circle_position[1] - sprite.rect.y)]
+                    if sprite.mask.get_at(mask_point):
+                        sprite.kill()
+                        score += 1
         else:
             pygame.draw.circle(surface, RED, circle_position, 3)  # desenha um círculo vermelho
         
-        # mostra o Spider Man na tela
-        sprites.update(time)
-        sprites.draw(surface)
-
-
+        text = font.render("Placar: {}".format(score), True, WHITE)
+        surface.blit(text, (10,0))
         # Ajustes finos na tela
         pygame.display.flip()  # atualiza o que é mostrado na tela
 
