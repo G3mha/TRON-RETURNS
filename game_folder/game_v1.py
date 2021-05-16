@@ -53,6 +53,10 @@ def main():
     surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
     pygame.display.set_caption("Spider Man Game")
 
+    pygame.mixer.music.load("Spiderman.mp3")
+    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.play(-1)
+
     font = pygame.font.Font(pygame.font.get_default_font(), 18)
 
     # variáveis iniciais do circulo
