@@ -19,27 +19,28 @@ class SpiderMan(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
-        self.velocity = [0.2, 0.27]  # lista de velocidades horizontal e vertical
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
+        self.position = pygame.math.Vector2(0,0)
+        self.velocity = pygame.math.Vector2(0.2, 0.27)  # lista de velocidades horizontal e vertical
     
     def update(self, time):
         width, height = pygame.display.get_surface().get_size()
-        self.rect.x += self.velocity[0] * time
-        self.rect.y += self.velocity[1] * time
+        self.position += self.velocity * time
+        self.rect.topleft = self.position
         # regula o movimento do Spider Man horizontalmente, para que ele não saia da tela
         if self.rect.right > width:
-            self.velocity[0] = -(self.velocity[0])
+            self.velocity[0] = -abs(self.velocity[0])
             self.rect.right = width
         elif self.rect.x < 0:
-            self.velocity[0] = -(self.velocity[0])
+            self.velocity[0] = abs(self.velocity[0])
             self.rect.x = 0
         # regula o movimento do Spider Man verticalmente, para que ele não saia da tela
         if self.rect.bottom > height:
-            self.velocity[1] = -(self.velocity[1])
+            self.velocity[1] = -abs(self.velocity[1])
             self.rect.bottom = height
         elif self.rect.y < 0:
-            self.velocity[1] = -(self.velocity[1])
+            self.velocity[1] = abs(self.velocity[1])
             self.rect.y = 0
 
 
@@ -58,7 +59,7 @@ def main():
     font = pygame.font.Font(pygame.font.get_default_font(), 18)
 
     # variáveis iniciais do circulo
-    circle_position = [250,250]
+    circle_position = [surface.get_width()/2,surface.get_height()/2]
     circle_var = {"left": 0, "right": 0, "up": 0, "down": 0}
     circle_velocity = 0.3
     space_bar = False
