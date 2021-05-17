@@ -53,7 +53,7 @@ class SpiderMan(pygame.sprite.Sprite):
 def main():
     """Rotina principal do jogo"""
     pygame.init()  # inicializa as rotinas do PyGame
-    surface = pygame.display.set_mode((500,500))  # cria a tela do jogo com tamanho personalizado
+    surface = pygame.display.set_mode((500,500), pygame.RESIZABLE)  # cria a tela do jogo com tamanho personalizado
     pygame.display.set_caption("Spider Man Game")
 
     # Rotinas de aúdio
@@ -62,7 +62,8 @@ def main():
     pygame.mixer.music.play(-1)
     shot_sound = pygame.mixer.Sound("preview.mp3")
 
-    font = pygame.font.Font(pygame.font.get_default_font(), 18)
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)  # fonte para o placar
+    font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)  # fonte para o aviso de pausado
 
     # variáveis iniciais do circulo
     circle_position = [surface.get_width()/2,surface.get_height()/2]
@@ -78,18 +79,25 @@ def main():
 
     pygame.time.set_timer(pygame.USEREVENT, 1000)  # timer de 1 segundo para cada evento
 
-    last = 0
-    score = 0
-    
+    last = 0  # último placar coletado
+    score = 0  # placar mais recente coletado
+
+    screen_size = None  # tamanho da tela a ser redimensionada
+
+    RUNNING = 0
+    PAUSED = 1
+    game = RUNNING
+
     while True:  # Loop infinito do game
         time = clock.tick(60)  # segura a taxa de quadros em 60 por segundo
-        surface.fill(BLACK)  # preenche o display em preto
         events = pygame.event.get()  # variável que absorve todos os eventos do jogo
 
 
         # eventos do jogo
         for event in events:
             # termina o jogo ao clicar ESC ou no X da aba
+            if event.type == pygame.VIDEORESIZE:  # Usuário redimensiona a tela
+                screen_size = event.size
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 pygame.quit()
                 sys.exit()
@@ -105,6 +113,16 @@ def main():
                     circle_var["down"] = 1
                 elif event.key == pygame.K_SPACE:
                     space_bar = True
+                elif event.key == pygame.K_p:
+                    if game != PAUSED:
+                        pygame.mixer.music.pause()
+                        pause = font_paused.render("PAUSE", True, RED, WHITE)
+                        surface.blit(pause,((surface.get_width()-pause.get_width())/2,
+                                            (surface.get_height()-pause.get_height())/2))
+                        game = PAUSED
+                    else:
+                        pygame.mixer.music.unpause()
+                        game = RUNNING
             # eventos de despressionamento de tecla
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
@@ -126,14 +144,26 @@ def main():
             if event.type == pygame.MOUSEMOTION:
                 circle_position = list(pygame.mouse.get_pos())
 
-            if event.type == pygame.USEREVENT:
+            if event.type == pygame.USEREVENT and game != PAUSED:
                 spiderman = SpiderMan(sprites)  # cria sprite do Spider Man e coloca no Sprites
                 spiderman.set_position(random.randint(0, surface.get_width()-spiderman.image.get_width()),
                                        random.randint(0, surface.get_height()-spiderman.image.get_height()))
                 spiderman.set_velocity(random.uniform(-0.3,0.3), random.uniform(-0.3,0.3))
 
+        if screen_size:
+            surface = pygame.display.set_mode(screen_size, pygame.RESIZABLE)  # atualiza o tamanho da superfície do jogo
+            screen_size = None  # retorna a varíavel ao seu estado original
+
+
+        if game == PAUSED:
+            pygame.display.flip()
+            continue
+
+        surface.fill(BLACK)  # preenche o display em preto
+
         sprites.update(time)
         sprites.draw(surface)
+
         # Mudança no posicionamento do círculo, conforme pressionamento de tecla
         circle_position[0] += (circle_var["right"] - circle_var["left"]) * circle_velocity * time
         circle_position[1] += (circle_var["down"] - circle_var["up"]) * circle_velocity * time
