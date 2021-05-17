@@ -4,7 +4,7 @@ Autores: Enricco Gemha, Bruno Besnosik, Marcelo Rabello
 Data: 13/05/2021
 """
 
-import os
+import random
 import sys
 import pygame
 
@@ -21,9 +21,15 @@ class SpiderMan(pygame.sprite.Sprite):
         self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.position = pygame.math.Vector2(0,0)
-        self.velocity = pygame.math.Vector2(0.2, 0.27)  # lista de velocidades horizontal e vertical
+        self.set_position(0,0)
+        self.set_velocity(0.2, 0.27)
+
+    def set_position(self, x, y):
+        self.position = pygame.math.Vector2(x,y)
     
+    def set_velocity(self, vx, vy):
+        self.velocity = pygame.math.Vector2(vx, vy)
+
     def update(self, time):
         width, height = pygame.display.get_surface().get_size()
         self.position += self.velocity * time
@@ -121,7 +127,10 @@ def main():
                 circle_position = list(pygame.mouse.get_pos())
 
             if event.type == pygame.USEREVENT:
-                SpiderMan(sprites)  # cria sprite do Spider Man e coloca no Sprites
+                spiderman = SpiderMan(sprites)  # cria sprite do Spider Man e coloca no Sprites
+                spiderman.set_position(random.randint(0, surface.get_width()-spiderman.image.get_width()),
+                                       random.randint(0, surface.get_height()-spiderman.image.get_height()))
+                spiderman.set_velocity(random.uniform(-0.3,0.3), random.uniform(-0.3,0.3))
 
         sprites.update(time)
         sprites.draw(surface)
