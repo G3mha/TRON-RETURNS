@@ -7,47 +7,39 @@ Data: 18/05/2021
 import random
 import sys
 import pygame
+from os import path
 
-BLACK = (0,0,0)  # código rgb para preto
-BLUE_MIDNIGHT = (25,25,112)  # código rgb para azul escuro
-BLUE_LIGHT = (0,0,235)  # código rgb para azul claro
-YELLOW_GOLD = (255,215,0)  # código rgb para amarelo
+# Estabelece a pasta que contem as figuras e sons.
+blue_lightcicle_dir = path.join(path.dirname(__file__), 'SPRITE_TRON_LIGHTCICLE_blue.png')
 
-class blueLightCicle(pygame.sprite.Sprite):
-    def __init__(self, group, surface):
-        super().__init__(group)
-        self.image = pygame.image.load("SPRITE_TRON_LIGHTCICLE_blue").convert_alpha()
-        pygame.transform.scale(self.image, (largura, altura), None)  # TODO
+# Algumas variáveis essenciais para a aplicação
+screen_size = (1024,768)  # Largura e altura da tela
+playable_area_size = (700,498)  # Largura e altura da área jogável
+lightcicle_size = (20,50)
+page_title = "Corrida de motos"
+
+# Define o código RGB das cores que utilizadas
+BLACK = (0,0,0)
+BLUE_MIDNIGHT = (25,25,112)
+BLUE_LIGHT = (0,0,235)
+YELLOW_GOLD = (255,215,0)
+
+class blueLightCicle():
+    def __init__(self):
+        self.image = pygame.image.load("SPRITE_TRON_LIGHTCICLE_blue.png").convert_alpha()
+        pygame.transform.scale(self.image, lightcicle_size, None)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.set_position(0,0)
-        self.set_velocity(0.2, 0.27)
+        self.set_position(playable_area_size[0], playable_area_size[1])
+        self.velocity = 0  # TODO
 
     def set_position(self, x, y):
         self.position = pygame.math.Vector2(x,y)
-    
-    def set_velocity(self, vx, vy):
-        self.velocity = pygame.math.Vector2(vx, vy)
 
-    def update(self, time):
-        width, height = pygame.display.get_surface().get_size()
+    def update(self, time, direction):
         self.position += self.velocity * time
-        self.rect.topleft = self.position
-        # regula o movimento do Spider Man horizontalmente, para que ele não saia da tela
-        if self.rect.right > width:
-            self.velocity[0] = -abs(self.velocity[0])
-            self.rect.right = width
-        elif self.rect.x < 0:
-            self.velocity[0] = abs(self.velocity[0])
-            self.rect.x = 0
-        # regula o movimento do Spider Man verticalmente, para que ele não saia da tela
-        if self.rect.bottom > height:
-            self.velocity[1] = -abs(self.velocity[1])
-            self.rect.bottom = height
-        elif self.rect.y < 0:
-            self.velocity[1] = abs(self.velocity[1])
-            self.rect.y = 0
+
 
 pygame.init()  # inicializa as rotinas do PyGame
-surface = pygame.display.set_mode((500,500), pygame.RESIZABLE)  # cria a tela do jogo com tamanho personalizado
-pygame.display.set_caption("Spider Man Game")
+surface = pygame.display.set_mode(screen_size)  # cria a tela do jogo com tamanho personalizado
+pygame.display.set_caption(page_title)  # título da janela do jogo
