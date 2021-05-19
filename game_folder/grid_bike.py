@@ -12,7 +12,7 @@ BLUE_MIDNIGHT = (25,25,112)
 YELLOW_GOLD = (255,215,0)
 BLUE_LIGHT = (0,0,235)
 
-class Bike(pygame.sprite.Sprite):
+class LightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
