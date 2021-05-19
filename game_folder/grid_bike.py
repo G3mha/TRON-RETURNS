@@ -8,14 +8,16 @@ import random
 import sys
 import pygame
 
-BLUE_MIDNIGHT = (25,25,112)
-YELLOW_GOLD = (255,215,0)
-BLUE_LIGHT = (0,0,235)
+BLACK = (0,0,0)  # código rgb para preto
+BLUE_MIDNIGHT = (25,25,112)  # código rgb para azul escuro
+BLUE_LIGHT = (0,0,235)  # código rgb para azul claro
+YELLOW_GOLD = (255,215,0)  # código rgb para amarelo
 
-class LightCicle(pygame.sprite.Sprite):
-    def __init__(self, group):
+class blueLightCicle(pygame.sprite.Sprite):
+    def __init__(self, group, surface):
         super().__init__(group)
-        self.image = pygame.image.load("SPRITE SPIDER MAN - Copia.png").convert_alpha()
+        self.image = pygame.image.load("SPRITE_TRON_LIGHTCICLE_blue").convert_alpha()
+        pygame.transform.scale(self.image, (largura, altura), None)  # TODO
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.set_position(0,0)
@@ -45,3 +47,7 @@ class LightCicle(pygame.sprite.Sprite):
         elif self.rect.y < 0:
             self.velocity[1] = abs(self.velocity[1])
             self.rect.y = 0
+
+pygame.init()  # inicializa as rotinas do PyGame
+surface = pygame.display.set_mode((500,500), pygame.RESIZABLE)  # cria a tela do jogo com tamanho personalizado
+pygame.display.set_caption("Spider Man Game")
