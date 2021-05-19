@@ -11,6 +11,7 @@ from os import path
 
 # Estabelece a pasta que contem as figuras e sons.
 blue_lightcicle_dir = path.join(path.dirname(__file__), 'SPRITE_TRON_LIGHTCICLE_blue.png')
+yellow_lightcicle_dir = path.join(path.dirname(__file__), 'SPRITE_TRON_LIGHTCICLE_yellow.png')
 
 # Algumas variáveis essenciais para a aplicação
 screen_size = (1024,768)  # Largura e altura da tela
@@ -52,3 +53,17 @@ shot_sound = pygame.mixer.Sound("preview.mp3")
 
 font = pygame.font.Font(pygame.font.get_default_font(), 18)  # fonte para o placar
 font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)  # fonte para o aviso de pausado
+
+class yellowLightCicle():
+    def __init__(self):
+        self.image = pygame.image.load("SPRITE_TRON_LIGHTCICLE_yellow.png").convert_alpha()
+        pygame.transform.scale(self.image, lightcicle_size, None)
+        self.rect = self.image.get_rect()
+        self.set_position(playable_area_size[1], random.randint(0, playable_area_size[0]))
+        self.velocity = 0.4 # VALOR TESTE
+
+    def set_position(self, x, y):
+        self.position = pygame.math.Vactor2(x, y)
+    
+    def update(self, time, direction):
+        self.position += self.velocity * time
