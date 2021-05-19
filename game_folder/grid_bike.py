@@ -30,8 +30,8 @@ class blueLightCicle():
         pygame.transform.scale(self.image, lightcicle_size, None)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.set_position(playable_area_size[0], playable_area_size[1])
-        self.velocity = 0  # TODO
+        self.set_position(playable_area_size[0], playable_area_size[1])  # VALOR TESTE
+        self.velocity = 0.4  # VALOR TESTE
 
     def set_position(self, x, y):
         self.position = pygame.math.Vector2(x,y)
@@ -39,7 +39,16 @@ class blueLightCicle():
     def update(self, time, direction):
         self.position += self.velocity * time
 
-
+# Rotina Principal do jogo
 pygame.init()  # inicializa as rotinas do PyGame
 surface = pygame.display.set_mode(screen_size)  # cria a tela do jogo com tamanho personalizado
 pygame.display.set_caption(page_title)  # título da janela do jogo
+
+# Rotinas de aúdio
+pygame.mixer.music.load("Derezzed.mp3")
+pygame.mixer.music.set_volume(0.05)
+pygame.mixer.music.play(-1)
+shot_sound = pygame.mixer.Sound("preview.mp3")
+
+font = pygame.font.Font(pygame.font.get_default_font(), 18)  # fonte para o placar
+font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)  # fonte para o aviso de pausado
