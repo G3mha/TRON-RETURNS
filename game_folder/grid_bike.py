@@ -11,7 +11,9 @@ from os import path
 
 # Estabelece a pasta que contem as sprites.
 sprite_dir = path.join(path.dirname(__file__), 'SPRITE_TRON_LIGHTCICLE_blue.png')
-# TODO: audio_dir = path.join(path.dirname(__file__), 'Derezzed.mp3')
+audio_dir = str(path.join(path.dirname(__file__), 'Derezzed.mp3'))
+audio_dir = audio_dir.replace("\Derezzed.mp3","/Derezzed.mp3")
+
 
 # Algumas variáveis essenciais para a aplicação
 screen_size = (1024,768) # Largura e altura da tela
@@ -74,11 +76,9 @@ for static_lines in range(1,9):
     pygame.draw.line(surface, BLUE_MIDNIGHT, ((static_lines*static_vertical),0), ((static_lines*static_vertical),768), thickness) # linha vertical
 
 # Rotinas de aúdio
-"""
-pygame.mixer.music.load("Derezzed.mp3")
+pygame.mixer.music.load("AUDIO\Derezzed.mp3")
 pygame.mixer.music.set_volume(0.05)  # VALOR TESTE
 pygame.mixer.music.play(-1)  # VALOR TESTE
-"""
 
 # Início do main Loop
 game = True
