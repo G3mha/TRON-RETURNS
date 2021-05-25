@@ -6,3 +6,4 @@ fontes:
 https://hipwallpaper.com/view/quU6SY (SPRITE TRON LIGHTCICLE yellow)
 https://www.deviantart.com/paul-muad-dib/art/TRON-Light-cycle-finished-206191909 (SPRITE TRON LIGHTCICLE blue)
 https://www.youtube.com/watch?v=F4eccPBFEjE (SONG DEREZZED for the lightcicle)
+https://www.dreamstime.com/stock-images-bit-pixel-art-explosion-blue-background-image34995864 (VISUAL FX DEREZZED for explosion)

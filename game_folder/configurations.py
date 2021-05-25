@@ -10,7 +10,8 @@ RIGHTyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png'
 UPyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png'
 DOWNyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png'
 derezzedSONG_dir = 'AUDIO/DerezzedSong.ogg'
-derezzedFX_dir = 'AUDIO/DerezzedFX.ogg'
+derezzedSFX_dir = 'AUDIO/DerezzedFX.ogg'
+derezzedVFX_dir = 'SPRITES/VFX DEREZZED EXPLOSION.png'
 
 # Algumas variáveis essenciais para a aplicação
 screen_size = (1024,768) # Largura e altura da tela

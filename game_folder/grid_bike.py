@@ -7,7 +7,7 @@ Data: 18/05/2021
 import random
 import sys
 import pygame
-from configurations import derezzedSONG_dir, derezzedFX_dir, frames, screen_size, lightcicle_size, LEFTblue_dir,RIGHTblue_dir,UPblue_dir,DOWNblue_dir,LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir
+from configurations import derezzedSONG_dir, derezzedSFX_dir, derezzedVFX_dir, frames, screen_size, lightcicle_size, LEFTblue_dir,RIGHTblue_dir,UPblue_dir,DOWNblue_dir,LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir
 
 # Define o código RGB das cores que utilizadas
 BLUE_MIDNIGHT = (0,0,30)
@@ -133,7 +133,15 @@ while game:
         pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(static_lines*static_horizontal)), (1024,(static_lines*static_horizontal)), thickness) # linha horizontal
         pygame.draw.line(surface, BLUE_MIDNIGHT, ((static_lines*static_vertical),0), ((static_lines*static_vertical),768), thickness) # linha vertical
     
-    sprites.update(time)
+
+
+    if trace.rect.collidepoint( ): # TODO definir trace
+        mask_point = [int(circle_position[0] - sprite.rect.x), int(circle_position[1] - sprite.rect.y)]
+        if sprite.mask.get_at(mask_point):
+            sprite.kill()
+            score += 1
+
+    # TODO sprites.update(time)
 
     pygame.display.update() # atualiza o display
 
