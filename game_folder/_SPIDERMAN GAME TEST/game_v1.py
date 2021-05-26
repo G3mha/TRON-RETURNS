@@ -82,8 +82,6 @@ def main():
     last = 0  # último placar coletado
     score = 0  # placar mais recente coletado
 
-    screen_size = None  # tamanho da tela a ser redimensionada
-
     RUNNING = 0
     PAUSED = 1
     game = RUNNING
@@ -91,13 +89,9 @@ def main():
     while True:  # Loop infinito do game
         time = clock.tick(60)  # segura a taxa de quadros em 60 por segundo
         events = pygame.event.get()  # variável que absorve todos os eventos do jogo
-
-
         # eventos do jogo
         for event in events:
             # termina o jogo ao clicar ESC ou no X da aba
-            if event.type == pygame.VIDEORESIZE:  # Usuário redimensiona a tela
-                screen_size = event.size
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 pygame.quit()
                 sys.exit()
@@ -149,10 +143,6 @@ def main():
                 spiderman.set_position(random.randint(0, surface.get_width()-spiderman.image.get_width()),
                                        random.randint(0, surface.get_height()-spiderman.image.get_height()))
                 spiderman.set_velocity(random.uniform(-0.3,0.3), random.uniform(-0.3,0.3))
-
-        if screen_size:
-            surface = pygame.display.set_mode(screen_size, pygame.RESIZABLE)  # atualiza o tamanho da superfície do jogo
-            screen_size = None  # retorna a varíavel ao seu estado original
 
 
         if game == PAUSED:

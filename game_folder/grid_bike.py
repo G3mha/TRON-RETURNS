@@ -18,12 +18,13 @@ YELLOW_GOLD = (255,215,0)
 # Define o nome desta página
 page_title = "Corrida de motos"
 
-class yellowLightCicle():
-    def __init__(self, screen_size, LEFTyellow_dir, lightcicle_size):
+class yellowLightCicle(pygame.sprite.Sprite):
+    def __init__(self, group, screen_size, LEFTyellow_dir, lightcicle_size):
+        super().__init__(group)
         self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
-        pygame.transform.scale(self.image, lightcicle_size, None)
+        pygame.transform.scale(self.image, lightcicle_size)
         self.rect = self.image.get_rect()
-        self.set_position(screen_size[0], random.randint(0, screen_size[1]))
+        self.set_position(0,0) # screen_size[0], random.randint(0, screen_size[1])
         self.set_velocity(-0.4,0) # VALOR TESTE
         self.direction = "LEFT"
         self.trace = []
@@ -38,23 +39,23 @@ class yellowLightCicle():
         if direction != self.direction:
             if direction == "UP":
                 self.image = pygame.image.load(UPyellow_dir).convert_alpha()
-                self.set_velocity((0,0.4)) # VALOR TESTE
+                self.set_velocity(0,0.4) # VALOR TESTE
             if direction == "DOWN":
                 self.image = pygame.image.load(DOWNyellow_dir).convert_alpha()
-                self.set_velocity((0,-0.4)) # VALOR TESTE
+                self.set_velocity(0,-0.4) # VALOR TESTE
             if direction == "LEFT":
                 self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
-                self.set_velocity((-0.4,0)) # VALOR TESTE
+                self.set_velocity(-0.4,0) # VALOR TESTE
             if direction == "RIGHT":
                 self.image = pygame.image.load(RIGHTyellow_dir).convert_alpha()
-                self.set_velocity((0.4,0)) # VALOR TESTE
+                self.set_velocity(0.4,0) # VALOR TESTE
             self.direction = direction
 
     def update_position(self, time):
         self.last_position = self.position
         self.position += self.velocity * time
-        if self.position != self.last_position:
-            self.trace.append(self.position)
+        # if self.position != self.last_position:
+        #     self.trace.append(self.position)
 
 class blueLightCicle():
     def __init__(self, screen_size, RIGHTblue_dir, lightcicle_size):
@@ -75,16 +76,16 @@ class blueLightCicle():
         if direction != self.direction:
             if direction == "UP":
                 self.image = pygame.image.load(UPblue_dir).convert_alpha()
-                self.set_velocity((0,0.4)) # VALOR TESTE
+                self.set_velocity(0,0.4) # VALOR TESTE
             if direction == "DOWN":
                 self.image = pygame.image.load(DOWNblue_dir).convert_alpha()
-                self.set_velocity((0,-0.4)) # VALOR TESTE
+                self.set_velocity(0,-0.4) # VALOR TESTE
             if direction == "LEFT":
                 self.image = pygame.image.load(LEFTblue_dir).convert_alpha()
-                self.set_velocity((-0.4,0)) # VALOR TESTE
+                self.set_velocity(-0.4,0) # VALOR TESTE
             if direction == "RIGHT":
                 self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
-                self.set_velocity((0.4,0)) # VALOR TESTE
+                self.set_velocity(0.4,0) # VALOR TESTE
             self.direction = direction
 
     def update_position(self, time):
@@ -109,15 +110,23 @@ pygame.mixer.music.play(-1)  # VALOR TESTE
 clock = pygame.time.Clock()
 
 # Início do main Loop
-game = True
-while game:
+while True:
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
-
     # Adquire todos os eventos e os testa para casos desejados
     events = pygame.event.get()
     for event in events:
-        if event.type == pygame.QUIT: # quebra o loop
-            game = False
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
+                pygame.quit()
+                sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                yellow.update_direction("LEFT")
+            elif event.key == pygame.K_RIGHT:
+                yellow.update_direction("RIGHT")
+            elif event.key == pygame.K_UP:
+                yellow.update_direction("UP")
+            elif event.key == pygame.K_DOWN:
+                yellow.update_direction("DOWN")
     
     # Rotinas da tela "estática"
     surface.fill(BLUE)
@@ -132,16 +141,21 @@ while game:
     for static_lines in range(1,9):
         pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(static_lines*static_horizontal)), (1024,(static_lines*static_horizontal)), thickness) # linha horizontal
         pygame.draw.line(surface, BLUE_MIDNIGHT, ((static_lines*static_vertical),0), ((static_lines*static_vertical),768), thickness) # linha vertical
-    
+
+    # cria sprite da Moto Amarela
+    sprites = pygame.sprite.Group()
+    yellow = yellowLightCicle(screen_size, LEFTyellow_dir, lightcicle_size)
+    yellow.render()
 
 
-    if trace.rect.collidepoint( ): # TODO definir trace
-        mask_point = [int(circle_position[0] - sprite.rect.x), int(circle_position[1] - sprite.rect.y)]
-        if sprite.mask.get_at(mask_point):
-            sprite.kill()
-            score += 1
+    # if trace.rect.collidepoint( ): # TODO definir trace
+    #     mask_point = [int(circle_position[0] - sprite.rect.x), int(circle_position[1] - sprite.rect.y)]
+    #     if sprite.mask.get_at(mask_point):
+    #         sprite.kill()
+    #         score += 1
 
-    # TODO sprites.update(time)
+    yellow.update_position(time)
+
 
     pygame.display.update() # atualiza o display
 
