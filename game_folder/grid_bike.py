@@ -25,6 +25,9 @@ derezzedVFX_dir = 'SPRITES/VFX DEREZZED EXPLOSION.png'
 screen_size = (1024,768) # Largura e altura da tela
 lightcicle_size = (200,100) # Tamanho da bike
 page_title = "Corrida de motos" # Define o nome desta página
+stop_blue = True
+stop_yellow = True
+
 
 # Define o código RGB das cores que utilizadas
 BLUE_MIDNIGHT = (0,0,30)
@@ -45,7 +48,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.trace = []
 
     def set_position(self, x, y):
-        self.position = pygame.math.Vector2(x, y)
+        self.rect.center = pygame.math.Vector2(x, y)
     
     def set_velocity(self, vx, vy):
         self.velocity = pygame.math.Vector2(vx, vy)
@@ -53,11 +56,11 @@ class yellowLightCicle(pygame.sprite.Sprite):
     def update_direction(self, direction,LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir):
         if direction != self.direction:
             if direction == "UP":
-                self.image = pygame.image.load(UPyellow_dir).convert_alpha()
+                self.image = pygame.image.load(DOWNyellow_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
                 self.set_velocity(0,0.4) # VALOR TESTE
             if direction == "DOWN":
-                self.image = pygame.image.load(DOWNyellow_dir).convert_alpha()
+                self.image = pygame.image.load(UPyellow_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
                 self.set_velocity(0,-0.4) # VALOR TESTE
             if direction == "LEFT":
@@ -71,9 +74,50 @@ class yellowLightCicle(pygame.sprite.Sprite):
             self.direction = direction
 
     def update_position(self, time):
-        self.position += self.velocity * time
-        # self.trace.append(self.position)
+        self.rect.center += self.velocity * time
+        self.trace.append(self.rect.center)
 
+
+class blueLightCicle(pygame.sprite.Sprite):
+    def __init__(self, group, RIGHTblue_dir):
+        super().__init__(group)
+        self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+        self.rect = self.image.get_rect()
+        self.set_position(0,768)
+        self.set_velocity(0.4,0) # VALOR TESTE
+        self.direction = "RIGHT"
+        self.trace = []
+
+    def set_position(self, x, y):
+        self.rect.center = pygame.math.Vector2(x, y)
+    
+    def set_velocity(self, vx, vy):
+        self.velocity = pygame.math.Vector2(vx, vy)
+    
+    def update_direction(self, direction,RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir):
+        if direction != self.direction:
+            if direction == "UP":
+                self.image = pygame.image.load(DOWNblue_dir).convert_alpha()
+                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.set_velocity(0,0.4) # VALOR TESTE
+            if direction == "DOWN":
+                self.image = pygame.image.load(UPblue_dir).convert_alpha()
+                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.set_velocity(0,-0.4) # VALOR TESTE
+            if direction == "LEFT":
+                self.image = pygame.image.load(LEFTblue_dir).convert_alpha()
+                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.set_velocity(-0.4,0) # VALOR TESTE
+            if direction == "RIGHT":
+                self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
+                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.set_velocity(0.4,0) # VALOR TESTE
+            self.direction = direction
+
+    def update_position(self, time):
+        self.rect.center += self.velocity * time
+        self.trace.append(self.rect.center)
 
 # Rotina Inicial do jogo
 pygame.init()  # inicializa as rotinas do PyGame
@@ -92,6 +136,7 @@ clock = pygame.time.Clock()
 # cria sprite da Moto Amarela
 sprites = pygame.sprite.Group()
 yellow = yellowLightCicle(sprites, LEFTyellow_dir)
+blue = blueLightCicle(sprites, RIGHTblue_dir)
 
 # Início do main Loop
 while True:
@@ -104,13 +149,13 @@ while True:
                 sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                yellow.update_direction("LEFT",LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir)
+                blue.update_direction("LEFT",RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir)
             elif event.key == pygame.K_RIGHT:
-                yellow.update_direction("RIGHT",LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir)
-            elif event.key == pygame.K_UP:
-                yellow.update_direction("UP",LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir)
+                blue.update_direction("RIGHT",RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir)
             elif event.key == pygame.K_DOWN:
-                yellow.update_direction("DOWN",LEFTyellow_dir,RIGHTyellow_dir,UPyellow_dir,DOWNyellow_dir)
+                blue.update_direction("UP",RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir)
+            elif event.key == pygame.K_UP:
+                blue.update_direction("DOWN",RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir)
 
     # Rotinas da tela "estática"
     surface.fill(BLUE)
@@ -126,15 +171,36 @@ while True:
         pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(static_lines*static_horizontal)), (1024,(static_lines*static_horizontal)), thickness) # linha horizontal
         pygame.draw.line(surface, BLUE_MIDNIGHT, ((static_lines*static_vertical),0), ((static_lines*static_vertical),768), thickness) # linha vertical
 
+    i = 0
+    if len(blue.trace) >= 2:
+        while i < len(blue.trace):
+            pygame.draw.circle(surface, BLUE_LIGHT, blue.trace[i], 6)
+            i+=1
+    
+    i = 0
+    if len(yellow.trace) >= 2:
+        while i < len(yellow.trace):
+            pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
+            i+=1
+
     sprites.draw(surface)
-    yellow.update_position(time)
+    if stop_yellow:
+        yellow.update_position(time)
+    if stop_blue:
+        blue.update_position(time)
 
+    for blue_t in blue.trace:
+        if yellow.rect.collidepoint(blue_t): # TODO definir trace
+            # derezzed_blit=blue.rect
+            # surface.blit(pygame.image.load(derezzedVFX_dir).convert_alpha(), derezzed_blit)
+            yellow.kill()
+            stop_yellow = False
 
-    # if trace.rect.collidepoint( ): # TODO definir trace
-    #     mask_point = [int(circle_position[0] - sprite.rect.x), int(circle_position[1] - sprite.rect.y)]
-    #     if sprite.mask.get_at(mask_point):
-    #         sprite.kill()
-    #         score += 1
-
+    for yellow_t in yellow.trace:
+        if blue.rect.collidepoint(yellow_t): # TODO definir trace
+            # derezzed_blit=blue.rect
+            # surface.blit(pygame.image.load(derezzedVFX_dir).convert_alpha(), derezzed_blit)
+            blue.kill()
+            stop_blue = False
 
     pygame.display.update() # atualiza o display
