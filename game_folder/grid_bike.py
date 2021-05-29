@@ -34,7 +34,7 @@ font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
 # Define o código RGB das cores que utilizadas
 BLUE_MIDNIGHT = (0,0,30)
 BLUE = (12,12,100)
-BLUE_LIGHT = (0,0,195)
+BLUE_ICE = (215, 255, 254)
 YELLOW_GOLD = (255,215,0)
 WHITE = (255,255,255)
 
@@ -191,7 +191,7 @@ while True:
     i = 0
     if len(blue.trace) >= 2:
         while i < len(blue.trace):
-            pygame.draw.circle(surface, BLUE_LIGHT, blue.trace[i], 6)
+            pygame.draw.circle(surface, BLUE_ICE, blue.trace[i], 6)
             i+=1
     
     i = 0
