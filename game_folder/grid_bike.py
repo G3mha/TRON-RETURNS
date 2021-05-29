@@ -4,6 +4,7 @@ Autor: Enricco Gemha
 Data: 18/05/2021
 """
 
+from game_folder.Boss_fight import BLACK
 import random
 import sys
 import pygame
@@ -27,13 +28,15 @@ lightcicle_size = (200,100) # Tamanho da bike
 page_title = "Corrida de motos" # Define o nome desta página
 stop_blue = True
 stop_yellow = True
-
+game = "RUNNING"
+font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
 
 # Define o código RGB das cores que utilizadas
 BLUE_MIDNIGHT = (0,0,30)
 BLUE = (12,12,100)
 BLUE_LIGHT = (0,0,195)
 YELLOW_GOLD = (255,215,0)
+WHITE = (255,255,255)
 
 
 class yellowLightCicle(pygame.sprite.Sprite):
@@ -133,7 +136,7 @@ pygame.mixer.music.play(-1)  # VALOR TESTE
 # variável que declara o clock do jogo
 clock = pygame.time.Clock()
 
-# cria sprite da Moto Amarela
+# cria sprite das Motos
 sprites = pygame.sprite.Group()
 yellow = yellowLightCicle(sprites, LEFTyellow_dir)
 blue = blueLightCicle(sprites, RIGHTblue_dir)
@@ -156,6 +159,20 @@ while True:
                 blue.update_direction("UP",RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir)
             elif event.key == pygame.K_UP:
                 blue.update_direction("DOWN",RIGHTblue_dir,LEFTblue_dir,UPblue_dir,DOWNblue_dir)
+            elif event.key == pygame.K_p:
+                if game != "PAUSED":
+                    pygame.mixer.music.pause()
+                    pause = font_paused.render("PAUSE", True, BLACK, WHITE)
+                    surface.blit(pause,((surface.get_width()-pause.get_width())/2,
+                                        (surface.get_height()-pause.get_height())/2))
+                    game = "PAUSED"
+                else:
+                    pygame.mixer.music.unpause()
+                    game = "RUNNING"
+
+    if game == "PAUSED":
+        pygame.display.flip()
+        continue
 
     # Rotinas da tela "estática"
     surface.fill(BLUE)
