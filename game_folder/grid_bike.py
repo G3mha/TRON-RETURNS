@@ -4,7 +4,6 @@ Autor: Enricco Gemha
 Data: 18/05/2021
 """
 
-from game_folder.Boss_fight import BLACK
 import random
 import sys
 import pygame
@@ -32,9 +31,10 @@ game = "RUNNING"
 font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
 
 # Define o código RGB das cores que utilizadas
+BLACK = (0,0,0)
 BLUE_MIDNIGHT = (0,0,30)
 BLUE = (12,12,100)
-BLUE_ICE = (215, 255, 254)
+BLUE_ICE = (215,255,254)
 YELLOW_GOLD = (255,215,0)
 WHITE = (255,255,255)
 
