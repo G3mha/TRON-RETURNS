@@ -42,7 +42,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
         self.rect = self.image.get_rect()
-        self.set_position(400,100)
+        self.set_position(400,200)
         self.set_velocity(-0.2,0) # VALOR TESTE
         self.direction = "LEFT"
         self.trace = []
@@ -202,11 +202,7 @@ def crash(collor1,collor2):
 def draw_background():
     surface.fill(BLUE)
     thickness = 10
-    pygame.draw.line(surface, BLUE_MIDNIGHT, (0,0), (screen_size[0],0), thickness)
-    pygame.draw.line(surface, BLUE_MIDNIGHT, (0,0), (0,screen_size[1]), thickness)
-    pygame.draw.line(surface, BLUE_MIDNIGHT, screen_size, (screen_size[0],0), thickness)
-    pygame.draw.line(surface, BLUE_MIDNIGHT, screen_size, (0,screen_size[1]), thickness)
-    distance = 1024/8 # espaço entre cada quadrado
+    distance = screen_size[0]/8 # espaço entre cada quadrado
     i = 0
     while i < 9:
         pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
