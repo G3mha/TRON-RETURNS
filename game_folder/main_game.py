@@ -68,6 +68,7 @@ while lifes > 0:
     stop_yellow = True
     stop_sound = True
     restart = False
+    boss_ticket = None
     game = "RUNNING"
 
     # variáveis de fonte
@@ -86,6 +87,8 @@ while lifes > 0:
                 if event.key == pygame.K_n:
                     lifes -= 1
                     restart = True
+                if event.key == pygame.K_m:
+                    boss_ticket = True
                 if event.key == pygame.K_LEFT:
                     blue.update_direction("LEFT")
                 elif event.key == pygame.K_RIGHT:
@@ -138,3 +141,6 @@ while lifes > 0:
         show_score(stop_blue,stop_yellow)
 
         pygame.display.flip() # atualiza o display
+    
+    while boss_ticket:
+        a=0

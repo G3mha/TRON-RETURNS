@@ -7,8 +7,12 @@ screen_size = (800,800)
 # # # # # # RGB # # # # # # 
 ###########################
 
-BLACK = (0, 0, 0)
-
+BLACK = (0,0,0)
+BLUE_MIDNIGHT = (0,0,30)
+BLUE = (12,12,100)
+BLUE_ICE = (0,255,251)
+YELLOW_GOLD = (255,215,0)
+WHITE = (255,255,255)
 
 disk_
 

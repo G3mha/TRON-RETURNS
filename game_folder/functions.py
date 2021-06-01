@@ -208,11 +208,14 @@ def show_score(stop_blue,stop_yellow):
         surface.blit(line_image,(50,200))
         line_image2 = font_used.render(score[1], True, BLUE_ICE, BLACK)
         surface.blit(line_image2,(50,300))
-        
-
 
     if stop_yellow == False:
-        score = "Você GANHOU!"
+        score = ["Você GANHOU!","Para prosseguir, clique M"]
         font_used = pygame.font.Font(pygame.font.get_default_font(), 40)
-        line_image = font_used.render(score, True, BLUE_ICE, BLACK)
-        surface.blit(line_image,(400,400))
+        line_image = font_used.render(score[0], True, BLUE_ICE, BLACK)
+        surface.blit(line_image,(50,200))
+        line_image2 = font_used.render(score[1], True, BLUE_ICE, BLACK)
+        surface.blit(line_image2,(50,300))
+
+
+##############################################################################
