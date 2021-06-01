@@ -1,9 +1,8 @@
 import pygame
-from configurations import screen_size
 import sys
 
 PageTitle = "Final Boss" # Titulo da pagina
-
+screen_size = (800,800)
 ###########################
 # # # # # # RGB # # # # # # 
 ###########################
@@ -11,6 +10,7 @@ PageTitle = "Final Boss" # Titulo da pagina
 BLACK = (0, 0, 0)
 
 
+disk_
 
 ############################
 # Rotina principal do game #
