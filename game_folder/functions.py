@@ -222,3 +222,51 @@ def show_score(stop_blue,stop_yellow):
 
 
 ##############################################################################
+
+diskOrange_dir = 'SPRITES_BOSS/disk_orange.png'
+diskBlue_dir = 'SPRITES_BOSS/disk_blue.png'
+
+
+class orangeDisk(pygame.sprite.Sprite):
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = pygame.image.load(diskOrange_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.set_position(400,200) # TODO: mudar para um valor fixo
+        self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
+    
+    def set_position(self, x, y):
+        self.rect.center = pygame.math.Vector2(x, y)
+    
+    def set_velocity(self, vx, vy):
+        """Define a velocidade
+        vx: velocidade no eixo x
+        vy: velocidade no eixo y"""
+        self.velocity = pygame.math.Vector2(vx, vy)
+
+    def update(self, time):
+        self.rect.center += self.velocity * time
+
+class blueDisk(pygame.sprite.Sprite):
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = pygame.image.load(diskBlue_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.set_position(400,200) # TODO: mudar para um valor fixo
+        self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
+    
+    def set_position(self, x, y):
+        self.rect.center = pygame.math.Vector2(x, y)
+    
+    def set_velocity(self, vx, vy):
+        """Define a velocidade
+        vx: velocidade no eixo x
+        vy: velocidade no eixo y"""
+        self.velocity = pygame.math.Vector2(vx, vy)
+
+    def update(self, time):
+        self.rect.center += self.velocity * time
