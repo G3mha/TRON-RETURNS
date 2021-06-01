@@ -42,7 +42,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
         self.rect = self.image.get_rect()
-        self.set_position(screen_size[0],0)
+        self.set_position(400,100)
         self.set_velocity(-0.2,0) # VALOR TESTE
         self.direction = "LEFT"
         self.trace = []
@@ -88,7 +88,7 @@ class blueLightCicle(pygame.sprite.Sprite):
         self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
         self.rect = self.image.get_rect()
-        self.set_position(0,screen_size[0])
+        self.set_position(100,400)
         self.set_velocity(0.2,0) # VALOR TESTE
         self.direction = "RIGHT"
         self.trace = []
@@ -178,6 +178,18 @@ def tutorial_screen():
             pygame.display.flip()
 
 def crash(collor1,collor2):
+    if collor1.rect.topright[0] == 800 or collor1.rect.topright[1] == 0 or collor1.rect.bottomleft[1] == 800 or collor1.rect.bottomleft[0] == 0:
+        derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
+        derezzed_visual = pygame.transform.scale(derezzed_visual, (int(derezzed_visual.get_width()/5),int(derezzed_visual.get_height()/5)))
+        surface.blit(derezzed_visual, collor1.rect.center)
+        collor1.kill()
+        return False # retorna um valor booleano "False" para parar o "trace"
+    if collor2.rect.topright[0] == 800 or collor2.rect.topright[1] == 0 or collor2.rect.bottomleft[1] == 800 or collor2.rect.bottomleft[0] == 0:
+        derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
+        derezzed_visual = pygame.transform.scale(derezzed_visual, (int(derezzed_visual.get_width()/5),int(derezzed_visual.get_height()/5)))
+        surface.blit(derezzed_visual, collor2.rect.center)
+        collor2.kill()
+        return False # retorna um valor booleano "False" para parar o "trace"
     for t in collor1.trace:
         if collor2.rect.collidepoint(t):
             derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
