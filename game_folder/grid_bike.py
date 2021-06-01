@@ -8,6 +8,9 @@ import random
 import sys
 import pygame
 
+# Quantidade de vidas até o game-over
+lifes = 4
+
 # Estabelece a pasta que contem as sprites.
 LEFTblue_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_blueLEFT.png'
 RIGHTblue_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_blueRIGHT.png'
@@ -24,10 +27,6 @@ derezzedVFX_dir = 'SPRITES/VFX DEREZZED EXPLOSION.png'
 # Algumas variáveis essenciais para a aplicação
 screen_size = (800,800) # Largura e altura da tela
 page_title = "Corrida de motos" # Define o nome desta página
-stop_blue = True
-stop_yellow = True
-stop_sound = True
-game = "RUNNING"
 
 # Define o código RGB das cores utilizadas
 BLACK = (0,0,0)
@@ -36,7 +35,6 @@ BLUE = (12,12,100)
 BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
 WHITE = (255,255,255)
-
 
 class yellowLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -83,7 +81,6 @@ class yellowLightCicle(pygame.sprite.Sprite):
     def update_position(self, time):
         self.rect.center += self.velocity * time
         self.trace.append(self.rect.center)
-
 
 class blueLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -148,7 +145,6 @@ class blueLightCicle(pygame.sprite.Sprite):
         self.rect.center += self.velocity * time
         self.trace.append(self.rect.center)
 
-
 def tutorial_screen():
     line_text = [
         "Olá programa! Aqui você testará suas habilidades com motos.",
@@ -181,7 +177,6 @@ def tutorial_screen():
             surface.blit(command_image,(20,700))
             pygame.display.flip()
 
-
 def crash(collor1,collor2):
     for t in collor1.trace:
         if collor2.rect.collidepoint(t):
@@ -192,72 +187,9 @@ def crash(collor1,collor2):
             return False # retorna um valor booleano "False" para parar o "trace"
     return True # Caso contrário, continua igual
         
-
-
-# Rotina Inicial do jogo
-pygame.init()  # inicializa as rotinas do PyGame
-surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
-pygame.display.set_caption(page_title) # título da janela do jogo
-
-# Rotinas de aúdio
-pygame.mixer.music.load(derezzedSONG_dir)
-pygame.mixer.music.set_volume(0.04)
-pygame.mixer.music.play(-1)
-
-# Breve tutorial de instruções deste modo de jogo
-tutorial_screen()
-
-# variável que declara o clock do jogo
-clock = pygame.time.Clock()
-
-# cria sprite das Motos
-sprites = pygame.sprite.Group()
-yellow = yellowLightCicle(sprites)
-blue = blueLightCicle(sprites)
-
-# variáveis de fonte
-font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
-
-
-# Início do Loop da corrida de moto
-while True:
-    time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
-    # Adquire todos os eventos e os testa para casos desejados
-    events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
-                pygame.quit()
-                sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                blue.update_direction("LEFT")
-            elif event.key == pygame.K_RIGHT:
-                blue.update_direction("RIGHT")
-            elif event.key == pygame.K_DOWN:
-                blue.update_direction("UP")
-            elif event.key == pygame.K_UP:
-                blue.update_direction("DOWN")
-            elif event.key == pygame.K_SPACE:
-                blue.slow_down()
-            elif event.key == pygame.K_p:
-                if game != "PAUSED":
-                    pygame.mixer.music.pause()
-                    pause = font_paused.render("PAUSE", True, BLACK, WHITE)
-                    surface.blit(pause,((surface.get_width()-pause.get_width())/2,
-                                        (surface.get_height()-pause.get_height())/2))
-                    game = "PAUSED"
-                else:
-                    pygame.mixer.music.unpause()
-                    game = "RUNNING"
-
-    if game == "PAUSED":
-        pygame.display.flip()
-        continue
-    
-    # Rotinas do Background
+def draw_background():
     surface.fill(BLUE)
     thickness = 10
-    # Desenha borda da tela
     pygame.draw.line(surface, BLUE_MIDNIGHT, (0,0), (screen_size[0],0), thickness)
     pygame.draw.line(surface, BLUE_MIDNIGHT, (0,0), (0,screen_size[1]), thickness)
     pygame.draw.line(surface, BLUE_MIDNIGHT, screen_size, (screen_size[0],0), thickness)
@@ -269,6 +201,7 @@ while True:
         pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
         i+=1
 
+def draw_trace():
     i = 0
     if len(blue.trace) >= 2:
         while i < len(blue.trace):
@@ -281,22 +214,117 @@ while True:
             pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
             i+=1
 
-    sprites.draw(surface) # desenha as sprites
-    
-    # Atualiza a posição da moto e rastro
-    if stop_yellow:
-        yellow.update_position(time)
-    if stop_blue:
-        blue.update_position(time)
-
-    # Verifica se houve colisão entre a moto e o rastro
-    stop_yellow = crash(blue,yellow)
-    stop_blue = crash(yellow,blue)
-    if (stop_blue == False or stop_yellow == False) and stop_sound == True:
-        derezzed_sound = pygame.mixer.Sound(derezzedSFX_dir)
-        derezzed_sound.set_volume(0.08)
-        derezzed_sound.play()
-        stop_sound = False
+def show_score(stop_blue,stop_yellow):
+    if stop_blue == False:
+        score = ["Você PERDEU!","Para tentar novamente, clique N"]
+        font_used = pygame.font.Font(pygame.font.get_default_font(), 40)
+        line_image = font_used.render(score[0], True, BLUE_ICE, BLACK)
+        surface.blit(line_image,(50,200))
+        line_image2 = font_used.render(score[1], True, BLUE_ICE, BLACK)
+        surface.blit(line_image2,(50,300))
+        
 
 
-    pygame.display.flip() # atualiza o display
+    if stop_yellow == False:
+        score = "Você GANHOU!"
+        font_used = pygame.font.Font(pygame.font.get_default_font(), 40)
+        line_image = font_used.render(score, True, BLUE_ICE, BLACK)
+        surface.blit(line_image,(400,400))
+
+while lifes > 0:
+    # Rotina Inicial do jogo
+    pygame.init()  # inicializa as rotinas do PyGame
+    surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    pygame.display.set_caption(page_title) # título da janela do jogo
+
+    # Rotinas de aúdio
+    pygame.mixer.music.load(derezzedSONG_dir)
+    pygame.mixer.music.set_volume(0.04)
+    pygame.mixer.music.play(-1)
+
+    # Breve tutorial de instruções deste modo de jogo
+    tutorial_screen()
+
+    # variável que declara o clock do jogo
+    clock = pygame.time.Clock()
+
+    # cria sprite das Motos
+    sprites = pygame.sprite.Group()
+    yellow = yellowLightCicle(sprites)
+    blue = blueLightCicle(sprites)
+
+    # Variáveis para regular processos
+    stop_blue = True
+    stop_yellow = True
+    stop_sound = True
+    restart = False
+    game = "RUNNING"
+
+    # variáveis de fonte
+    font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
+
+    # Início do Loop da corrida de moto
+    while True:
+        time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
+        # Adquire todos os eventos e os testa para casos desejados
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_n:
+                    lifes -= 1
+                    restart = True
+                if event.key == pygame.K_LEFT:
+                    blue.update_direction("LEFT")
+                elif event.key == pygame.K_RIGHT:
+                    blue.update_direction("RIGHT")
+                elif event.key == pygame.K_DOWN:
+                    blue.update_direction("UP")
+                elif event.key == pygame.K_UP:
+                    blue.update_direction("DOWN")
+                elif event.key == pygame.K_SPACE:
+                    blue.slow_down()
+                elif event.key == pygame.K_p:
+                    if game != "PAUSED":
+                        pygame.mixer.music.pause()
+                        pause = font_paused.render("PAUSE", True, BLACK, WHITE)
+                        surface.blit(pause,((surface.get_width()-pause.get_width())/2,
+                                            (surface.get_height()-pause.get_height())/2))
+                        game = "PAUSED"
+                    else:
+                        pygame.mixer.music.unpause()
+                        game = "RUNNING"
+
+        if game == "PAUSED":
+            pygame.display.flip()
+            continue
+        
+        if restart == True:
+            restart = False
+            break
+
+        draw_background()
+
+        draw_trace()
+        sprites.draw(surface) # desenha as sprites
+
+        # Atualiza a posição da moto e rastro
+        if stop_yellow == True and stop_blue == True:
+            yellow.update_position(time)
+            blue.update_position(time)
+
+        # Verifica se houve colisão entre a moto e o rastro
+        stop_yellow = crash(blue,yellow)
+        stop_blue = crash(yellow,blue)
+
+        if (stop_blue == False or stop_yellow == False) and stop_sound == True:
+            derezzed_sound = pygame.mixer.Sound(derezzedSFX_dir)
+            derezzed_sound.set_volume(0.08)
+            derezzed_sound.play()
+            stop_sound = False
+
+        show_score(stop_blue,stop_yellow)
+
+        pygame.display.flip() # atualiza o display
