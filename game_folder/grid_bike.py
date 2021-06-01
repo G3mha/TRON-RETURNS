@@ -23,10 +23,10 @@ derezzedVFX_dir = 'SPRITES/VFX DEREZZED EXPLOSION.png'
 
 # Algumas variáveis essenciais para a aplicação
 screen_size = (800,800) # Largura e altura da tela
-lightcicle_size = (200,100) # Tamanho da bike
 page_title = "Corrida de motos" # Define o nome desta página
 stop_blue = True
 stop_yellow = True
+stop_sound = True
 game = "RUNNING"
 
 # Define o código RGB das cores utilizadas
@@ -107,20 +107,42 @@ class blueLightCicle(pygame.sprite.Sprite):
             if direction == "UP":
                 self.image = pygame.image.load(DOWNblue_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(0,0.2) # VALOR TESTE
+                self.set_velocity(0,0.2)
             if direction == "DOWN":
                 self.image = pygame.image.load(UPblue_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(0,-0.2) # VALOR TESTE
+                self.set_velocity(0,-0.2)
             if direction == "LEFT":
                 self.image = pygame.image.load(LEFTblue_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(-0.2,0) # VALOR TESTE
+                self.set_velocity(-0.2,0)
             if direction == "RIGHT":
                 self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(0.2,0) # VALOR TESTE
+                self.set_velocity(0.2,0)
             self.direction = direction
+    
+    def slow_down(self):
+        if self.direction == "UP":
+            if self.velocity == (0,0.2):
+                self.set_velocity(0,0.1)
+            elif self.velocity == (0,0.1):
+                self.set_velocity(0,0.2)
+        if self.direction == "DOWN":
+            if self.velocity == (0,-0.2):
+                self.set_velocity(0,-0.1)
+            elif self.velocity == (0,-0.1):
+                self.set_velocity(0,-0.2)
+        if self.direction == "LEFT":
+            if self.velocity == (-0.2,0):
+                self.set_velocity(-0.1,0)
+            elif self.velocity == (-0.1,0):
+                self.set_velocity(-0.2,0)
+        if self.direction == "RIGHT":
+            if self.velocity == (0.2,0):
+                self.set_velocity(0.1,0)
+            elif self.velocity == (0.1,0):
+                self.set_velocity(0.2,0)
 
     def update_position(self, time):
         self.rect.center += self.velocity * time
@@ -138,7 +160,7 @@ def tutorial_screen():
         "Da mesma forma, a moto amarela também tentará o mesmo.",
         "Que os jogos começem!"
     ]
-    command = "...(pressione a BARRA DE ESPAÇO para continuar)"
+    command = "...(pressione ENTER para continuar)"
     font_instructions = pygame.font.Font(pygame.font.get_default_font(), 20)
     
     for line in line_text:
@@ -148,7 +170,7 @@ def tutorial_screen():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     command_pressed = False
                     break
             surface.fill(BLACK)
@@ -163,8 +185,9 @@ def tutorial_screen():
 def crash(collor1,collor2):
     for t in collor1.trace:
         if collor2.rect.collidepoint(t):
-            # derezzed_blit=blue.rect
-            # surface.blit(pygame.image.load(derezzedVFX_dir).convert_alpha(), derezzed_blit)
+            derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
+            derezzed_visual = pygame.transform.scale(derezzed_visual, (int(derezzed_visual.get_width()/5),int(derezzed_visual.get_height()/5)))
+            surface.blit(derezzed_visual, collor2.rect.center)
             collor2.kill()
             return False # retorna um valor booleano "False" para parar o "trace"
     return True # Caso contrário, continua igual
@@ -176,13 +199,13 @@ pygame.init()  # inicializa as rotinas do PyGame
 surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
 pygame.display.set_caption(page_title) # título da janela do jogo
 
-# Breve tutorial de instruções deste modo de jogo
-tutorial_screen()
-
 # Rotinas de aúdio
 pygame.mixer.music.load(derezzedSONG_dir)
-pygame.mixer.music.set_volume(0.04)  # VALOR TESTE
-pygame.mixer.music.play(-1)  # VALOR TESTE
+pygame.mixer.music.set_volume(0.04)
+pygame.mixer.music.play(-1)
+
+# Breve tutorial de instruções deste modo de jogo
+tutorial_screen()
 
 # variável que declara o clock do jogo
 clock = pygame.time.Clock()
@@ -215,7 +238,7 @@ while True:
             elif event.key == pygame.K_UP:
                 blue.update_direction("DOWN")
             elif event.key == pygame.K_SPACE:
-                blue.velocity = (blue.velocity)/2
+                blue.slow_down()
             elif event.key == pygame.K_p:
                 if game != "PAUSED":
                     pygame.mixer.music.pause()
@@ -226,14 +249,11 @@ while True:
                 else:
                     pygame.mixer.music.unpause()
                     game = "RUNNING"
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                blue.velocity = (blue.velocity)*2
 
     if game == "PAUSED":
         pygame.display.flip()
         continue
-
+    
     # Rotinas do Background
     surface.fill(BLUE)
     thickness = 10
@@ -272,5 +292,11 @@ while True:
     # Verifica se houve colisão entre a moto e o rastro
     stop_yellow = crash(blue,yellow)
     stop_blue = crash(yellow,blue)
+    if (stop_blue == False or stop_yellow == False) and stop_sound == True:
+        derezzed_sound = pygame.mixer.Sound(derezzedSFX_dir)
+        derezzed_sound.set_volume(0.08)
+        derezzed_sound.play()
+        stop_sound = False
+
 
     pygame.display.flip() # atualiza o display
