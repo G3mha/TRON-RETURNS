@@ -101,6 +101,7 @@ class blueLightCicle(pygame.sprite.Sprite):
     
     def update_direction(self, direction):
         if direction != self.direction:
+            position = self.rect.center
             if direction == "UP":
                 self.image = pygame.image.load(DOWNblue_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
@@ -117,6 +118,8 @@ class blueLightCicle(pygame.sprite.Sprite):
                 self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
                 self.set_velocity(0.2,0)
+            self.rect = self.image.get_rect()
+            self.rect.center = position
             self.direction = direction
     
     def slow_down(self):

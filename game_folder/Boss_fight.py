@@ -10,6 +10,7 @@ screen_size = (800,800)
 BLACK = (0, 0, 0)
 
 
+disk_
 
 ############################
 # Rotina principal do game #
