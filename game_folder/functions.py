@@ -48,6 +48,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
     
     def update_direction(self, direction):
         if direction != self.direction:
+            position = self.rect.center
             if direction == "UP":
                 self.image = pygame.image.load(DOWNyellow_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
@@ -64,6 +65,8 @@ class yellowLightCicle(pygame.sprite.Sprite):
                 self.image = pygame.image.load(RIGHTyellow_dir).convert_alpha()
                 self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
                 self.set_velocity(0.2,0) # VALOR TESTE
+            self.rect = self.image.get_rect()
+            self.rect.center = position
             self.direction = direction
 
     def update_position(self, time):
