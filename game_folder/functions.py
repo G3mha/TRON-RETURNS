@@ -230,9 +230,9 @@ tronDISKcrouched_dir = 'SPRITES_BOSS/agachado_com_disco.png'
 tronNOregular_dir = 'SPRITES_BOSS/normal_sem_disco.png'
 tronDEREZZED1_dir = 'SPRITES_BOSS/desfazendo_1.png'
 tronDEREZZED2_dir = 'SPRITES_BOSS/desfazendo_2.png'
+windEFFECT_dir = 'SPRITES_BOSS/vento.png'
 cluwDISK_dir = 'SPRITES_BOSS/boss_com_disco.png'
 cluwoDISK_dir = 'SPRITES_BOSS/boss_sem_disco.png'
-windEFFECT_dir = 'SPRITES_BOSS/vento.png'
 
 
 class orangeDisk(pygame.sprite.Sprite):
@@ -286,8 +286,31 @@ class CLU(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
+
+    def launch_disk(self):
+        position = self.rect.center
+        self.image = pygame.image.load(cluwoDISK_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.center = position
+    
+    def back_to_normal(self):
+        position = self.rect.center
+        self.image = pygame.image.load(cluwDISK_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.center = position
+
+class TRON(pygame.sprite.Sprite):
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = pygame.image.load(tronDISKregular_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.set_position(400,200) # TODO: mudar para um valor fixo
-        self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
     
     def set_position(self, x, y):
         self.rect.center = pygame.math.Vector2(x, y)
@@ -299,13 +322,23 @@ class CLU(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
 
     def launch_disk(self):
-        self.image = pygame.image.load(cluwoDISK_dir).convert_alpha()
+        position = self.rect.center
+        self.image = pygame.image.load(tronNOregular_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
+        self.rect.center = position
     
     def back_to_normal(self):
-        self.image = pygame.image.load(cluwDISK_dir).convert_alpha()
+        position = self.rect.center
+        self.image = pygame.image.load(tronDISKregular_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.center = position
+
+    def crouch(self):
+        self.image = pygame.image.load(tronDISKcrouched_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5))) # TODO: mudar para um valor fixo
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
