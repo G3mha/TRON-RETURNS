@@ -350,3 +350,10 @@ class TRON(pygame.sprite.Sprite):
         self.image = self.images[self.index]
         self.mask = pygame.mask.from_surface(self.image)
         return False
+
+
+def recharge_delay(last1):
+    current = pygame.time.get_ticks()
+    if current - last1 > 500: # TODO: verificar se o valor é adequado
+        last = current
+        return last
