@@ -170,7 +170,7 @@ def tutorial_screen():
             surface.blit(line_image,(20,100))
             surface.blit(command_image,(20,700))
             pygame.display.flip()
-
+    
 def crash(collor1,collor2):
     if collor1.rect.topright[0] == 800 or collor1.rect.topright[1] == 0 or collor1.rect.bottomleft[1] == 800 or collor1.rect.bottomleft[0] == 0:
         derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
@@ -356,4 +356,8 @@ def recharge_delay(last1):
     current = pygame.time.get_ticks()
     if current - last1 > 500: # TODO: verificar se o valor é adequado
         last = current
-        return last
+        true_or_false = True
+        return last, true_or_false
+    else:
+        true_or_false = False
+        return last1, true_or_false
