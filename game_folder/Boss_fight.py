@@ -1,3 +1,4 @@
+from functions import blueDisk, orangeDisk, CLU, TRON, recharge_delay
 import pygame
 import sys
 
@@ -14,8 +15,15 @@ BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
 WHITE = (255,255,255)
 
-disk_
 
+sprites = pygame.sprite.Group()
+disk_blue = blueDisk(sprites)
+disk_orange = orangeDisk(sprites)
+clu = CLU(sprites)
+tron = TRON(sprites)
+
+last = 0
+ready_to_lauch = True
 ############################
 # Rotina principal do game #
 ############################
@@ -36,17 +44,18 @@ while True:    #True
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
                 #-- TODO --#
-                a = 0 #enchendo linguica
+                tron.crouch()
             if event.key == pygame.K_UP:
                 #-- TODO --#
                 a = 0 #enchendo linguica
-            if event.key == pygame.K_LEFT:
-                #-- TODO --#
-                a = 0 #enchendo linguica
-            if event.key == pygame.K_RIGHT:
-                #-- TODO --#
-                a = 0 #enchendo linguica
             if event.key == pygame.K_SPACE:
-                #-- TODO --#
-                a = 0 #enchendo linguica
+                if ready_to_lauch == True:
+                    disk_blue = blueDisk(sprites)
+                last, ready_to_lauch = recharge_delay(last)
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_DOWN:
+                tron.standing()
+
+    sprites.update()
+
     surface.fill(BLACK)
