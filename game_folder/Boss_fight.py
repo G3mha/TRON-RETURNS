@@ -43,19 +43,26 @@ while True:    #True
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                #-- TODO --#
                 tron.crouch()
             if event.key == pygame.K_UP:
                 #-- TODO --#
                 a = 0 #enchendo linguica
             if event.key == pygame.K_SPACE:
-                if ready_to_lauch == True:
-                    disk_blue = blueDisk(sprites)
                 last, ready_to_lauch = recharge_delay(last)
+                if ready_to_lauch == True:
+                    tron.launch_disk()
+                    disk_blue = blueDisk(sprites)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 tron.standing()
 
-    sprites.update()
-
     surface.fill(BLACK)
+    pygame.draw.line(surface, BLUE_MIDNIGHT, (0,400), (800,400), 10)
+
+
+    # sprites.draw(surface)
+    # sprites.update(Time)
+
+
+
+    pygame.display.flip()
