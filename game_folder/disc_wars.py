@@ -4,6 +4,7 @@ import math
 
 BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
+BLACK = (255,255,255)
 
 class Disk(pygame.sprite.Sprite):
     def __init__(self, group, colour, creator):
@@ -17,6 +18,8 @@ class Disk(pygame.sprite.Sprite):
         self.colour = colour
         self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 100, 100)
         self.mask = pygame.mask.from_surface(self.image)
+        self.v = 1
+        self.angle_list = {0:(self.v,-self.v), 22:(self.v,-self.v/2), 45:(self.v,0), 67:(self.v,self.v/2), 90:(self.v,self.v)}
 
     def update(self, time):
         self.rect.center += self.velocity * time
@@ -49,23 +52,24 @@ class Paddle(pygame.sprite.Sprite):
             self.yellow = False
         self.rect = pygame.Rect('x', 'y', 100, 100) # TODO: change values for x & y
         self.velocity = [0,0]
+        
 
     def game_controls(self, event):
         if self.yellow == False:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
-                    self.velocity[1] = 0 # TODO: change value
+                    self.velocity[1] = 1 # TODO: change value
                 elif event.key == pygame.K_w:
-                    self.velocity[1] = 0 # TODO: change value
+                    self.velocity[1] = 1 # TODO: change value
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_s or event.key == pygame.K_w:
                     self.velocity[1] = 0
         if self.yellow == True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
-                    self.velocity[1] = 0 # TODO: change value
+                    self.velocity[1] = 1 # TODO: change value
                 elif event.key == pygame.K_UP:
-                    self.velocity[1] = 0 # TODO: change value
+                    self.velocity[1] = 1 # TODO: change value
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                     self.velocity[1] = 0
@@ -105,7 +109,6 @@ y_disk_on = True
 y_score = 0
 b_score = 0
 
-
 # variáveis de fonte
 font_standart = pygame.font.Font(pygame.font.get_default_font(), 40)
 
@@ -118,6 +121,12 @@ while True:
         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
             blue.game_controls(event)
             yellow.game_controls(event)
+            if event.type == pygame.KEYDOWN:
+                if blue.yellow == False:
+
+                if yellow.yellow == True:
+                    if event.key == pygame.K_c:
+
 
     if b_disk.mask.collide_mask(blue.mask):
         b_disk.kill()
@@ -134,3 +143,7 @@ while True:
         y_score += 1
         blue.kill()
         blue = Paddle(sprites, "blue")
+    
+    surface.fill(BLACK)
+    
+    pygame.display.update()
