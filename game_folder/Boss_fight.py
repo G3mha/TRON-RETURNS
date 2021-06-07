@@ -67,3 +67,5 @@ while True:    #True
 # Código extraído de https://codingshiksha.com/python/python-3-pygame-google-chrome-dinosaur-t-rex-dino-runner-game-gui-script-desktop-app-full-project-for-beginners/
 
     pygame.display.flip()
+
+    # https://github.com/insper/pygame-snippets#fazendo-o-personagem-pular link de consulta
