@@ -69,6 +69,19 @@ class Paddle(pygame.sprite.Sprite):
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                     self.velocity[1] = 0
+    
+    def update(self):
+        width, height = pygame.display.get_surface().get_size()
+        # cria barreira invisível, para que o Jogador não saia da tela
+        if self.rect.right > width:
+            self.rect.right = width
+        elif self.rect.x < 0:
+            self.rect.x = 0
+        # cria barreira invisível, para que o Jogador não saia da tela
+        if self.rect.bottom > height:
+            self.rect.bottom = height
+        elif self.rect.y < 0:
+            self.rect.y = 0
 
 pygame.init()  # inicializa as rotinas do PyGame
 screen_size = (800,800) # Largura e altura da tela
@@ -85,15 +98,13 @@ yellow = Paddle(sprites, "yellow")
 blue = Paddle(sprites, "blue")
 b_disk = Disk(sprites, 'blue')
 y_disk = Disk(sprites, 'yellow')
-y_on = True
-b_on = True
+
+# Variáveis para regular processos
 b_disk_on = True
 y_disk_on = True
 y_score = 0
 b_score = 0
 
-# Variáveis para regular processos
-score = 0
 
 # variáveis de fonte
 font_standart = pygame.font.Font(pygame.font.get_default_font(), 40)
@@ -116,10 +127,10 @@ while True:
         y_disk_on = False
     
     if b_disk.mask.collide_mask(yellow.mask):
-        yellow.kill()
         b_score += 1
-        y_on = False
+        yellow.kill()
+        yellow = Paddle(sprites, "yellow")
     if y_disk.mask.collide_mask(blue.mask):
-        blue.kill()
         y_score += 1
-        b_on = False
+        blue.kill()
+        blue = Paddle(sprites, "blue")
