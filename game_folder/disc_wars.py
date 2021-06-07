@@ -84,9 +84,13 @@ sprites = pygame.sprite.Group()
 yellow = Paddle(sprites, "yellow")
 blue = Paddle(sprites, "blue")
 b_disk = Disk(sprites, 'blue')
-b_disk_on = True
 y_disk = Disk(sprites, 'yellow')
+y_on = True
+b_on = True
+b_disk_on = True
 y_disk_on = True
+y_score = 0
+b_score = 0
 
 # Variáveis para regular processos
 score = 0
@@ -108,5 +112,14 @@ while True:
         b_disk.kill()
         b_disk_on = False
     if y_disk.mask.collide_mask(yellow.mask):
-        b_disk.kill()
-        b_disk_on = False
+        y_disk.kill()
+        y_disk_on = False
+    
+    if b_disk.mask.collide_mask(yellow.mask):
+        yellow.kill()
+        b_score += 1
+        y_on = False
+    if y_disk.mask.collide_mask(blue.mask):
+        blue.kill()
+        y_score += 1
+        b_on = False
