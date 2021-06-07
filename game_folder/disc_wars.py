@@ -4,7 +4,7 @@ import random
 
 BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
-BLACK = (255,255,255)
+BLACK = (0,0,0)
 GREEN = (0,0,255)
 
 class Disk(pygame.sprite.Sprite):
@@ -22,7 +22,7 @@ class Disk(pygame.sprite.Sprite):
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
             self.angle = self.angle_list[angle_index]
         self.colour = colour
-        self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 100, 100)
+        self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 50, 50)
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, time):
@@ -59,7 +59,7 @@ class Paddle(pygame.sprite.Sprite):
             self.image = pygame.image.load('SPRITES_BOSS/normal_sem_disco.png').convert_alpha()
             self.mask = pygame.mask.from_surface(self.image)
             self.yellow = False
-            self.rect = self.image()
+            self.rect = self.image.get_rect()
             self.rect.center = (random.randint(100,300),random.randint(100,700))
         self.velocity = [0,0]
         
@@ -111,11 +111,9 @@ sprites = pygame.sprite.Group()
 yellow = Paddle(sprites, "yellow")
 blue = Paddle(sprites, "blue")
 
-
-
 # Variáveis para regular processos
-b_disk_on = True
-y_disk_on = True
+b_disk_on = False
+y_disk_on = False
 y_score = 0
 b_score = 0
 angle_index = 0
@@ -142,9 +140,11 @@ while True:
                         c_pressed_yellow = True
                     if event.key == pygame.K_d and c_pressed_blue == True:
                         b_disk = Disk(sprites, 'blue', blue, angle_index)
+                        b_disk_on = True
                         c_pressed_blue = False
                     if event.key == pygame.K_RIGHT and c_pressed_yellow == True:
                         y_disk = Disk(sprites, 'yellow', yellow, angle_index)
+                        y_disk_on = True
                         c_pressed_yellow = False
     if c_pressed_blue == True:
         pygame.draw.line(surface, GREEN, blue.rect.center, (blue.rect.center + blue.angle_list[angle_index]*15), 5)
@@ -155,26 +155,31 @@ while True:
         angle_index = 0
     
 
-
-
-    sprites.update()
-    
-    if b_disk.mask.collide_mask(blue.mask):
-        b_disk.kill()
-        b_disk_on = False
-    if y_disk.mask.collide_mask(yellow.mask):
-        y_disk.kill()
-        y_disk_on = False
-    
-    if b_disk.mask.collide_mask(yellow.mask):
-        b_score += 1
-        yellow.kill()
-        yellow = Paddle(sprites, "yellow")
-    if y_disk.mask.collide_mask(blue.mask):
-        y_score += 1
-        blue.kill()
-        blue = Paddle(sprites, "blue")
-    
     surface.fill(BLACK)
+
+    blue.update()
+    yellow.update()
+
+    if y_disk_on == True:
+        y_disk.update()
+        if y_disk.mask.collide_mask(yellow.mask):
+            y_disk.kill()
+            y_disk_on = False
+        if y_disk.mask.collide_mask(blue.mask):
+            y_score += 1
+            blue.kill()
+            blue = Paddle(sprites, "blue")
+    if b_disk_on == True:
+        b_disk.update()
+        if b_disk.mask.collide_mask(blue.mask):
+            b_disk.kill()
+            b_disk_on = False
+        if b_disk.mask.collide_mask(yellow.mask):
+            b_score += 1
+            yellow.kill()
+            yellow = Paddle(sprites, "yellow")
+    
+        
+    sprites.draw(surface)
 
     pygame.display.update()
