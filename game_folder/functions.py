@@ -170,7 +170,7 @@ def tutorial_screen():
             surface.blit(line_image,(20,100))
             surface.blit(command_image,(20,700))
             pygame.display.flip()
-    
+
 def crash(collor1,collor2):
     if collor1.rect.topright[0] == 800 or collor1.rect.topright[1] == 0 or collor1.rect.bottomleft[1] == 800 or collor1.rect.bottomleft[0] == 0:
         derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
@@ -239,8 +239,10 @@ class orangeDisk(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.image = pygame.image.load(diskOrange_dir).convert_alpha()
-        self.rect = pygame.Rect(6,6,150,150) # respectivamente posição x, posição y, largura e altura TODO: mudar valores
+        self.image = pygame.transform.scale(self.image, (200,200))
         self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.set_position(75,300)
         self.set_position(400,200) # TODO: mudar para um valor fixo
         self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
     
@@ -260,7 +262,7 @@ class blueDisk(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.image = pygame.image.load(diskBlue_dir).convert_alpha()
-        self.rect = pygame.Rect(6,6,150,150) # respectivamente posição x, posição y, largura e altura TODO: mudar valores
+        self.rect = pygame.Rect(6,6,40,40) # respectivamente posição x, posição y, largura e altura TODO: mudar valores
         self.mask = pygame.mask.from_surface(self.image)
         self.set_position(400,200) # TODO: mudar para um valor fixo
         self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
@@ -309,10 +311,12 @@ class TRON(pygame.sprite.Sprite):
         self.images.append(pygame.image.load(tronDEREZZED2_dir).convert_alpha())
         self.index = 0
         self.image = self.images[self.index]
-        self.rect = pygame.Rect(6,6,150,150) # respectivamente posição x, posição y, largura e altura TODO: mudar valores
+        self.image = pygame.transform.scale(self.image, (200,200))
+        self.rect = self.image.get_rect()
+        self.set_position(75,300)
         self.mask = pygame.mask.from_surface(self.image)
         self.index_derezzed = 0
-    
+
     def set_position(self, x, y):
         self.rect.center = pygame.math.Vector2(x, y)
     
@@ -321,21 +325,37 @@ class TRON(pygame.sprite.Sprite):
         vx: velocidade no eixo x
         vy: velocidade no eixo y"""
         self.velocity = pygame.math.Vector2(vx, vy)
-
+    
     def standing(self):
         self.index = 0
         self.image = self.images[self.index]
+        self.image = pygame.transform.scale(self.image, (200,200))
+        self.set_position(75,300)
         self.mask = pygame.mask.from_surface(self.image)
 
     def crouch(self):
         self.index = 1
         self.image = self.images[self.index]
+        self.image = pygame.transform.scale(self.image, (200,200))
+        self.set_position(75,300)
         self.mask = pygame.mask.from_surface(self.image)
-    
+
     def launch_disk(self):
         self.index = 2
         self.image = self.images[self.index]
+        self.image = pygame.transform.scale(self.image, (200,200))
+        self.set_position(75,300)
         self.mask = pygame.mask.from_surface(self.image)
+    
+    def jump(self):
+        self.set_velocity(0,-84)
+    
+    def update(self, time):
+        if self.rect.center == (75,240):
+            self.set_velocity(0,4)
+        if self.rect.center == (75,300):
+            self.set_velocity(0,0)
+        self.rect.center += self.velocity * time
 
     def derezzed(self,sprite_name):
         self.index_derezzed += 1
