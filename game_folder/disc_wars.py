@@ -13,11 +13,13 @@ class Disk(pygame.sprite.Sprite):
         self.v = 1
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (31,28))
             self.velocity = [0,0] # TODO: change values
             self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
             self.angle = self.angle_list[angle_index]
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (31,28))
             self.velocity = [0,0] # TODO: change values
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
             self.angle = self.angle_list[angle_index]
@@ -50,6 +52,7 @@ class Paddle(pygame.sprite.Sprite):
         if colour == "yellow":
             self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
             self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (50,88))
             self.mask = pygame.mask.from_surface(self.image)
             self.yellow = True
             self.rect = self.image.get_rect()
@@ -57,12 +60,12 @@ class Paddle(pygame.sprite.Sprite):
         if colour == "blue":
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
             self.image = pygame.image.load('SPRITES_BOSS/normal_sem_disco.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (50,88))
             self.mask = pygame.mask.from_surface(self.image)
             self.yellow = False
             self.rect = self.image.get_rect()
             self.rect.center = (random.randint(100,300),random.randint(100,700))
         self.velocity = [0,0]
-        
 
     def game_controls(self, event):
         if self.yellow == False:
