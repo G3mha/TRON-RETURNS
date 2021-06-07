@@ -9,20 +9,38 @@ class Disk(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.image = pygame.image.load('SPRITES_BOSS/neutral_disk.png').convert_alpha()
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = ('x','y',100,100) # TODO: change values for x & y
-        self.velocity = (0,0) # TODO: change values
+        self.velocity = [0,0] # TODO: change values
 
     def update(self, time):
         self.rect.center += self.velocity * time
+        width, height = pygame.display.get_surface().get_size()
+        # regula o movimento do disco horizontalmente, para que ele não saia da tela
+        if self.rect.right > width:
+            self.velocity[0] = -abs(self.velocity[0])
+            self.rect.right = width
+        elif self.rect.x < 0:
+            self.velocity[0] = abs(self.velocity[0])
+            self.rect.x = 0
+        # regula o movimento do disco verticalmente, para que ele não saia da tela
+        if self.rect.bottom > height:
+            self.velocity[1] = -abs(self.velocity[1])
+            self.rect.bottom = height
+        elif self.rect.y < 0:
+            self.velocity[1] = abs(self.velocity[1])
+            self.rect.y = 0
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, group, colour):
         super().__init__(group)
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/yellow_padle.png').convert_alpha()
+            self.mask = pygame.mask.from_surface(self.image)
             self.yellow = True
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/blue_padle.png').convert_alpha()
+            self.mask = pygame.mask.from_surface(self.image)
             self.yellow = False
         self.rect = ('x','y',100,100) # TODO: change values for x & y
         self.velocity = (0,0)
