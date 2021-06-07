@@ -5,6 +5,7 @@ import math
 BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
 BLACK = (255,255,255)
+GREEN = (0,0,255)
 
 class Disk(pygame.sprite.Sprite):
     def __init__(self, group, colour, creator):
@@ -12,14 +13,15 @@ class Disk(pygame.sprite.Sprite):
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
             self.velocity = [0,0] # TODO: change values
+            self.angle_list = {0:(-self.v,-self.v), 22:(-self.v,-self.v/2), 45:(-self.v,0), 67:(-self.v,self.v/2), 90:(-self.v,self.v)}        
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
             self.velocity = [0,0] # TODO: change values
+            self.angle_list = {0:(self.v,-self.v), 22:(self.v,-self.v/2), 45:(self.v,0), 67:(self.v,self.v/2), 90:(self.v,self.v)}
         self.colour = colour
         self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 100, 100)
         self.mask = pygame.mask.from_surface(self.image)
         self.v = 1
-        self.angle_list = {0:(self.v,-self.v), 22:(self.v,-self.v/2), 45:(self.v,0), 67:(self.v,self.v/2), 90:(self.v,self.v)}
 
     def update(self, time):
         self.rect.center += self.velocity * time
@@ -108,6 +110,7 @@ b_disk_on = True
 y_disk_on = True
 y_score = 0
 b_score = 0
+angle_index = 0
 
 # variáveis de fonte
 font_standart = pygame.font.Font(pygame.font.get_default_font(), 40)
@@ -123,11 +126,15 @@ while True:
             yellow.game_controls(event)
             if event.type == pygame.KEYDOWN:
                 if blue.yellow == False:
-
+                    if event.key == pygame.K_c:
+                        pygame.draw.line(surface, GREEN, blue.rect.center, (blue.rect.center + blue.angle_list[angle_index]*15), 5)
                 if yellow.yellow == True:
                     if event.key == pygame.K_c:
+                        pygame.draw.line(surface, GREEN, yellow.rect.center, (yellow.rect.center + yellow.angle_list[angle_index]*15), 5)
 
 
+    sprites.update()
+    
     if b_disk.mask.collide_mask(blue.mask):
         b_disk.kill()
         b_disk_on = False
@@ -145,5 +152,5 @@ while True:
         blue = Paddle(sprites, "blue")
     
     surface.fill(BLACK)
-    
+
     pygame.display.update()
