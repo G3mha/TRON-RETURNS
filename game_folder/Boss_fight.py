@@ -17,8 +17,7 @@ WHITE = (255,255,255)
 
 
 sprites = pygame.sprite.Group()
-disk_blue = blueDisk(sprites)
-disk_orange = orangeDisk(sprites)
+#disk_orange = orangeDisk(sprites)
 clu = CLU(sprites)
 tron = TRON(sprites)
 
@@ -45,8 +44,7 @@ while True:    #True
             if event.key == pygame.K_DOWN:
                 tron.crouch()
             if event.key == pygame.K_UP:
-                #-- TODO --#
-                a = 0 #enchendo linguica
+                tron.jump()
             if event.key == pygame.K_SPACE:
                 last, ready_to_lauch = recharge_delay(last)
                 if ready_to_lauch == True:
@@ -56,13 +54,16 @@ while True:    #True
             if event.key == pygame.K_DOWN:
                 tron.standing()
 
+
     surface.fill(BLACK)
     pygame.draw.line(surface, BLUE_MIDNIGHT, (0,400), (800,400), 10)
 
 
-    # sprites.draw(surface)
+    tron.update(Time)
+    sprites.draw(surface)
+    
     # sprites.update(Time)
 
-
+# Código extraído de https://codingshiksha.com/python/python-3-pygame-google-chrome-dinosaur-t-rex-dino-runner-game-gui-script-desktop-app-full-project-for-beginners/
 
     pygame.display.flip()
