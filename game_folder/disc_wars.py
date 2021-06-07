@@ -61,3 +61,19 @@ sprites = pygame.sprite.Group()
 yellow = Paddle(sprites, "yellow")
 blue = Paddle(sprites, "blue")
 disk = Disk(sprites)
+
+# Variáveis para regular processos
+score = 0
+
+# variáveis de fonte
+font_standart = pygame.font.Font(pygame.font.get_default_font(), 40)
+
+while True:
+    time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            pygame.quit()
+            sys.exit()
+        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+            blue.game_controls(event)
+            yellow.game_controls(event)
