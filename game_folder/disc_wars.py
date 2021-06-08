@@ -25,22 +25,25 @@ class Disk(pygame.sprite.Sprite):
         self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 50, 50)
         self.mask = pygame.mask.from_surface(self.image)
 
+    def set_velocity(self, vx, vy):
+        self.velocity = pygame.math.Vector2(vx, vy)
+
     def update(self, time):
         self.rect.center = ((self.rect.center[0] + (self.velocity[0] * time)), (self.rect.center[1] + (self.velocity[1] * time)))
         width, height = pygame.display.get_surface().get_size()
         # regula o movimento do disco horizontalmente, para que ele não saia da tela
         if self.rect.right > width:
-            self.velocity[0] = -abs(self.velocity[0])
+            self.set_velocity(-abs(self.velocity[0]), self.velocity[1])
             self.rect.right = width
         elif self.rect.x < 0:
-            self.velocity[0] = abs(self.velocity[0])
+            self.set_velocity(abs(self.velocity[0]), self.velocity[1])
             self.rect.x = 0
         # regula o movimento do disco verticalmente, para que ele não saia da tela
         if self.rect.bottom > height:
-            self.velocity[1] = -abs(self.velocity[1])
+            self.set_velocity(self.velocity[0], -abs(self.velocity[1]))
             self.rect.bottom = height
         elif self.rect.y < 0:
-            self.velocity[1] = abs(self.velocity[1])
+            self.set_velocity(self.velocity[0], abs(self.velocity[1]))
             self.rect.y = 0
 
 class Paddle(pygame.sprite.Sprite):
@@ -162,8 +165,6 @@ while True:
     angle_index += 1
     if angle_index > 4:
         angle_index = 0
-    
-
 
     blue.update()
     yellow.update()
@@ -186,7 +187,7 @@ while True:
             b_score += 1
             yellow.kill()
             yellow = Paddle(sprites, "yellow")
-    
+
         
     sprites.draw(surface)
 
