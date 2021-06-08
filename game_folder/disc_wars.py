@@ -14,20 +14,20 @@ class Disk(pygame.sprite.Sprite):
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.velocity = [0,0] # TODO: change values
-            self.angle_list = [[-self.v,-self.v], [-self.v,-self.v/2], [-self.v,0], [-self.v,self.v/2], [-self.v,self.v]]
-            self.angle = self.angle_list[angle_index]
+            self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
+            self.velocity = self.angle_list[angle_index]
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.velocity = [0,0] # TODO: change values
-            self.angle_list = [[self.v,-self.v], [self.v,-self.v/2], [self.v,0], [self.v,self.v/2], [self.v,self.v]]
-            self.angle = self.angle_list[angle_index]
+            self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
+            self.velocity = self.angle_list[angle_index]
         self.colour = colour
         self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 50, 50)
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, time):
+        print(self.velocity)
+        print(self.rect.center)
         self.rect.center += self.velocity * time
         width, height = pygame.display.get_surface().get_size()
         # regula o movimento do disco horizontalmente, para que ele não saia da tela
@@ -154,12 +154,13 @@ while True:
     if c_pressed_blue == True:
         angle_list = [(v,-v), (v,v/2), (v,0), (v,v/2), (v,v)]
         v_15 = [int(angle_list[angle_index][0]*15), int(angle_list[angle_index][1]*15)]
-        end_pos = (list(blue.rect.center) + v_15)
+        end_pos = ((list(blue.rect.center)[0] + v_15[0]),(list(blue.rect.center)[1] + v_15[1]))
         pygame.draw.line(surface, WHITE, blue.rect.center, end_pos, 5)
     if c_pressed_yellow == True:
         angle_list = [[-v,-v], [-v,-v/2], [-v,0], [-v,v/2], [-v,v]]
         v_15_ = [int(yellow.angle_list[angle_index][0]*15), int(yellow.angle_list[angle_index][1]*15)]
-        end_pos1 = (list(yellow.rect.center) + v_15_)
+        end_pos1 = ((list(yellow.rect.center)[0] + v_15_[0]),(list(yellow.rect.center)[1] + v_15_[1]))
+        print(end_pos1)
         pygame.draw.line(surface, WHITE, yellow.rect.center, end_pos1, 5)
     angle_index += 1
     if angle_index > 4:
@@ -171,7 +172,7 @@ while True:
     yellow.update()
 
     if y_disk_on == True:
-        y_disk.update()
+        y_disk.update(time)
         if y_disk.mask.collide_mask(yellow.mask):
             y_disk.kill()
             y_disk_on = False
@@ -180,7 +181,7 @@ while True:
             blue.kill()
             blue = Paddle(sprites, "blue")
     if b_disk_on == True:
-        b_disk.update()
+        b_disk.update(time)
         if b_disk.mask.collide_mask(blue.mask):
             b_disk.kill()
             b_disk_on = False
