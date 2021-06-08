@@ -10,7 +10,7 @@ WHITE = (255,255,255)
 class Disk(pygame.sprite.Sprite):
     def __init__(self, group, colour, creator, angle_index):
         super().__init__(group)
-        self.v = 2
+        self.v = 0.4
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
@@ -21,7 +21,6 @@ class Disk(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, (31,28))
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
             self.velocity = self.angle_list[angle_index]
-        self.colour = colour
         self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 50, 50)
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -49,7 +48,7 @@ class Disk(pygame.sprite.Sprite):
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, group, colour):
         super().__init__(group)
-        self.v = 2
+        self.v = 0.4
         if colour == "yellow":
             self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
             self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
@@ -123,7 +122,7 @@ c_pressed_yellow = False
 y_score = 0
 b_score = 0
 angle_index = 0
-v=2
+v=0.4
 
 
 # variáveis de fonte
