@@ -26,9 +26,7 @@ class Disk(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, time):
-        print(self.velocity)
-        print(self.rect.center)
-        self.rect.center += self.velocity * time
+        self.rect.center = ((self.rect.center[0] + (self.velocity[0] * time)), (self.rect.center[1] + (self.velocity[1] * time)))
         width, height = pygame.display.get_surface().get_size()
         # regula o movimento do disco horizontalmente, para que ele não saia da tela
         if self.rect.right > width:
@@ -141,13 +139,13 @@ while True:
             if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
                         c_pressed_blue = True
-                    if event.key == pygame.K_LEFT:
+                    if event.key == pygame.K_RIGHT:
                         c_pressed_yellow = True
                     if event.key == pygame.K_d and c_pressed_blue == True:
                         b_disk = Disk(sprites, 'blue', blue, angle_index)
                         b_disk_on = True
                         c_pressed_blue = False
-                    if event.key == pygame.K_RIGHT and c_pressed_yellow == True:
+                    if event.key == pygame.K_LEFT and c_pressed_yellow == True:
                         y_disk = Disk(sprites, 'yellow', yellow, angle_index)
                         y_disk_on = True
                         c_pressed_yellow = False
@@ -160,7 +158,6 @@ while True:
         angle_list = [[-v,-v], [-v,-v/2], [-v,0], [-v,v/2], [-v,v]]
         v_15_ = [int(yellow.angle_list[angle_index][0]*15), int(yellow.angle_list[angle_index][1]*15)]
         end_pos1 = ((list(yellow.rect.center)[0] + v_15_[0]),(list(yellow.rect.center)[1] + v_15_[1]))
-        print(end_pos1)
         pygame.draw.line(surface, WHITE, yellow.rect.center, end_pos1, 5)
     angle_index += 1
     if angle_index > 4:
@@ -173,19 +170,19 @@ while True:
 
     if y_disk_on == True:
         y_disk.update(time)
-        if y_disk.mask.collide_mask(yellow.mask):
+        if pygame.sprite.collide_mask(yellow,y_disk) != None:
             y_disk.kill()
             y_disk_on = False
-        if y_disk.mask.collide_mask(blue.mask):
+        if pygame.sprite.collide_mask(blue,y_disk) != None:
             y_score += 1
             blue.kill()
             blue = Paddle(sprites, "blue")
     if b_disk_on == True:
         b_disk.update(time)
-        if b_disk.mask.collide_mask(blue.mask):
+        if pygame.sprite.collide_mask(blue,b_disk) != None:
             b_disk.kill()
             b_disk_on = False
-        if b_disk.mask.collide_mask(yellow.mask):
+        if pygame.sprite.collide_mask(yellow,b_disk) != None:
             b_score += 1
             yellow.kill()
             yellow = Paddle(sprites, "yellow")
