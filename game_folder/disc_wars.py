@@ -5,21 +5,23 @@ import random
 BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
 BLACK = (0,0,0)
-GREEN = (0,0,255)
+WHITE = (255,255,255)
 
 class Disk(pygame.sprite.Sprite):
     def __init__(self, group, colour, creator, angle_index):
         super().__init__(group)
-        self.v = 1
+        self.v = 2
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (31,28))
             self.velocity = [0,0] # TODO: change values
-            self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
+            self.angle_list = [[-self.v,-self.v], [-self.v,-self.v/2], [-self.v,0], [-self.v,self.v/2], [-self.v,self.v]]
             self.angle = self.angle_list[angle_index]
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (31,28))
             self.velocity = [0,0] # TODO: change values
-            self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
+            self.angle_list = [[self.v,-self.v], [self.v,-self.v/2], [self.v,0], [self.v,self.v/2], [self.v,self.v]]
             self.angle = self.angle_list[angle_index]
         self.colour = colour
         self.rect = pygame.Rect(creator.rect.x, creator.rect.y, 50, 50)
@@ -46,10 +48,11 @@ class Disk(pygame.sprite.Sprite):
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, group, colour):
         super().__init__(group)
-        self.v = 1
+        self.v = 2
         if colour == "yellow":
             self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
             self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (50,88))
             self.mask = pygame.mask.from_surface(self.image)
             self.yellow = True
             self.rect = self.image.get_rect()
@@ -57,12 +60,12 @@ class Paddle(pygame.sprite.Sprite):
         if colour == "blue":
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
             self.image = pygame.image.load('SPRITES_BOSS/normal_sem_disco.png').convert_alpha()
+            self.image = pygame.transform.scale(self.image, (50,88))
             self.mask = pygame.mask.from_surface(self.image)
             self.yellow = False
             self.rect = self.image.get_rect()
             self.rect.center = (random.randint(100,300),random.randint(100,700))
         self.velocity = [0,0]
-        
 
     def game_controls(self, event):
         if self.yellow == False:
@@ -114,11 +117,12 @@ blue = Paddle(sprites, "blue")
 # Variáveis para regular processos
 b_disk_on = False
 y_disk_on = False
+c_pressed_blue = False
+c_pressed_yellow = False
 y_score = 0
 b_score = 0
 angle_index = 0
-c_pressed_blue = False
-c_pressed_yellow = False
+v=2
 
 
 # variáveis de fonte
@@ -126,6 +130,7 @@ font_standart = pygame.font.Font(pygame.font.get_default_font(), 40)
 
 while True:
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
+    surface.fill(BLACK)
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             pygame.quit()
@@ -147,15 +152,20 @@ while True:
                         y_disk_on = True
                         c_pressed_yellow = False
     if c_pressed_blue == True:
-        pygame.draw.line(surface, GREEN, blue.rect.center, (blue.rect.center + blue.angle_list[angle_index]*15), 5)
+        angle_list = [(v,-v), (v,v/2), (v,0), (v,v/2), (v,v)]
+        v_15 = [int(angle_list[angle_index][0]*15), int(angle_list[angle_index][1]*15)]
+        end_pos = (list(blue.rect.center) + v_15)
+        pygame.draw.line(surface, WHITE, blue.rect.center, end_pos, 5)
     if c_pressed_yellow == True:
-        pygame.draw.line(surface, GREEN, yellow.rect.center, (yellow.rect.center + yellow.angle_list[angle_index]*15), 5)
+        angle_list = [[-v,-v], [-v,-v/2], [-v,0], [-v,v/2], [-v,v]]
+        v_15_ = [int(yellow.angle_list[angle_index][0]*15), int(yellow.angle_list[angle_index][1]*15)]
+        end_pos1 = (list(yellow.rect.center) + v_15_)
+        pygame.draw.line(surface, WHITE, yellow.rect.center, end_pos1, 5)
     angle_index += 1
     if angle_index > 4:
         angle_index = 0
     
 
-    surface.fill(BLACK)
 
     blue.update()
     yellow.update()
