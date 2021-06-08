@@ -31,7 +31,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
         self.rect = self.image.get_rect()
         self.set_position(400,200)
-        self.set_velocity(-0.2,0) # VALOR TESTE
+        self.set_velocity(-0.2,0)
         self.direction = "LEFT"
         self.trace = []
 
@@ -72,6 +72,28 @@ class yellowLightCicle(pygame.sprite.Sprite):
     def update_position(self, time):
         self.rect.center += self.velocity * time
         self.trace.append(self.rect.center)
+    
+    def slow_down(self):
+        if self.direction == "UP":
+            if self.velocity == (0,0.2):
+                self.set_velocity(0,0.1)
+            elif self.velocity == (0,0.1):
+                self.set_velocity(0,0.2)
+        if self.direction == "DOWN":
+            if self.velocity == (0,-0.2):
+                self.set_velocity(0,-0.1)
+            elif self.velocity == (0,-0.1):
+                self.set_velocity(0,-0.2)
+        if self.direction == "LEFT":
+            if self.velocity == (-0.2,0):
+                self.set_velocity(-0.1,0)
+            elif self.velocity == (-0.1,0):
+                self.set_velocity(-0.2,0)
+        if self.direction == "RIGHT":
+            if self.velocity == (0.2,0):
+                self.set_velocity(0.1,0)
+            elif self.velocity == (0.1,0):
+                self.set_velocity(0.2,0)
 
 class blueLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -112,6 +134,10 @@ class blueLightCicle(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.center = position
             self.direction = direction
+
+    def update_position(self, time):
+        self.rect.center += self.velocity * time
+        self.trace.append(self.rect.center)
     
     def slow_down(self):
         if self.direction == "UP":
@@ -134,10 +160,6 @@ class blueLightCicle(pygame.sprite.Sprite):
                 self.set_velocity(0.1,0)
             elif self.velocity == (0.1,0):
                 self.set_velocity(0.2,0)
-
-    def update_position(self, time):
-        self.rect.center += self.velocity * time
-        self.trace.append(self.rect.center)
 
 def tutorial_screen():
     line_text = [

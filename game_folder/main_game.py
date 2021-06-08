@@ -10,7 +10,7 @@ import pygame
 from functions import yellowLightCicle, blueLightCicle, tutorial_screen, crash, draw_background, show_score
 
 # Quantidade de vidas até o game-over
-lifes = 4
+not_restart = False
 
 # Estabelece a pasta que contem as sprites.
 derezzedSFX_dir = 'AUDIO/DerezzedFX.ogg'
@@ -41,7 +41,10 @@ def draw_trace():
             pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
             i+=1
 
-while lifes > 0:
+while True:
+    if not_restart == True:
+        break
+
     # Rotina Inicial do jogo
     pygame.init()  # inicializa as rotinas do PyGame
     surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
@@ -67,8 +70,8 @@ while lifes > 0:
     stop_blue = True
     stop_yellow = True
     stop_sound = True
-    restart = False
     boss_ticket = None
+    restart_now = False
     game = "RUNNING"
 
     # variáveis de fonte
@@ -85,10 +88,12 @@ while lifes > 0:
                     sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_n:
-                    lifes -= 1
-                    restart = True
-                if event.key == pygame.K_m:
-                    boss_ticket = True
+                    not_restart = True
+                    restart_now = True
+                if event.key == pygame.K_y:
+                    not_restart = False
+                    restart_now = True
+                
                 if event.key == pygame.K_LEFT:
                     blue.update_direction("LEFT")
                 elif event.key == pygame.K_RIGHT:
@@ -99,6 +104,18 @@ while lifes > 0:
                     blue.update_direction("DOWN")
                 elif event.key == pygame.K_SPACE:
                     blue.slow_down()
+                
+                elif event.key == pygame.K_a:
+                    yellow.update_direction("LEFT")
+                elif event.key == pygame.K_d:
+                    yellow.update_direction("RIGHT")
+                elif event.key == pygame.K_s:
+                    yellow.update_direction("UP")
+                elif event.key == pygame.K_w:
+                    yellow.update_direction("DOWN")
+                elif event.key == pygame.K_RETURN:
+                    yellow.slow_down()
+
                 elif event.key == pygame.K_p:
                     if game != "PAUSED":
                         pygame.mixer.music.pause()
@@ -114,8 +131,8 @@ while lifes > 0:
             pygame.display.flip()
             continue
         
-        if restart == True:
-            restart = False
+        if restart_now == True:
+            restart_now = False
             break
 
         draw_background()
