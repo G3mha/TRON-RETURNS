@@ -15,12 +15,13 @@ class Disk(pygame.sprite.Sprite):
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
             self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
+            self.rect = pygame.Rect(creator.rect.midleft[0]-20, creator.rect.midleft[1]-20, 31, 28)
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
+            self.rect = pygame.Rect(creator.rect.midright[0]+20, creator.rect.midright[1]+20, 31, 28)
         self.set_velocity(self.angle_list[angle_index][0], self.angle_list[angle_index][1])
-        self.rect = pygame.Rect(creator.rect.midleft, (31, 28))
         self.mask = pygame.mask.from_surface(self.image)
 
     def set_velocity(self, vx, vy):
@@ -151,30 +152,28 @@ while True:
             blue.game_controls(event)
             yellow.game_controls(event)
             if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_e:
+                    if event.key == pygame.K_e and not pressed_blue:
                         pressed_blue = True
-                    if event.key == pygame.K_RETURN:
-                        pressed_yellow = True
-                        print("oi")
-
-                    if event.key == pygame.K_e and pressed_blue == True:
+                    elif event.key == pygame.K_e and pressed_blue == True:
                         b_disk = Disk(sprites, 'blue', blue, angle_index)
                         b_disk_alive = True
                         pressed_blue = False
 
-                    if event.key == pygame.K_RETURN and pressed_yellow == True:
+                    if event.key == pygame.K_RETURN and not pressed_yellow:
+                        pressed_yellow = True
+                    
+                    elif event.key == pygame.K_RETURN and pressed_yellow:
                         y_disk = Disk(sprites, 'yellow', yellow, angle_index)
                         y_disk_alive = True
                         pressed_yellow = False
                         
-    if pressed_blue == True and b_disk_alive != True:
-        v_15 = [int(angle_list_1[angle_index][0]*20), int(angle_list_1[angle_index][1]*20)]
+    if pressed_blue == True: #and b_disk_alive != True:
+        v_15 = [int(angle_list_1[angle_index][0]*200), int(angle_list_1[angle_index][1]*200)]
         end_pos = ((list(blue.rect.center)[0] + v_15[0]),(list(blue.rect.center)[1] + v_15[1]))
         pygame.draw.line(surface, WHITE, blue.rect.center, end_pos, 5)
-        print("pimba")
 
     if pressed_yellow == True and y_disk_alive != True:
-        v_15_ = [int(angle_list_2[angle_index][0]*20), int(angle_list_2[angle_index][1]*20)]
+        v_15_ = [int(angle_list_2[angle_index][0]*200), int(angle_list_2[angle_index][1]*200)]
         end_pos1 = ((list(yellow.rect.center)[0] + v_15_[0]),(list(yellow.rect.center)[1] + v_15_[1]))
         pygame.draw.line(surface, WHITE, yellow.rect.center, end_pos1, 5)
 
@@ -192,6 +191,7 @@ while True:
             y_disk_alive = False
         if pygame.sprite.collide_mask(blue,y_disk) != None:
             y_score += 1
+            print(1)
             blue.kill()
             blue = Player(sprites, "blue")
     if b_disk_alive == True:
