@@ -114,10 +114,10 @@ class Player(pygame.sprite.Sprite):
 def score(y_score, b_score, surface):
     font = pygame.font.Font(pygame.font.get_default_font(), 18)
     text = font.render("Placar TRON: {}".format(b_score), True, BLUE_ICE)
-    surface.blit(text, (10,7))
+    surface.blit(text, (310,7))
     font1 = pygame.font.Font(pygame.font.get_default_font(), 18)
     text1 = font1.render("Placar CLU: {}".format(y_score), True, YELLOW_GOLD)
-    surface.blit(text1, (10,30))
+    surface.blit(text1, (310,30))
 
 pygame.init()  # inicializa as rotinas do PyGame
 screen_size = (800,800) # Largura e altura da tela
@@ -149,7 +149,8 @@ angle_list_2 = [(-v,-v), (-v,-v/2), (-v,0), (-v,v/2), (-v,v)]
 
 while True:
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
-    surface.fill(BLACK)
+    surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_disc_wars.png').convert_alpha(), (0,0))
+    pygame.draw.line(surface, BLUE_ICE, (400,60), (400,800), 5)
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             pygame.quit()
