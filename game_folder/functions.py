@@ -260,21 +260,19 @@ clu_dir = 'SPRITES_BOSS/boss_sem_disco.png'
 
 
 class Disk_BF(pygame.sprite.Sprite):
-    def __init__(self, group, colour):
+    def __init__(self, group, colour, rect):
         super().__init__(group)
         self.colour = colour
         if self.colour == "yellow":
             self.image = pygame.image.load(YELLOWdisk_dir).convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
+            self.set_velocity(0.2,0) # TODO: mudar para um valor fixo
         if self.colour == "blue":
             self.image = pygame.image.load(BLUEdisk_dir).convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-        self.image = pygame.transform.scale(self.image, (200,200))
+            self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.set_position(75,300)
-        self.set_position(400,200) # TODO: mudar para um valor fixo
-        self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
+        self.rect = pygame.Rect(rect[0], rect[1], 31, 28)
     
     def set_position(self, x, y):
         self.rect.center = pygame.math.Vector2(x, y)
