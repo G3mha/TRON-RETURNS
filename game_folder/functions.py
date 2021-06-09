@@ -266,11 +266,11 @@ class Disk_BF(pygame.sprite.Sprite):
         if self.colour == "yellow":
             self.image = pygame.image.load(YELLOWdisk_dir).convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.set_velocity(0.2,0) # TODO: mudar para um valor fixo
+            self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
         if self.colour == "blue":
             self.image = pygame.image.load(BLUEdisk_dir).convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
+            self.set_velocity(0.2,0) # TODO: mudar para um valor fixo
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = pygame.Rect(rect[0], rect[1], 31, 28)
     
@@ -284,14 +284,13 @@ class Disk_BF(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
 
     def update(self, time):
-        self.rect.center += self.velocity * time
+        self.rect.midbottom += self.velocity * time
 
 class CLU_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.image = pygame.image.load(clu_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (40,90)) # TODO: mudar para um valor fixo
-        self.image = self.images[self.index]
         self.rect = pygame.Rect(600, 535, 40, 90) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -303,7 +302,7 @@ class TRON_BF(pygame.sprite.Sprite):
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
         self.i = pygame.image.load(tronDUCK_dir).convert_alpha()
-        self.i = pygame.transform.scale(self.i, (25,60)) # TODO: mudar para um valor fixo
+        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
         self.i = pygame.image.load(tronDEREZZED1_dir).convert_alpha()
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
@@ -313,6 +312,7 @@ class TRON_BF(pygame.sprite.Sprite):
         self.images.append(self.i)
         self.image = self.images[0]
         self.rect = pygame.Rect(150, 535, 40, 90) # TODO: testar valores
+        self.midbottom = self.rect.midbottom
         self.mask = pygame.mask.from_surface(self.image)
         self.state = "STANDING"
         self.gravity = pygame.math.Vector2(0, 3) # TODO: testar valores
@@ -329,13 +329,13 @@ class TRON_BF(pygame.sprite.Sprite):
     def stand(self):
         self.state = "STANDING"
         self.image = self.images[0]
-        self.set_position(150,535) # TODO: testar valores
+        self.set_position(self.midbottom[0], self.midbottom[1]) # TODO: testar valore
         self.mask = pygame.mask.from_surface(self.image)
 
     def duck(self):
         self.state = "DUCKING"
         self.image = self.images[1]
-        self.set_position(150,535) # TODO: testar valores
+        self.set_position(self.midbottom[0], self.midbottom[1]) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
     
     def jump(self):
