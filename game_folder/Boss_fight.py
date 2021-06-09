@@ -1,4 +1,5 @@
-from functions import blueDisk, orangeDisk, CLU, TRON, recharge_delay
+from pygame.constants import USEREVENT
+from functions import Disk_BF, CLU_BF, TRON_BF
 import pygame
 import sys
 
@@ -17,12 +18,11 @@ WHITE = (255,255,255)
 
 
 sprites = pygame.sprite.Group()
-#disk_orange = orangeDisk(sprites)
-clu = CLU(sprites)
-tron = TRON(sprites)
+clu = CLU_BF(sprites)
+tron = TRON_BF(sprites)
+can_y_launch = True
+can_launch = True
 
-last = 0
-ready_to_lauch = True
 ############################
 # Rotina principal do game #
 ############################
@@ -31,6 +31,7 @@ pygame.init() # inicia o pygame
 surface =  pygame.display.set_mode(screen_size) #tamanho tela
 pygame.display.set_caption(PageTitle) # titulo tela
 clock = pygame.time.Clock() #Fps
+pygame.time.set_timer(pygame.USEREVENT, 4000)  # timer de 4 segundos para cada evento
 while True:    #True
     Time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
     # Adquire todos os eventos e os testa para casos desejados
@@ -39,22 +40,23 @@ while True:    #True
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
                 pygame.quit()
                 sys.exit()
-
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_s:
                 tron.crouch()
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_w:
                 tron.jump()
-            if event.key == pygame.K_SPACE:
-                last, ready_to_lauch = recharge_delay(last)
-                if ready_to_lauch == True:
-                    tron.launch_disk()
-                    disk_blue = blueDisk(sprites)
+            if event.key == pygame.K_d and can_launch:
+                can_launch = False
+                tron.launch_disk()
+                disk_b = Disk_BF(sprites, "blue")
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_s:
                 tron.standing()
+        if event.type == pygame.USEREVENT:
+            can_launch = True
 
-
+    if (pygame.time.get_ticks()) % 1000 == 0:
+        can_y_launch = True
     surface.fill(BLACK)
     pygame.draw.line(surface, BLUE_MIDNIGHT, (0,400), (800,400), 10)
 
