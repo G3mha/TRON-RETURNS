@@ -3,21 +3,9 @@ import pygame
 
 # Define o código RGB das cores utilizadas
 BLACK = (0,0,0)
-BLUE_MIDNIGHT = (0,0,30)
 BLUE = (12,12,100)
 BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
-WHITE = (255,255,255)
-
-# Estabelece a pasta que contem as sprites.
-LEFTblue_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_blueLEFT.png'
-RIGHTblue_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_blueRIGHT.png'
-UPblue_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_blueUP.png'
-DOWNblue_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_blueDOWN.png'
-LEFTyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowLEFT.png'
-RIGHTyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png'
-UPyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png'
-DOWNyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png'
 
 pygame.init()
 
@@ -26,7 +14,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
         super().__init__(group)
         self.size_vert = (32,80)
         self.size_horiz = (80,32)
-        self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
+        self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowLEFT.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, self.size_horiz)
         self.rect = self.image.get_rect()
         self.set_position(400,200)
@@ -51,19 +39,19 @@ class yellowLightCicle(pygame.sprite.Sprite):
         if direction != self.direction:
             position = self.rect.center
             if direction == "UP":
-                self.image = pygame.image.load(DOWNyellow_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_vert)
                 self.set_velocity(0,0.2)
             if direction == "DOWN":
-                self.image = pygame.image.load(UPyellow_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_vert)
                 self.set_velocity(0,-0.2)
             if direction == "LEFT":
-                self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowLEFT.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_horiz)
                 self.set_velocity(-0.2,0)
             if direction == "RIGHT":
-                self.image = pygame.image.load(RIGHTyellow_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_horiz)
                 self.set_velocity(0.2,0)
             self.rect = self.image.get_rect()
@@ -112,7 +100,7 @@ class blueLightCicle(pygame.sprite.Sprite):
         super().__init__(group)
         self.size_vert = (32,80)
         self.size_horiz = (80,32)
-        self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
+        self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueRIGHT.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, self.size_horiz)
         self.rect = self.image.get_rect()
         self.set_position(100,400)
@@ -131,19 +119,19 @@ class blueLightCicle(pygame.sprite.Sprite):
         if direction != self.direction:
             position = self.rect.center
             if direction == "UP":
-                self.image = pygame.image.load(DOWNblue_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueDOWN.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_vert)
                 self.set_velocity(0,0.2)
             if direction == "DOWN":
-                self.image = pygame.image.load(UPblue_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueUP.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_vert)
                 self.set_velocity(0,-0.2)
             if direction == "LEFT":
-                self.image = pygame.image.load(LEFTblue_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueLEFT.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_horiz)
                 self.set_velocity(-0.2,0)
             if direction == "RIGHT":
-                self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
+                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueRIGHT.png').convert_alpha()
                 self.image = pygame.transform.scale(self.image, self.size_horiz)
                 self.set_velocity(0.2,0)
             self.rect = self.image.get_rect()
