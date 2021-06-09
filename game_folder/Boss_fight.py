@@ -25,8 +25,8 @@ can_y_launch = True
 can_b_launch = True
 disk_y_n = 0
 disk_b_n = 0
-blue_died = False
-yellow_died = False
+tron_died = False
+clu_died = False
 score_y = 0
 score_b = 0
 
@@ -110,19 +110,20 @@ while True:    #True
         for disky in ydisks.sprites():
             if pygame.sprite.collide_mask(tron,disky) != None:
                 tron.kill()
-                blue_died = True
+                tron_died = True
     if disk_b_n != 0:
         disk_b.update(Time)
         if disk_b.rect.x == 800:
             disk_b.kill()
         if pygame.sprite.collide_mask(clu,disk_b) != None:
+            print(pygame.sprite.collide_mask(clu,disk_b))
             clu.kill()
-            yellow_died = True
+            clu_died = True
 
-    if yellow_died:
+    if clu_died:
         score_b += 1
         break
-    if blue_died:
+    if tron_died:
         score_y += 1
         break
 

@@ -18,7 +18,6 @@ LEFTyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowLEFT.png'
 RIGHTyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png'
 UPyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png'
 DOWNyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png'
-derezzedVFX_dir = 'SPRITES/VFX DEREZZED EXPLOSION.png'
 
 pygame.init() # inicia o pygame
 screen_size = (800,800) # Largura e altura da tela
@@ -36,6 +35,8 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.set_velocity(-0.2,0)
         self.direction = "LEFT"
         self.trace = []
+        self.explode = False
+
 
     def set_position(self, x, y):
         self.rect.center = pygame.math.Vector2(x, y)
@@ -71,10 +72,21 @@ class yellowLightCicle(pygame.sprite.Sprite):
             self.rect.center = position
             self.direction = direction
 
-    def update_position(self, time):
+    def update(self, time):
         self.rect.center += self.velocity * time
         self.trace.append(self.rect.center)
-    
+        width, height = pygame.display.get_surface().get_size()
+        # regula o movimento do disco horizontalmente, para que ele não saia da tela
+        if self.rect.right > width:
+            self.explode = True
+        elif self.rect.x < 0:
+            self.explode = True
+        # regula o movimento do disco verticalmente, para que ele não saia da tela
+        if self.rect.bottom > height:
+            self.explode = True
+        elif self.rect.y < 0:
+            self.explode = True
+
     def slow_down(self):
         if self.direction == "UP":
             if self.velocity == (0,0.2):
@@ -196,28 +208,6 @@ def tutorial_screen():
             surface.blit(line_image,(20,100))
             surface.blit(command_image,(20,700))
             pygame.display.flip()
-
-def crash(collor1,collor2):
-    if collor1.rect.topright[0] == 800 or collor1.rect.topright[1] == 0 or collor1.rect.bottomleft[1] == 800 or collor1.rect.bottomleft[0] == 0:
-        derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
-        derezzed_visual = pygame.transform.scale(derezzed_visual, (int(derezzed_visual.get_width()/5),int(derezzed_visual.get_height()/5)))
-        surface.blit(derezzed_visual, collor1.rect.center)
-        collor1.kill()
-        return False # retorna um valor booleano "False" para parar o "trace"
-    if collor2.rect.topright[0] == 800 or collor2.rect.topright[1] == 0 or collor2.rect.bottomleft[1] == 800 or collor2.rect.bottomleft[0] == 0:
-        derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
-        derezzed_visual = pygame.transform.scale(derezzed_visual, (int(derezzed_visual.get_width()/5),int(derezzed_visual.get_height()/5)))
-        surface.blit(derezzed_visual, collor2.rect.center)
-        collor2.kill()
-        return False # retorna um valor booleano "False" para parar o "trace"
-    for t in collor1.trace:
-        if collor2.rect.collidepoint(t):
-            derezzed_visual = pygame.image.load(derezzedVFX_dir).convert_alpha()
-            derezzed_visual = pygame.transform.scale(derezzed_visual, (int(derezzed_visual.get_width()/5),int(derezzed_visual.get_height()/5)))
-            surface.blit(derezzed_visual, collor2.rect.center)
-            collor2.kill()
-            return False # retorna um valor booleano "False" para parar o "trace"
-    return True # Caso contrário, continua igual
         
 def draw_background():
     surface.fill(BLUE)
@@ -228,23 +218,6 @@ def draw_background():
         pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
         pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
         i+=1
-
-def show_score(stop_blue,stop_yellow):
-    if stop_blue == False:
-        score = ["Você PERDEU!","Para tentar novamente, clique N"]
-        font_used = pygame.font.Font(pygame.font.get_default_font(), 40)
-        line_image = font_used.render(score[0], True, BLUE_ICE, BLACK)
-        surface.blit(line_image,(50,200))
-        line_image2 = font_used.render(score[1], True, BLUE_ICE, BLACK)
-        surface.blit(line_image2,(50,300))
-
-    if stop_yellow == False:
-        score = ["Você GANHOU!","Para prosseguir, clique M"]
-        font_used = pygame.font.Font(pygame.font.get_default_font(), 40)
-        line_image = font_used.render(score[0], True, BLUE_ICE, BLACK)
-        surface.blit(line_image,(50,200))
-        line_image2 = font_used.render(score[1], True, BLUE_ICE, BLACK)
-        surface.blit(line_image2,(50,300))
 
 
 ##############################################################################
@@ -361,3 +334,13 @@ class TRON_BF(pygame.sprite.Sprite):
         if self.state == "JUMPING":
             self.velocity += self.gravity
             self.rect.midbottom += self.velocity * time
+
+################################ FUNCOES ESSENCIAIS ################################
+
+def score(y_score, b_score, surface):
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text = font.render("Placar TRON: {}".format(b_score), True, BLUE_ICE)
+    surface.blit(text, (310,7))
+    font1 = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text1 = font1.render("Placar CLU: {}".format(y_score), True, YELLOW_GOLD)
+    surface.blit(text1, (310,30))

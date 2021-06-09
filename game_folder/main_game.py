@@ -7,7 +7,7 @@ Data: 18/05/2021
 import random
 import sys
 import pygame
-from functions import yellowLightCicle, blueLightCicle, tutorial_screen, crash, draw_background, show_score
+from functions import yellowLightCicle, blueLightCicle, tutorial_screen, crash, draw_background, score
 
 # Quantidade de vidas até o game-over
 not_restart = False
@@ -67,8 +67,8 @@ while True:
     blue = blueLightCicle(sprites)
 
     # Variáveis para regular processos
-    stop_blue = True
-    stop_yellow = True
+    b_score = 0
+    y_score = 0
     stop_sound = True
     boss_ticket = None
     restart_now = False
@@ -141,23 +141,41 @@ while True:
         sprites.draw(surface) # desenha as sprites
 
         # Atualiza a posição da moto e rastro
-        if stop_yellow == True and stop_blue == True:
-            yellow.update_position(time)
-            blue.update_position(time)
+        yellow.update(time)
+        blue.update(time)
 
         # Verifica se houve colisão entre a moto e o rastro
-        stop_yellow = crash(blue,yellow)
-        stop_blue = crash(yellow,blue)
+        if yellow.explode:
+            b_score += 1
+        if blue.explode:
+            y_score += 1
+        for t in blue.trace:
+            if yellow.rect.collidepoint(t):
+                derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
+                derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
+                surface.blit(derezzed_visual, yellow.rect.center)
+                b_score += 1
+                yellow.kill()
+        for t in yellow.trace:
+            if blue.rect.collidepoint(t):
+                derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
+                derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
+                surface.blit(derezzed_visual, blue.rect.center)
+                y_score += 1
+                blue.kill()
+        if pygame.sprite.collide_mask(blue,yellow) != None:
+            yellow.kill()
+            blue.kill()
 
-        if (stop_blue == False or stop_yellow == False) and stop_sound == True:
+        if (b_score == False or y_score == False) and stop_sound == True:
             derezzed_sound = pygame.mixer.Sound(derezzedSFX_dir)
             derezzed_sound.set_volume(0.08)
             derezzed_sound.play()
             stop_sound = False
 
-        show_score(stop_blue,stop_yellow)
+        score(b_score, y_score, surface)
 
-        pygame.display.flip() # atualiza o display
+        pygame.display.update() # atualiza o display
     
     while boss_ticket:
         a=0
