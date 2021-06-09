@@ -18,12 +18,31 @@ WHITE = (255,255,255)
 
 
 sprites = pygame.sprite.Group()
+ydisks = pygame.sprite.Group()
 clu = CLU_BF(sprites)
 tron = TRON_BF(sprites)
 can_y_launch = True
-can_launch = True
-disk_y_up = False
-disk_b_up = False
+can_b_launch = True
+disk_y_n = 0
+disk_b_n = 0
+blue_died = False
+yellow_died = False
+score_y = 0
+score_b = 0
+
+ADD_YDISK = pygame.USEREVENT + 1
+pygame.time.set_timer(ADD_YDISK, 1000)
+ADD_BDISK = pygame.USEREVENT
+pygame.time.set_timer(ADD_BDISK, 3000)
+
+def score(score_y, score_b, surface):
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text = font.render("Placar TRON: {}".format(score_b), True, BLUE_ICE)
+    surface.blit(text, (310,7))
+    font1 = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text1 = font1.render("Placar CLU: {}".format(score_y), True, YELLOW_GOLD)
+    surface.blit(text1, (310,30))
+
 
 ############################
 # Rotina principal do game #
@@ -33,7 +52,6 @@ pygame.init() # inicia o pygame
 surface =  pygame.display.set_mode(screen_size) #tamanho tela
 pygame.display.set_caption(PageTitle) # titulo tela
 clock = pygame.time.Clock() #Fps
-pygame.time.set_timer(pygame.USEREVENT, 3000)  # timer de 3 segundos para cada evento
 while True:    #True
     Time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
     # Adquire todos os eventos e os testa para casos desejados
@@ -47,45 +65,67 @@ while True:    #True
                 tron.duck()
             if event.key == pygame.K_w:
                 tron.jump()
-            if event.key == pygame.K_d and can_launch:
-                can_launch = False
+            if event.key == pygame.K_d and can_b_launch:
+                can_b_launch = False
                 disk_b = Disk_BF(sprites, "blue", (170,568))
-                disk_b_up = True
+                disk_b_n += 1
             if event.key == pygame.K_i and can_y_launch:
                 can_y_launch = False
                 disk_y = Disk_BF(sprites, "yellow", (580,538))
-                disk_y_up = True
+                ydisks.add(disk_y)
+                disk_y_n += 1
             if event.key == pygame.K_k and can_y_launch:
                 can_y_launch = False
                 disk_y = Disk_BF(sprites, "yellow", (580,568))
-                disk_y_up = True
+                ydisks.add(disk_y)
+                disk_y_n += 1
             if event.key == pygame.K_m and can_y_launch:
                 can_y_launch = False
                 disk_y = Disk_BF(sprites, "yellow", (580,598))
-                disk_y_up = True
+                ydisks.add(disk_y)
+                disk_y_n += 1
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_s:
                 tron.stand()
-        if event.type == pygame.USEREVENT:
-            can_launch = True
-
-    if (pygame.time.get_ticks()) % 1000 == 0:
-        can_y_launch = True
+        if event.type == ADD_BDISK:
+            can_b_launch = True
+        if event.type == ADD_YDISK:
+            can_y_launch = True
 
     surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_boss_fight.jpg').convert_alpha(), (0,0))
 
-
+    score(score_y, score_b, surface)
     tron.update(Time)
     sprites.draw(surface)
-    if disk_y_up:
-        disk_y.update(Time)
-    if disk_b_up:
-        disk_b.update(Time)
     
-    # sprites.update(Time)
+    if disk_b_n != 0 and disk_y_n != 0:
+        if pygame.sprite.collide_mask(disk_b,disk_y) != None:
+            disk_b.kill()
+            disk_y.kill()
 
-# Código extraído de https://codingshiksha.com/python/python-3-pygame-google-chrome-dinosaur-t-rex-dino-runner-game-gui-script-desktop-app-full-project-for-beginners/
+    if disk_y_n != 0:
+        ydisks.update(Time)
+        if disk_y.rect.x == 0:
+            disk_y.kill()
+        for disky in ydisks.sprites():
+            if pygame.sprite.collide_mask(tron,disky) != None:
+                tron.kill()
+                blue_died = True
+    if disk_b_n != 0:
+        disk_b.update(Time)
+        if disk_b.rect.x == 800:
+            disk_b.kill()
+        if pygame.sprite.collide_mask(clu,disk_b) != None:
+            clu.kill()
+            yellow_died = True
 
-    pygame.display.flip()
+    if yellow_died:
+        score_b += 1
+        break
+    if blue_died:
+        score_y += 1
+        break
 
-    # https://github.com/insper/pygame-snippets#fazendo-o-personagem-pular link de consulta
+    pygame.display.update()
+
+print(score_b,score_y)
