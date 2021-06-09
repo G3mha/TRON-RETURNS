@@ -19,9 +19,7 @@ RIGHTyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png'
 UPyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png'
 DOWNyellow_dir = 'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png'
 
-pygame.init() # inicia o pygame
-screen_size = (800,800) # Largura e altura da tela
-surface =  pygame.display.set_mode(screen_size) # Define tela
+pygame.init()
 
 class yellowLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -121,6 +119,7 @@ class blueLightCicle(pygame.sprite.Sprite):
         self.set_velocity(0.2,0) # VALOR TESTE
         self.direction = "RIGHT"
         self.trace = []
+        self.explode = False
 
     def set_position(self, x, y):
         self.rect.center = pygame.math.Vector2(x, y)
@@ -151,9 +150,20 @@ class blueLightCicle(pygame.sprite.Sprite):
             self.rect.center = position
             self.direction = direction
 
-    def update_position(self, time):
+    def update(self, time):
         self.rect.center += self.velocity * time
         self.trace.append(self.rect.center)
+        width, height = pygame.display.get_surface().get_size()
+        # regula o movimento do disco horizontalmente, para que ele não saia da tela
+        if self.rect.right > width:
+            self.explode = True
+        elif self.rect.x < 0:
+            self.explode = True
+        # regula o movimento do disco verticalmente, para que ele não saia da tela
+        if self.rect.bottom > height:
+            self.explode = True
+        elif self.rect.y < 0:
+            self.explode = True
     
     def slow_down(self):
         if self.direction == "UP":
@@ -177,7 +187,7 @@ class blueLightCicle(pygame.sprite.Sprite):
             elif self.velocity == (0.1,0):
                 self.set_velocity(0.2,0)
 
-def tutorial_screen():
+def tutorial_screen(surface):
     line_text = [
         "Olá programa! Aqui você testará suas habilidades com motos.",
         "Você iniciará no canto inferior esquerdo da tela.",
@@ -208,17 +218,6 @@ def tutorial_screen():
             surface.blit(line_image,(20,100))
             surface.blit(command_image,(20,700))
             pygame.display.flip()
-        
-def draw_background():
-    surface.fill(BLUE)
-    thickness = 10
-    distance = screen_size[0]/8 # espaço entre cada quadrado
-    i = 0
-    while i < 9:
-        pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
-        pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
-        i+=1
-
 
 ##############################################################################
 

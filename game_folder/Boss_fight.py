@@ -1,5 +1,5 @@
 from pygame.constants import USEREVENT
-from functions import Disk_BF, CLU_BF, TRON_BF
+from functions import Disk_BF, CLU_BF, TRON_BF, score
 import pygame
 import sys
 
@@ -34,15 +34,6 @@ ADD_YDISK = pygame.USEREVENT + 1
 pygame.time.set_timer(ADD_YDISK, 1000)
 ADD_BDISK = pygame.USEREVENT
 pygame.time.set_timer(ADD_BDISK, 3000)
-
-def score(score_y, score_b, surface):
-    font = pygame.font.Font(pygame.font.get_default_font(), 18)
-    text = font.render("Placar TRON: {}".format(score_b), True, BLUE_ICE)
-    surface.blit(text, (310,7))
-    font1 = pygame.font.Font(pygame.font.get_default_font(), 18)
-    text1 = font1.render("Placar CLU: {}".format(score_y), True, YELLOW_GOLD)
-    surface.blit(text1, (310,30))
-
 
 ############################
 # Rotina principal do game #

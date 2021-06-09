@@ -1,5 +1,5 @@
 """
-Programa do mini-game de Motos
+Programa do mini-game_state de Motos
 Autor: Enricco Gemha
 Data: 18/05/2021
 """
@@ -7,9 +7,9 @@ Data: 18/05/2021
 import random
 import sys
 import pygame
-from functions import yellowLightCicle, blueLightCicle, tutorial_screen, crash, draw_background, score
+from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score
 
-# Quantidade de vidas até o game-over
+# Quantidade de vidas até o game_state-over
 not_restart = False
 
 # Estabelece a pasta que contem as sprites.
@@ -28,19 +28,8 @@ BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
 WHITE = (255,255,255)
 
-def draw_trace():
-    i = 0
-    if len(blue.trace) >= 2:
-        while i < len(blue.trace):
-            pygame.draw.circle(surface, BLUE_ICE, blue.trace[i], 6)
-            i+=1
-    
-    i = 0
-    if len(yellow.trace) >= 2:
-        while i < len(yellow.trace):
-            pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
-            i+=1
-
+b_score = 0
+y_score = 0
 while True:
     if not_restart == True:
         break
@@ -56,7 +45,7 @@ while True:
     pygame.mixer.music.play(-1)
 
     # Breve tutorial de instruções deste modo de jogo
-    tutorial_screen()
+    tutorial_screen(surface)
 
     # variável que declara o clock do jogo
     clock = pygame.time.Clock()
@@ -67,18 +56,17 @@ while True:
     blue = blueLightCicle(sprites)
 
     # Variáveis para regular processos
-    b_score = 0
-    y_score = 0
     stop_sound = True
     boss_ticket = None
     restart_now = False
-    game = "RUNNING"
+    game_state = "RUNNING"
+    game = True
 
     # variáveis de fonte
     font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
 
     # Início do Loop da corrida de moto
-    while True:
+    while game:
         time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
         # Adquire todos os eventos e os testa para casos desejados
         events = pygame.event.get()
@@ -117,27 +105,43 @@ while True:
                     yellow.slow_down()
 
                 elif event.key == pygame.K_p:
-                    if game != "PAUSED":
+                    if game_state != "PAUSED":
                         pygame.mixer.music.pause()
                         pause = font_paused.render("PAUSE", True, BLACK, WHITE)
                         surface.blit(pause,((surface.get_width()-pause.get_width())/2,
                                             (surface.get_height()-pause.get_height())/2))
-                        game = "PAUSED"
+                        game_state = "PAUSED"
                     else:
                         pygame.mixer.music.unpause()
-                        game = "RUNNING"
+                        game_state = "RUNNING"
 
-        if game == "PAUSED":
+        if game_state == "PAUSED":
             pygame.display.flip()
             continue
+
+        # Desenha o Background
+        surface.fill(BLUE)
+        thickness = 10
+        distance = screen_size[0]/8 # espaço entre cada quadrado
+        i = 0
+        while i < 9:
+            pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
+            pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
+            i+=1
         
-        if restart_now == True:
-            restart_now = False
-            break
-
-        draw_background()
-
-        draw_trace()
+        # Desenha o rastro, que cessa quando há uma explosão
+        if yellow.explode == False and blue.explode == False:
+            i = 0
+            if len(blue.trace) >= 2:
+                while i < len(blue.trace):
+                    pygame.draw.circle(surface, BLUE_ICE, blue.trace[i], 6)
+                    i+=1
+            i = 0
+            if len(yellow.trace) >= 2:
+                while i < len(yellow.trace):
+                    pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
+                    i+=1
+                
         sprites.draw(surface) # desenha as sprites
 
         # Atualiza a posição da moto e rastro
@@ -147,25 +151,32 @@ while True:
         # Verifica se houve colisão entre a moto e o rastro
         if yellow.explode:
             b_score += 1
+            game = False
         if blue.explode:
             y_score += 1
+            game = False
         for t in blue.trace:
             if yellow.rect.collidepoint(t):
                 derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
                 derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
                 surface.blit(derezzed_visual, yellow.rect.center)
-                b_score += 1
                 yellow.kill()
+                b_score += 1
+                game = False
+                break
         for t in yellow.trace:
             if blue.rect.collidepoint(t):
                 derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
                 derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
                 surface.blit(derezzed_visual, blue.rect.center)
-                y_score += 1
                 blue.kill()
+                y_score += 1
+                game = False
+                break
         if pygame.sprite.collide_mask(blue,yellow) != None:
             yellow.kill()
             blue.kill()
+            game = False
 
         if (b_score == False or y_score == False) and stop_sound == True:
             derezzed_sound = pygame.mixer.Sound(derezzedSFX_dir)
