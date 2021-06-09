@@ -266,11 +266,11 @@ class Disk_BF(pygame.sprite.Sprite):
         if self.colour == "yellow":
             self.image = pygame.image.load(YELLOWdisk_dir).convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
+            self.set_velocity(-0.3,0) # TODO: mudar para um valor fixo
         if self.colour == "blue":
             self.image = pygame.image.load(BLUEdisk_dir).convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.set_velocity(0.2,0) # TODO: mudar para um valor fixo
+            self.set_velocity(0.3,0) # TODO: mudar para um valor fixo
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = pygame.Rect(rect[0], rect[1], 31, 28)
     
@@ -284,7 +284,6 @@ class Disk_BF(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
 
     def update(self, time):
-        print(self.rect.midbottom)
         self.rect.center += self.velocity * time
 
 class CLU_BF(pygame.sprite.Sprite):
