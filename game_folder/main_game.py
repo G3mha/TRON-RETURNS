@@ -31,159 +31,174 @@ time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
 pygame.display.set_caption("TRON vs CLU") # título da surface do jogo
 surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
 
-game_begin=False
-while (game_begin==False):
-    surface.blit(pygame.image.load('SOLID GAME SCREEN/game_insert_coin.png'),(0,0))
+initial_screen = True
+i=0
+while initial_screen:
+    if i % 2 == 0:  # gera um efeito de letreiro piscante "aleatório"
+        surface.blit(pygame.image.load('SOLID GAME SCREEN/game_front_page.jpeg'),(0,0))
+    else:
+        surface.blit(pygame.image.load('SOLID GAME SCREEN/game_insert_coin.png'),(0,0))
     for event in pygame.event.get():
-        if event .type == pygame.QUIT:
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             pygame.quit()
             sys.exit()
         if event.type==pygame.KEYDOWN:
-            game_begin=True
-    pygame.display.flip()
+            initial_screen = False
+    pygame.display.update()
+    i+=1
 
-# Rotina Inicial do jogo
-page_title = "TRON vs CLU" # Define o nome desta página
-pygame.display.set_caption(page_title) # título da surface do jogo
+choose_screen = True
+while choose_screen:
+    surface.blit(pygame.image.load('SOLID GAME SCREEN/selection_screen.jpeg'),(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            pygame.quit()
+            sys.exit()
+        if event.type==pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                game_access = "fastest_disc"
+                choose_screen = False
+            if event.key == pygame.K_2:
+                game_access = "disc_wars"
+                choose_screen = False
+            if event.key == pygame.K_3:
+                game_access = "lightcicle_run"
+                choose_screen = False
+    pygame.display.update()
 
 # Rotinas de aúdio
 pygame.mixer.music.load('AUDIO/DerezzedSong.ogg')
 pygame.mixer.music.set_volume(0.04)
 pygame.mixer.music.play(-1)
 
-# Breve tutorial de instruções deste modo de jogo
-tutorial_screen(surface)
-
 # variável que declara o clock do jogo
 clock = pygame.time.Clock()
 
-# cria sprite das Motos
-sprites = pygame.sprite.Group()
-yellow = yellowLightCicle(sprites)
-blue = blueLightCicle(sprites)
+# Breve tutorial de instruções deste modo de jogo
+tutorial_screen(surface)
 
-# Variáveis para regular processos
-stop_sound = True
-game_state = "RUNNING"
-game = True
+while game_access == "lightcicle_run":
+    # cria sprite das Motos
+    sprites = pygame.sprite.Group()
+    yellow = yellowLightCicle(sprites)
+    blue = blueLightCicle(sprites)
 
-# variáveis de fonte
-font_paused = pygame.font.Font(pygame.font.get_default_font(), 40)
+    # Variáveis para regular processos
+    stop_sound = True
+    game_state = "RUNNING"
+    game = True
 
-# Início do Loop da corrida de moto
-while game:
-    time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
-    # Adquire todos os eventos e os testa para casos desejados
-    events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
-                pygame.quit()
-                sys.exit()
-        if event.type == pygame.KEYDOWN: 
-            
-            if event.key == pygame.K_LEFT:
-                blue.update_direction("LEFT")
-            elif event.key == pygame.K_RIGHT:
-                blue.update_direction("RIGHT")
-            elif event.key == pygame.K_DOWN:
-                blue.update_direction("UP")
-            elif event.key == pygame.K_UP:
-                blue.update_direction("DOWN")
-            elif event.key == pygame.K_SPACE:
-                blue.slow_down()
-            
-            elif event.key == pygame.K_a:
-                yellow.update_direction("LEFT")
-            elif event.key == pygame.K_d:
-                yellow.update_direction("RIGHT")
-            elif event.key == pygame.K_s:
-                yellow.update_direction("UP")
-            elif event.key == pygame.K_w:
-                yellow.update_direction("DOWN")
-            elif event.key == pygame.K_RETURN:
-                yellow.slow_down()
+    # Início do Loop da corrida de moto
+    while game:
+        time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
+        # Adquire todos os eventos e os testa para casos desejados
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.KEYDOWN: 
+                
+                if event.key == pygame.K_LEFT:
+                    blue.update_direction("LEFT")
+                elif event.key == pygame.K_RIGHT:
+                    blue.update_direction("RIGHT")
+                elif event.key == pygame.K_DOWN:
+                    blue.update_direction("UP")
+                elif event.key == pygame.K_UP:
+                    blue.update_direction("DOWN")
+                elif event.key == pygame.K_SPACE:
+                    blue.slow_down()
+                
+                elif event.key == pygame.K_a:
+                    yellow.update_direction("LEFT")
+                elif event.key == pygame.K_d:
+                    yellow.update_direction("RIGHT")
+                elif event.key == pygame.K_s:
+                    yellow.update_direction("UP")
+                elif event.key == pygame.K_w:
+                    yellow.update_direction("DOWN")
+                elif event.key == pygame.K_RETURN:
+                    yellow.slow_down()
 
-            elif event.key == pygame.K_p:
-                if game_state != "PAUSED":
-                    pygame.mixer.music.pause()
-                    surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
-                    game_state = "PAUSED"
-                else:
-                    pygame.mixer.music.unpause()
-                    game_state = "RUNNING"
+                elif event.key == pygame.K_p:
+                    if game_state != "PAUSED":
+                        pygame.mixer.music.pause()
+                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
+                        game_state = "PAUSED"
+                    else:
+                        pygame.mixer.music.unpause()
+                        game_state = "RUNNING"
 
-    if game_state == "PAUSED":
-        pygame.display.flip()
-        continue
+        if game_state == "PAUSED":
+            pygame.display.flip()
+            continue
 
-    # Desenha o Background
-    surface.fill(BLUE)
-    thickness = 10
-    distance = screen_size[0]/8 # espaço entre cada quadrado
-    i = 0
-    while i < 9:
-        pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
-        pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
-        i+=1
-
-    # Desenha o rastro, que cessa quando há uma explosão
-    if yellow.explode == False and blue.explode == False:
+        # Desenha o Background
+        surface.fill(BLUE)
+        thickness = 10
+        distance = screen_size[0]/8 # espaço entre cada quadrado
         i = 0
-        if len(blue.trace) >= 2:
-            while i < len(blue.trace):
-                pygame.draw.circle(surface, BLUE_ICE, blue.trace[i], 6)
-                i+=1
-        i = 0
-        if len(yellow.trace) >= 2:
-            while i < len(yellow.trace):
-                pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
-                i+=1
-            
-    sprites.draw(surface) # desenha as sprites
+        while i < 9:
+            pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
+            pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
+            i+=1
 
-    # Atualiza a posição da moto e rastro
-    yellow.update(time)
-    blue.update(time)
+        # Desenha o rastro, que cessa quando há uma explosão
+        if yellow.explode == False and blue.explode == False:
+            i = 0
+            if len(blue.trace) >= 2:
+                while i < len(blue.trace):
+                    pygame.draw.circle(surface, BLUE_ICE, blue.trace[i], 6)
+                    i+=1
+            i = 0
+            if len(yellow.trace) >= 2:
+                while i < len(yellow.trace):
+                    pygame.draw.circle(surface, YELLOW_GOLD, yellow.trace[i], 6)
+                    i+=1
+                
+        sprites.draw(surface) # desenha as sprites
 
-    # Verifica se houve colisão
-    if yellow.explode:
-        b_score += 1
-        game = False
-    if blue.explode:
-        y_score += 1
-        game = False
-    for t in blue.trace:
-        if yellow.rect.collidepoint(t):
-            derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
-            derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
-            surface.blit(derezzed_visual, yellow.rect.center)
-            yellow.kill()
+        # Atualiza a posição da moto e rastro
+        yellow.update(time)
+        blue.update(time)
+
+        # Verifica se houve colisão
+        if yellow.explode:
             b_score += 1
             game = False
-            break
-    for t in yellow.trace:
-        if blue.rect.collidepoint(t):
-            derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
-            derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
-            surface.blit(derezzed_visual, blue.rect.center)
-            blue.kill()
+        if blue.explode:
             y_score += 1
             game = False
-            break
-    if pygame.sprite.collide_mask(blue,yellow) != None:
-        yellow.kill()
-        blue.kill()
-        game = False
+        for t in blue.trace:
+            if yellow.rect.collidepoint(t):
+                derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
+                derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
+                surface.blit(derezzed_visual, yellow.rect.center)
+                yellow.kill()
+                b_score += 1
+                game = False
+                break
+        for t in yellow.trace:
+            if blue.rect.collidepoint(t):
+                derezzed_visual = pygame.image.load('SPRITES/VFX DEREZZED EXPLOSION.png').convert_alpha()
+                derezzed_visual = pygame.transform.scale(derezzed_visual, (80, 80))
+                surface.blit(derezzed_visual, blue.rect.center)
+                blue.kill()
+                y_score += 1
+                game = False
+                break
+        if pygame.sprite.collide_mask(blue,yellow) != None:
+            yellow.kill()
+            blue.kill()
+            game = False
 
-    if (b_score == False or y_score == False) and stop_sound == True:
-        derezzed_sound = pygame.mixer.Sound('AUDIO/DerezzedFX.ogg')
-        derezzed_sound.set_volume(0.08)
-        derezzed_sound.play()
-        stop_sound = False
+        if (b_score == False or y_score == False) and stop_sound == True:
+            derezzed_sound = pygame.mixer.Sound('AUDIO/DerezzedFX.ogg')
+            derezzed_sound.set_volume(0.08)
+            derezzed_sound.play()
+            stop_sound = False
 
-    score(y_score, b_score, surface)
+        score(y_score, b_score, surface)
 
-    pygame.display.update() # atualiza o display
-
-# while boss_ticket:
-#     a=0
+        pygame.display.update() # atualiza o display
