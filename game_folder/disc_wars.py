@@ -20,7 +20,7 @@ class Disk(pygame.sprite.Sprite):
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
             self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
-            self.rect = pygame.Rect(rect[0], rect[1]+20, 31, 28)
+            self.rect = pygame.Rect(rect[0]+31, rect[1]+20, 31, 28)
         self.set_velocity(self.angle_list[angle_index][0], self.angle_list[angle_index][1])
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -111,6 +111,14 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.y < 0:
             self.rect.y = 0
 
+def score(y_score, b_score, surface):
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text = font.render("Placar TRON: {}".format(b_score), True, BLUE_ICE)
+    surface.blit(text, (10,7))
+    font1 = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text1 = font1.render("Placar CLU: {}".format(y_score), True, YELLOW_GOLD)
+    surface.blit(text1, (10,30))
+
 pygame.init()  # inicializa as rotinas do PyGame
 screen_size = (800,800) # Largura e altura da tela
 page_title = "Batalha de Discos" # Define o nome desta página
@@ -133,13 +141,11 @@ pressed_yellow = False
 y_score = 0
 b_score = 0
 angle_index = 0
+sub_angle_index = 0
 v=0.2
 angle_list_1 = [(v,-v), (v,-v/2), (v,0), (v,v/2), (v,v)]
 angle_list_2 = [(-v,-v), (-v,-v/2), (-v,0), (-v,v/2), (-v,v)]
 
-
-# variáveis de fonte
-font_standart = pygame.font.Font(pygame.font.get_default_font(), 40)
 
 while True:
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
@@ -179,7 +185,10 @@ while True:
         end_pos1 = ((list(yellow.rect.center)[0] + v_15_[0]),(list(yellow.rect.center)[1] + v_15_[1]))
         pygame.draw.line(surface, WHITE, yellow.rect.center, end_pos1, 5)
 
-    angle_index += 1
+    sub_angle_index += 1
+    if sub_angle_index == 12:
+        sub_angle_index = 0
+        angle_index += 1
     if angle_index > 4:
         angle_index = 0
 
@@ -191,7 +200,6 @@ while True:
         if pygame.sprite.collide_mask(yellow,y_disk) != None:
             y_disk.kill()
             y_disk_alive = False    
-            print("amarelo")
         if pygame.sprite.collide_mask(blue,y_disk) != None:
             y_score += 1
             blue.kill()
@@ -207,5 +215,5 @@ while True:
             yellow = Player(sprites, "yellow")
 
     sprites.draw(surface)
-
+    score(y_score, b_score, surface)
     pygame.display.update()
