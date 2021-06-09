@@ -249,22 +249,26 @@ def show_score(stop_blue,stop_yellow):
 
 ##############################################################################
 
-diskOrange_dir = 'SPRITES_BOSS/disk_orange.png'
-diskBlue_dir = 'SPRITES_BOSS/disk_blue.png'
-tronDISKregular_dir = 'SPRITES_BOSS/normal_com_disco.png'
-tronDISKcrouched_dir = 'SPRITES_BOSS/agachado_com_disco.png'
-tronNOregular_dir = 'SPRITES_BOSS/normal_sem_disco.png'
+YELLOWdisk_dir = 'SPRITES_BOSS/disk_orange.png'
+BLUEdisk_dir = 'SPRITES_BOSS/disk_blue.png'
+tronREGULAR_dir = 'SPRITES_BOSS/normal_sem_disco.png'
+tronCROUCHED_dir = 'SPRITES_BOSS/agachado.png'
 tronDEREZZED1_dir = 'SPRITES_BOSS/desfazendo_1.png'
 tronDEREZZED2_dir = 'SPRITES_BOSS/desfazendo_2.png'
-windEFFECT_dir = 'SPRITES_BOSS/vento.png'
-cluwDISK_dir = 'SPRITES_BOSS/boss_com_disco.png'
-cluwoDISK_dir = 'SPRITES_BOSS/boss_sem_disco.png'
+wind_dir = 'SPRITES_BOSS/vento.png'
+clu_dir = 'SPRITES_BOSS/boss_sem_disco.png'
 
 
-class orangeDisk(pygame.sprite.Sprite):
-    def __init__(self, group):
+class Disk_BF(pygame.sprite.Sprite):
+    def __init__(self, group, colour):
         super().__init__(group)
-        self.image = pygame.image.load(diskOrange_dir).convert_alpha()
+        self.colour = colour
+        if self.colour == "yellow":
+            self.image = pygame.image.load(YELLOWdisk_dir).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (31,28))
+        if self.colour == "blue":
+            self.image = pygame.image.load(BLUEdisk_dir).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (31,28))
         self.image = pygame.transform.scale(self.image, (200,200))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
