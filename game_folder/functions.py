@@ -284,7 +284,8 @@ class Disk_BF(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
 
     def update(self, time):
-        self.rect.midbottom += self.velocity * time
+        print(self.rect.midbottom)
+        self.rect.center += self.velocity * time
 
 class CLU_BF(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -302,7 +303,7 @@ class TRON_BF(pygame.sprite.Sprite):
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
         self.i = pygame.image.load(tronDUCK_dir).convert_alpha()
-        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
+        self.i = pygame.transform.scale(self.i, (40,60)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
         self.i = pygame.image.load(tronDEREZZED1_dir).convert_alpha()
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
@@ -312,13 +313,15 @@ class TRON_BF(pygame.sprite.Sprite):
         self.images.append(self.i)
         self.image = self.images[0]
         self.rect = pygame.Rect(150, 535, 40, 90) # TODO: testar valores
-        self.midbottom = self.rect.midbottom
+        self.og_x = self.rect.x
+        self.og_y = self.rect.y
         self.mask = pygame.mask.from_surface(self.image)
         self.state = "STANDING"
-        self.gravity = pygame.math.Vector2(0, 3) # TODO: testar valores
+        self.gravity = pygame.math.Vector2(0, 0.3) # TODO: testar valores
 
     def set_position(self, x, y):
-        self.rect.midbottom = pygame.math.Vector2(x, y)
+        self.rect.x = x
+        self.rect.y = y
     
     def set_velocity(self, vx, vy):
         """Define a velocidade
@@ -329,19 +332,20 @@ class TRON_BF(pygame.sprite.Sprite):
     def stand(self):
         self.state = "STANDING"
         self.image = self.images[0]
-        self.set_position(self.midbottom[0], self.midbottom[1]) # TODO: testar valore
+        self.set_position(self.og_x, self.og_y) # TODO: testar valores
+        self.set_velocity(0,0)
         self.mask = pygame.mask.from_surface(self.image)
 
     def duck(self):
         self.state = "DUCKING"
+        self.set_position(self.og_x, self.og_y+30) # TODO: testar valores
         self.image = self.images[1]
-        self.set_position(self.midbottom[0], self.midbottom[1]) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
     
     def jump(self):
         if self.state == "STANDING":
             self.state = "JUMPING"
-            self.set_velocity(0,-30) # TODO: testar valores
+            self.set_velocity(0,-3) # TODO: testar valores
     
     def derezzed(self, sprite_name):
         self.image = self.images[2]
@@ -352,8 +356,7 @@ class TRON_BF(pygame.sprite.Sprite):
 
     def update(self, time):
         if self.rect.midbottom == (150,535) and self.state == "JUMPING":
-            self.set_velocity(0,0)
-            self.state = "STANDING"
+            self.stand()
         if self.state == "JUMPING":
             self.velocity += self.gravity
             self.rect.midbottom += self.velocity * time
