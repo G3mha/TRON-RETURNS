@@ -286,46 +286,13 @@ class Disk_BF(pygame.sprite.Sprite):
     def update(self, time):
         self.rect.center += self.velocity * time
 
-class blueDisk(pygame.sprite.Sprite):
+class CLU_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
-        self.image = pygame.image.load(diskBlue_dir).convert_alpha()
-        self.rect = pygame.Rect(6,6,40,40) # respectivamente posição x, posição y, largura e altura TODO: mudar valores
-        self.mask = pygame.mask.from_surface(self.image)
-        self.set_position(400,200) # TODO: mudar para um valor fixo
-        self.set_velocity(-0.2,0) # TODO: mudar para um valor fixo
-    
-    def set_position(self, x, y):
-        self.rect.center = pygame.math.Vector2(x, y)
-    
-    def set_velocity(self, vx, vy):
-        """Define a velocidade
-        vx: velocidade no eixo x
-        vy: velocidade no eixo y"""
-        self.velocity = pygame.math.Vector2(vx, vy)
-
-    def update(self, time):
-        self.rect.center += self.velocity * time
-
-class CLU(pygame.sprite.Sprite):
-    def __init__(self, group):
-        super().__init__(group)
-        self.images = []
-        self.images.append(pygame.image.load(cluwDISK_dir).convert_alpha())
-        self.images.append(pygame.image.load(cluwoDISK_dir).convert_alpha())
-        self.index = 0
+        self.image = pygame.image.load(clu_dir).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (40,90)) # TODO: mudar para um valor fixo
         self.image = self.images[self.index]
-        self.rect = pygame.Rect(6,6,150,150) # respectivamente posição x, posição y, largura e altura TODO: mudar valores
-        self.mask = pygame.mask.from_surface(self.image)
-
-    def standing(self):
-        self.index = 0
-        self.image = self.images[self.index]
-        self.mask = pygame.mask.from_surface(self.image)
-    
-    def launch_disk(self):
-        self.index = 1
-        self.image = self.images[self.index]
+        self.rect = pygame.Rect(600, 535, 40, 90) # TODO: testar valores ()
         self.mask = pygame.mask.from_surface(self.image)
 
 class TRON(pygame.sprite.Sprite):
