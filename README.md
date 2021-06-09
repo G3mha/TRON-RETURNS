@@ -9,4 +9,3 @@ https://hipwallpaper.com/view/quU6SY (SPRITE TRON LIGHTCICLE yellow)
 https://www.deviantart.com/paul-muad-dib/art/TRON-Light-cycle-finished-206191909 (SPRITE TRON LIGHTCICLE blue)
 https://www.youtube.com/watch?v=F4eccPBFEjE (SONG DEREZZED for the lightcicle)
 https://www.dreamstime.com/stock-images-bit-pixel-art-explosion-blue-background-image34995864 (VISUAL FX DEREZZED for explosion)
-<https://teams.microsoft.com/l/message/19:581c0aac95b14f3cb3c50fd25209275a@thread.tacv2/1623262543530?tenantId=6370a6c0-7b90-4709-bd6e-59c28ede833b&amp;groupId=3cde3b37-5bfb-4e05-87d4-2c0302a232ad&amp;parentMessageId=1623257328086&amp;teamName=DESIGN DE SOFTWARE - 1C 2021/1&amp;channelName=Mesa 20&amp;createdTime=1623262543530>
