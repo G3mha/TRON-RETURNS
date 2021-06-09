@@ -27,8 +27,10 @@ surface =  pygame.display.set_mode(screen_size) # Define tela
 class yellowLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
+        self.size_vert = (32,80)
+        self.size_horiz = (80,32)
         self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+        self.image = pygame.transform.scale(self.image, self.size_horiz)
         self.rect = self.image.get_rect()
         self.set_position(400,200)
         self.set_velocity(-0.2,0)
@@ -51,20 +53,20 @@ class yellowLightCicle(pygame.sprite.Sprite):
             position = self.rect.center
             if direction == "UP":
                 self.image = pygame.image.load(DOWNyellow_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(0,0.2) # VALOR TESTE
+                self.image = pygame.transform.scale(self.image, self.size_vert)
+                self.set_velocity(0,0.2)
             if direction == "DOWN":
                 self.image = pygame.image.load(UPyellow_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(0,-0.2) # VALOR TESTE
+                self.image = pygame.transform.scale(self.image, self.size_vert)
+                self.set_velocity(0,-0.2)
             if direction == "LEFT":
                 self.image = pygame.image.load(LEFTyellow_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(-0.2,0) # VALOR TESTE
+                self.image = pygame.transform.scale(self.image, self.size_horiz)
+                self.set_velocity(-0.2,0)
             if direction == "RIGHT":
                 self.image = pygame.image.load(RIGHTyellow_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
-                self.set_velocity(0.2,0) # VALOR TESTE
+                self.image = pygame.transform.scale(self.image, self.size_horiz)
+                self.set_velocity(0.2,0)
             self.rect = self.image.get_rect()
             self.rect.center = position
             self.direction = direction
@@ -98,8 +100,10 @@ class yellowLightCicle(pygame.sprite.Sprite):
 class blueLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
+        self.size_vert = (32,80)
+        self.size_horiz = (80,32)
         self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+        self.image = pygame.transform.scale(self.image, self.size_horiz)
         self.rect = self.image.get_rect()
         self.set_position(100,400)
         self.set_velocity(0.2,0) # VALOR TESTE
@@ -117,19 +121,19 @@ class blueLightCicle(pygame.sprite.Sprite):
             position = self.rect.center
             if direction == "UP":
                 self.image = pygame.image.load(DOWNblue_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.image = pygame.transform.scale(self.image, self.size_vert)
                 self.set_velocity(0,0.2)
             if direction == "DOWN":
                 self.image = pygame.image.load(UPblue_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.image = pygame.transform.scale(self.image, self.size_vert)
                 self.set_velocity(0,-0.2)
             if direction == "LEFT":
                 self.image = pygame.image.load(LEFTblue_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.image = pygame.transform.scale(self.image, self.size_horiz)
                 self.set_velocity(-0.2,0)
             if direction == "RIGHT":
                 self.image = pygame.image.load(RIGHTblue_dir).convert_alpha()
-                self.image = pygame.transform.scale(self.image, (int(self.image.get_width()/5),int(self.image.get_height()/5)))
+                self.image = pygame.transform.scale(self.image, self.size_horiz)
                 self.set_velocity(0.2,0)
             self.rect = self.image.get_rect()
             self.rect.center = position
