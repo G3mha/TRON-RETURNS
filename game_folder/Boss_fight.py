@@ -53,13 +53,15 @@ while True:    #True
                 disk_b_up = True
             if event.key == pygame.K_i and can_y_launch:
                 can_y_launch = False
-                disk_y = Disk_BF(sprites, "yellow", (580,598))
+                disk_y = Disk_BF(sprites, "yellow", (580,538))
+                disk_y_up = True
             if event.key == pygame.K_k and can_y_launch:
                 can_y_launch = False
                 disk_y = Disk_BF(sprites, "yellow", (580,568))
+                disk_y_up = True
             if event.key == pygame.K_m and can_y_launch:
                 can_y_launch = False
-                disk_y = Disk_BF(sprites, "yellow", (580,538))
+                disk_y = Disk_BF(sprites, "yellow", (580,598))
                 disk_y_up = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_s:
