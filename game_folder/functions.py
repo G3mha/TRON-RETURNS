@@ -317,7 +317,8 @@ class TRON_BF(pygame.sprite.Sprite):
         self.og_y = self.rect.y
         self.mask = pygame.mask.from_surface(self.image)
         self.state = "STANDING"
-        self.gravity = pygame.math.Vector2(0, 0.3) # TODO: testar valores
+        self.gravity = pygame.math.Vector2(0, 0.1) # TODO: testar valores
+        self.set_velocity(0,0)
 
     def set_position(self, x, y):
         self.rect.x = x
@@ -343,9 +344,10 @@ class TRON_BF(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
     
     def jump(self):
+        self.jump_rect = self.rect
         if self.state == "STANDING":
             self.state = "JUMPING"
-            self.set_velocity(0,-3) # TODO: testar valores
+            self.set_velocity(0,-1) # TODO: testar valores
     
     def derezzed(self, sprite_name):
         self.image = self.images[2]
@@ -355,7 +357,7 @@ class TRON_BF(pygame.sprite.Sprite):
         sprite_name.kill()
 
     def update(self, time):
-        if self.rect.midbottom == (150,535) and self.state == "JUMPING":
+        if self.velocity == (0,1):
             self.stand()
         if self.state == "JUMPING":
             self.velocity += self.gravity
