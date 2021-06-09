@@ -9,16 +9,9 @@ import sys
 import pygame
 from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score
 
-# Quantidade de vidas até o game_state-over
-not_restart = False
-
-# Estabelece a pasta que contem as sprites.
-derezzedSFX_dir = 'AUDIO/DerezzedFX.ogg'
-derezzedSONG_dir = 'AUDIO/DerezzedSong.ogg'
 
 # Algumas variáveis essenciais para a aplicação
 screen_size = (800,800) # Largura e altura da tela
-page_title = "Corrida de motos" # Define o nome desta página
 
 # Define o código RGB das cores utilizadas
 BLACK = (0,0,0)
@@ -31,16 +24,15 @@ WHITE = (255,255,255)
 b_score = 0
 y_score = 0
 while True:
-    if not_restart == True:
-        break
 
     # Rotina Inicial do jogo
     pygame.init()  # inicializa as rotinas do PyGame
     surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    page_title = "Corrida de motos" # Define o nome desta página
     pygame.display.set_caption(page_title) # título da janela do jogo
 
     # Rotinas de aúdio
-    pygame.mixer.music.load(derezzedSONG_dir)
+    pygame.mixer.music.load('AUDIO/DerezzedSong.ogg')
     pygame.mixer.music.set_volume(0.04)
     pygame.mixer.music.play(-1)
 
@@ -57,8 +49,6 @@ while True:
 
     # Variáveis para regular processos
     stop_sound = True
-    boss_ticket = None
-    restart_now = False
     game_state = "RUNNING"
     game = True
 
@@ -74,13 +64,7 @@ while True:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
                     pygame.quit()
                     sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_n:
-                    not_restart = True
-                    restart_now = True
-                if event.key == pygame.K_y:
-                    not_restart = False
-                    restart_now = True
+            if event.type == pygame.KEYDOWN: 
                 
                 if event.key == pygame.K_LEFT:
                     blue.update_direction("LEFT")
@@ -107,9 +91,7 @@ while True:
                 elif event.key == pygame.K_p:
                     if game_state != "PAUSED":
                         pygame.mixer.music.pause()
-                        pause = font_paused.render("PAUSE", True, BLACK, WHITE)
-                        surface.blit(pause,((surface.get_width()-pause.get_width())/2,
-                                            (surface.get_height()-pause.get_height())/2))
+                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
                         game_state = "PAUSED"
                     else:
                         pygame.mixer.music.unpause()
@@ -128,7 +110,7 @@ while True:
             pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
             pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
             i+=1
-        
+
         # Desenha o rastro, que cessa quando há uma explosão
         if yellow.explode == False and blue.explode == False:
             i = 0
@@ -148,7 +130,7 @@ while True:
         yellow.update(time)
         blue.update(time)
 
-        # Verifica se houve colisão entre a moto e o rastro
+        # Verifica se houve colisão
         if yellow.explode:
             b_score += 1
             game = False
@@ -179,14 +161,14 @@ while True:
             game = False
 
         if (b_score == False or y_score == False) and stop_sound == True:
-            derezzed_sound = pygame.mixer.Sound(derezzedSFX_dir)
+            derezzed_sound = pygame.mixer.Sound('AUDIO/DerezzedFX.ogg')
             derezzed_sound.set_volume(0.08)
             derezzed_sound.play()
             stop_sound = False
 
-        score(b_score, y_score, surface)
+        score(y_score, b_score, surface)
 
         pygame.display.update() # atualiza o display
     
-    while boss_ticket:
-        a=0
+    # while boss_ticket:
+    #     a=0

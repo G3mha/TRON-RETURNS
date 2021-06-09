@@ -221,26 +221,16 @@ def tutorial_screen(surface):
 
 ##############################################################################
 
-YELLOWdisk_dir = 'SPRITES_BOSS/disk_orange.png'
-BLUEdisk_dir = 'SPRITES_BOSS/disk_blue.png'
-tronREGULAR_dir = 'SPRITES_BOSS/normal_sem_disco.png'
-tronDUCK_dir = 'SPRITES_BOSS/agachado.png'
-tronDEREZZED1_dir = 'SPRITES_BOSS/desfazendo_1.png'
-tronDEREZZED2_dir = 'SPRITES_BOSS/desfazendo_2.png'
-wind_dir = 'SPRITES_BOSS/vento.png'
-clu_dir = 'SPRITES_BOSS/boss_sem_disco.png'
-
-
 class Disk_BF(pygame.sprite.Sprite):
     def __init__(self, group, colour, rect):
         super().__init__(group)
         self.colour = colour
         if self.colour == "yellow":
-            self.image = pygame.image.load(YELLOWdisk_dir).convert_alpha()
+            self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
             self.set_velocity(-0.3,0) # TODO: mudar para um valor fixo
         if self.colour == "blue":
-            self.image = pygame.image.load(BLUEdisk_dir).convert_alpha()
+            self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
             self.set_velocity(0.3,0) # TODO: mudar para um valor fixo
         self.mask = pygame.mask.from_surface(self.image)
@@ -261,7 +251,7 @@ class Disk_BF(pygame.sprite.Sprite):
 class CLU_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
-        self.image = pygame.image.load(clu_dir).convert_alpha()
+        self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (40,90)) # TODO: mudar para um valor fixo
         self.rect = pygame.Rect(600, 535, 40, 90) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
@@ -270,16 +260,16 @@ class TRON_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.images = []
-        self.i = pygame.image.load(tronREGULAR_dir).convert_alpha()
+        self.i = pygame.image.load('SPRITES_BOSS/normal_sem_disco.png').convert_alpha()
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
-        self.i = pygame.image.load(tronDUCK_dir).convert_alpha()
+        self.i = pygame.image.load('SPRITES_BOSS/agachado.png').convert_alpha()
         self.i = pygame.transform.scale(self.i, (40,60)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
-        self.i = pygame.image.load(tronDEREZZED1_dir).convert_alpha()
+        self.i = pygame.image.load('SPRITES_BOSS/desfazendo_1.png').convert_alpha()
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
-        self.i = pygame.image.load(tronDEREZZED2_dir).convert_alpha()
+        self.i = pygame.image.load('SPRITES_BOSS/desfazendo_2.png').convert_alpha()
         self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
         self.images.append(self.i)
         self.image = self.images[0]

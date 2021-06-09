@@ -16,6 +16,10 @@ BLUE_ICE = (0,255,251)
 YELLOW_GOLD = (255,215,0)
 WHITE = (255,255,255)
 
+pygame.init() # inicia o pygame
+surface =  pygame.display.set_mode(screen_size) #tamanho tela
+pygame.display.set_caption(PageTitle) # titulo tela
+
 
 sprites = pygame.sprite.Group()
 ydisks = pygame.sprite.Group()
@@ -38,10 +42,6 @@ pygame.time.set_timer(ADD_BDISK, 3000)
 ############################
 # Rotina principal do game #
 ############################
-
-pygame.init() # inicia o pygame
-surface =  pygame.display.set_mode(screen_size) #tamanho tela
-pygame.display.set_caption(PageTitle) # titulo tela
 clock = pygame.time.Clock() #Fps
 while True:    #True
     Time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
@@ -89,15 +89,18 @@ while True:    #True
     tron.update(Time)
     sprites.draw(surface)
     
-    if disk_b_n != 0 and disk_y_n != 0:
+    if disk_b_n != 0 and disk_y_n != 0: # Se a contagem for 0, não faz sentido verificar a colisãom
         if pygame.sprite.collide_mask(disk_b,disk_y) != None:
             disk_b.kill()
+            disk_b_n -= 1
             disk_y.kill()
+            disk_y_n -= 1
 
     if disk_y_n != 0:
         ydisks.update(Time)
         if disk_y.rect.x == 0:
             disk_y.kill()
+            disk_y_n -= 1
         for disky in ydisks.sprites():
             if pygame.sprite.collide_mask(tron,disky) != None:
                 tron.kill()
@@ -106,6 +109,7 @@ while True:    #True
         disk_b.update(Time)
         if disk_b.rect.x == 800:
             disk_b.kill()
+            disk_b_n -= 1
         if pygame.sprite.collide_mask(clu,disk_b) != None:
             print(pygame.sprite.collide_mask(clu,disk_b))
             clu.kill()
