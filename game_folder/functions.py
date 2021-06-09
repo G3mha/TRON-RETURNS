@@ -252,7 +252,7 @@ def show_score(stop_blue,stop_yellow):
 YELLOWdisk_dir = 'SPRITES_BOSS/disk_orange.png'
 BLUEdisk_dir = 'SPRITES_BOSS/disk_blue.png'
 tronREGULAR_dir = 'SPRITES_BOSS/normal_sem_disco.png'
-tronCROUCHED_dir = 'SPRITES_BOSS/agachado.png'
+tronDUCK_dir = 'SPRITES_BOSS/agachado.png'
 tronDEREZZED1_dir = 'SPRITES_BOSS/desfazendo_1.png'
 tronDEREZZED2_dir = 'SPRITES_BOSS/desfazendo_2.png'
 wind_dir = 'SPRITES_BOSS/vento.png'
@@ -292,28 +292,33 @@ class CLU_BF(pygame.sprite.Sprite):
         self.image = pygame.image.load(clu_dir).convert_alpha()
         self.image = pygame.transform.scale(self.image, (40,90)) # TODO: mudar para um valor fixo
         self.image = self.images[self.index]
-        self.rect = pygame.Rect(600, 535, 40, 90) # TODO: testar valores ()
+        self.rect = pygame.Rect(600, 535, 40, 90) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
 
-class TRON(pygame.sprite.Sprite):
+class TRON_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.images = []
-        self.images.append(pygame.image.load(tronDISKregular_dir).convert_alpha())
-        self.images.append(pygame.image.load(tronDISKcrouched_dir).convert_alpha())
-        self.images.append(pygame.image.load(tronNOregular_dir).convert_alpha())
-        self.images.append(pygame.image.load(tronDEREZZED1_dir).convert_alpha())
-        self.images.append(pygame.image.load(tronDEREZZED2_dir).convert_alpha())
-        self.index = 0
-        self.image = self.images[self.index]
-        self.image = pygame.transform.scale(self.image, (200,200))
-        self.rect = self.image.get_rect()
-        self.set_position(75,300)
+        self.i = pygame.image.load(tronREGULAR_dir).convert_alpha()
+        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
+        self.images.append(self.i)
+        self.i = pygame.image.load(tronDUCK_dir).convert_alpha()
+        self.i = pygame.transform.scale(self.i, (25,60)) # TODO: mudar para um valor fixo
+        self.images.append(self.i)
+        self.i = pygame.image.load(tronDEREZZED1_dir).convert_alpha()
+        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
+        self.images.append(self.i)
+        self.i = pygame.image.load(tronDEREZZED2_dir).convert_alpha()
+        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
+        self.images.append(self.i)
+        self.image = self.images[0]
+        self.rect = pygame.Rect(150, 535, 40, 90) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
-        self.index_derezzed = 0
+        self.state = "STANDING"
+        self.gravity = pygame.math.Vector2(0, 3) # TODO: testar valores
 
     def set_position(self, x, y):
-        self.rect.center = pygame.math.Vector2(x, y)
+        self.rect.midbottom = pygame.math.Vector2(x, y)
     
     def set_velocity(self, vx, vy):
         """Define a velocidade
@@ -321,58 +326,34 @@ class TRON(pygame.sprite.Sprite):
         vy: velocidade no eixo y"""
         self.velocity = pygame.math.Vector2(vx, vy)
     
-    def standing(self):
-        self.index = 0
-        self.image = self.images[self.index]
-        self.image = pygame.transform.scale(self.image, (200,200))
-        self.set_position(75,300)
+    def stand(self):
+        self.state = "STANDING"
+        self.image = self.images[0]
+        self.set_position(150,535) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
 
-    def crouch(self):
-        self.index = 1
-        self.image = self.images[self.index]
-        self.image = pygame.transform.scale(self.image, (200,200))
-        self.set_position(75,300)
-        self.mask = pygame.mask.from_surface(self.image)
-
-    def launch_disk(self):
-        self.index = 2
-        self.image = self.images[self.index]
-        self.image = pygame.transform.scale(self.image, (200,200))
-        self.set_position(75,300)
+    def duck(self):
+        self.state = "DUCKING"
+        self.image = self.images[1]
+        self.set_position(150,535) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
     
     def jump(self):
-        self.set_velocity(0,-84)
+        if self.state == "STANDING":
+            self.state = "JUMPING"
+            self.set_velocity(0,-30) # TODO: testar valores
     
+    def derezzed(self, sprite_name):
+        self.image = self.images[2]
+        pygame.time.delay(333)
+        self.image = self.images[3]
+        pygame.time.delay(333)
+        sprite_name.kill()
+
     def update(self, time):
-        if self.rect.center == (75,240):
-            self.set_velocity(0,4)
-        if self.rect.center == (75,300):
+        if self.rect.midbottom == (150,535) and self.state == "JUMPING":
             self.set_velocity(0,0)
-        self.rect.center += self.velocity * time
-
-    def derezzed(self,sprite_name):
-        self.index_derezzed += 1
-        if self.index_derezzed == 3:
-            self.index = 4
-        if self.index_derezzed == 6:
-            self.index_derezzed = 0
-            sprite_name.kill()
-            return True
-        else:
-            self.index = 3
-        self.image = self.images[self.index]
-        self.mask = pygame.mask.from_surface(self.image)
-        return False
-
-
-def recharge_delay(last1):
-    current = pygame.time.get_ticks()
-    if current - last1 > 500: # TODO: verificar se o valor é adequado
-        last = current
-        true_or_false = True
-        return last, true_or_false
-    else:
-        true_or_false = False
-        return last1, true_or_false
+            self.state = "STANDING"
+        if self.state == "JUMPING":
+            self.velocity += self.gravity
+            self.rect.midbottom += self.velocity * time
