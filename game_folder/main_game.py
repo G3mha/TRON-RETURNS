@@ -441,20 +441,20 @@ while True:
                 ydisks.draw(surface)
                 ydisks.update(Time)
                 for disky in ydisks.sprites():
-                    for diskb in bdisks:
+                    for diskb in bdisks.sprites():
                         if disk_b_n != 0: # Se a contagem for 0, não faz sentido verificar a colisão (perde o objeto da colisão)
                             if (pygame.sprite.collide_mask(diskb,disky)) != None:
-                                disk_b.kill()
+                                diskb.kill()
                                 disk_b_n -= 1
                                 disky.kill()
                                 disk_y_n -= 1
-                        if disky.rect.x == 0:
-                            disky.kill()
-                            disk_y_n -= 1
-                        if (pygame.sprite.collide_mask(tron,disky)) != None:
-                            tron.kill()
-                            score_y += 1
-                            tron_died = True
+                    if disky.rect.x == 0:
+                        disky.kill()
+                        disk_y_n -= 1
+                    if (pygame.sprite.collide_mask(tron,disky)) != None:
+                        tron.kill()
+                        score_y += 1
+                        tron_died = True
             if disk_b_n != 0:
                 bdisks.draw(surface)
                 bdisks.update(Time)
