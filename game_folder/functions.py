@@ -101,7 +101,7 @@ class Player(pygame.sprite.Sprite):
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     self.set_velocity(0, self.velocity[1])
 
-    def update(self):
+    def update(self, time):
         self.rect.center = ((self.rect.center[0] + (self.velocity[0] * time)), (self.rect.center[1] + (self.velocity[1] * time)))
         width, height = pygame.display.get_surface().get_size()
         # cria barreira invisível, para que o Jogador não saia da tela

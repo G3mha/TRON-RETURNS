@@ -116,26 +116,26 @@ while game_access == "disc_wars":
                     if event.key == pygame.K_p:
                         if game_state != "PAUSED":
                             pygame.mixer.music.pause()
-                            surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
+                            surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.png').convert_alpha(),(0,0))
                             game_state = "PAUSED"
                         else:
                             pygame.mixer.music.unpause()
                             game_state = "RUNNING"
-                        if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
-                            pressed_blue = True
-                        elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
-                            rect_b = blue.rect.midright
-                            b_disk = Disk(sprites, 'blue', rect_b, angle_index)
-                            b_disk_alive = True
-                            pressed_blue = False
-                        if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
-                            pressed_yellow = True
-                        
-                        elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
-                            rect_y = yellow.rect.midleft
-                            y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
-                            y_disk_alive = True
-                            pressed_yellow = False
+                    if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
+                        pressed_blue = True
+                    elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
+                        rect_b = blue.rect.midright
+                        b_disk = Disk(sprites, 'blue', rect_b, angle_index)
+                        b_disk_alive = True
+                        pressed_blue = False
+                    if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
+                        pressed_yellow = True
+                    
+                    elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
+                        rect_y = yellow.rect.midleft
+                        y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
+                        y_disk_alive = True
+                        pressed_yellow = False
 
             if game_state == "PAUSED":
                 pygame.display.flip()
@@ -158,8 +158,8 @@ while game_access == "disc_wars":
         if angle_index > 4:
             angle_index = 0
 
-        blue.update()
-        yellow.update()
+        blue.update(time)
+        yellow.update(time)
 
         if y_disk_alive == True:
             y_disk.update(time)
@@ -244,7 +244,7 @@ while game_access == "lightcicle_run":
                 elif event.key == pygame.K_p:
                     if game_state != "PAUSED":
                         pygame.mixer.music.pause()
-                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
+                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.png').convert_alpha(),(0,0))
                         game_state = "PAUSED"
                     else:
                         pygame.mixer.music.unpause()
@@ -386,7 +386,7 @@ while game_access == "fastest_disc":
                 if event.key == pygame.K_p:
                     if game_state != "PAUSED":
                         pygame.mixer.music.pause()
-                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
+                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.png').convert_alpha(),(0,0))
                         game_state = "PAUSED"
                     else:
                         pygame.mixer.music.unpause()
@@ -406,24 +406,26 @@ while game_access == "fastest_disc":
 
         surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_boss_fight.jpg').convert_alpha(), (0,0))
 
+        sprites.draw(surface)
+
         score(score_y, score_b, surface)
         tron.update(Time)
-        sprites.draw(surface)
         
-        if disk_b_n != 0 and disk_y_n != 0: # Se a contagem for 0, não faz sentido verificar a colisãom
-            if pygame.sprite.collide_mask(disk_b,disk_y) != None:
-                disk_b.kill()
-                disk_b_n -= 1
-                disk_y.kill()
-                disk_y_n -= 1
 
         if disk_y_n != 0:
             ydisks.update(Time)
-            if disk_y.rect.x == 0:
-                disk_y.kill()
-                disk_y_n -= 1
             for disky in ydisks.sprites():
+                if disk_b_n != 0: # Se a contagem for 0, não faz sentido verificar a colisão (perde o objeto da colisão)
+                    if pygame.sprite.collide_mask(disk_b,disky) != None:
+                        disk_b.kill()
+                        disk_b_n -= 1
+                        disky.kill()
+                        disk_y_n -= 1
+                if disky.rect.x == 0:
+                    disky.kill()
+                    disk_y_n -= 1
                 if pygame.sprite.collide_mask(tron,disky) != None:
+                    print(pygame.sprite.collide_mask(tron,disky))
                     tron.kill()
                     tron_died = True
         if disk_b_n != 0:
@@ -432,7 +434,6 @@ while game_access == "fastest_disc":
                 disk_b.kill()
                 disk_b_n -= 1
             if pygame.sprite.collide_mask(clu,disk_b) != None:
-                print(pygame.sprite.collide_mask(clu,disk_b))
                 clu.kill()
                 clu_died = True
 
