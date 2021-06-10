@@ -4,8 +4,9 @@ Autor: Enricco Gemha
 Data: 18/05/2021
 """
 
-import random
+
 import sys
+from typing import Tuple
 import pygame
 from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score, Disk, Player, Disk_BF, CLU_BF, TRON_BF
 
@@ -72,6 +73,8 @@ pygame.mixer.music.set_volume(0.04)
 pygame.mixer.music.play(-1)
 
 
+y_score = 0
+b_score = 0
 while game_access == "disc_wars":
     screen_size = (800,800) # Largura e altura da tela
     page_title = "Disc Wars" # Define o nome desta página
@@ -92,8 +95,6 @@ while game_access == "disc_wars":
     y_disk_alive = False
     pressed_blue = False
     pressed_yellow = False
-    y_score = 0
-    b_score = 0
     angle_index = 0
     sub_angle_index = 0
     v=0.2
@@ -189,6 +190,8 @@ while game_access == "disc_wars":
 # # Breve tutorial de instruções deste modo de jogo
 # tutorial_screen(surface)
 
+y_score = 0
+b_score = 0
 while game_access == "lightcicle_run":
     screen_size = (800,800) # Largura e altura da tela
     page_title = "Lightcicle Chase" # Define o nome desta página
@@ -323,6 +326,8 @@ while game_access == "lightcicle_run":
 
         pygame.display.update() # atualiza o display
     
+score_y = 0
+score_b = 0
 while game_access == "fastest_disc":
     PageTitle = "The Fastest Disc in the Grid" # Titulo da pagina
     screen_size = (800,800)
@@ -332,6 +337,7 @@ while game_access == "fastest_disc":
 
     sprites = pygame.sprite.Group()
     ydisks = pygame.sprite.Group()
+    bdisks = pygame.sprite.Group()
     clu = CLU_BF(sprites)
     tron = TRON_BF(sprites)
     can_y_launch = True
@@ -340,8 +346,6 @@ while game_access == "fastest_disc":
     disk_b_n = 0
     tron_died = False
     clu_died = False
-    score_y = 0
-    score_b = 0
     game_state = "RUNNING"
 
     ADD_YDISK = pygame.USEREVENT + 1
@@ -366,22 +370,19 @@ while game_access == "fastest_disc":
                     tron.jump()
                 if event.key == pygame.K_d and can_b_launch:
                     can_b_launch = False
-                    disk_b = Disk_BF(sprites, "blue", (170,568))
+                    disk_b = Disk_BF(bdisks, "blue", (170,568))
                     disk_b_n += 1
                 if event.key == pygame.K_i and can_y_launch:
                     can_y_launch = False
-                    disk_y = Disk_BF(sprites, "yellow", (580,538))
-                    ydisks.add(disk_y)
+                    disk_y = Disk_BF(ydisks, "yellow", (580,538))
                     disk_y_n += 1
                 if event.key == pygame.K_k and can_y_launch:
                     can_y_launch = False
-                    disk_y = Disk_BF(sprites, "yellow", (580,568))
-                    ydisks.add(disk_y)
+                    disk_y = Disk_BF(ydisks, "yellow", (580,568))
                     disk_y_n += 1
                 if event.key == pygame.K_m and can_y_launch:
                     can_y_launch = False
-                    disk_y = Disk_BF(sprites, "yellow", (580,598))
-                    ydisks.add(disk_y)
+                    disk_y = Disk_BF(ydisks, "yellow", (580,598))
                     disk_y_n += 1
                 if event.key == pygame.K_p:
                     if game_state != "PAUSED":
@@ -407,16 +408,17 @@ while game_access == "fastest_disc":
         surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_boss_fight.jpg').convert_alpha(), (0,0))
 
         sprites.draw(surface)
+        tron.update(Time)
 
         score(score_y, score_b, surface)
-        tron.update(Time)
         
 
         if disk_y_n != 0:
+            ydisks.draw(surface)
             ydisks.update(Time)
             for disky in ydisks.sprites():
                 if disk_b_n != 0: # Se a contagem for 0, não faz sentido verificar a colisão (perde o objeto da colisão)
-                    if pygame.sprite.collide_mask(disk_b,disky) != None:
+                    if (pygame.sprite.collide_mask(disk_b,disky)) != None:
                         disk_b.kill()
                         disk_b_n -= 1
                         disky.kill()
@@ -424,24 +426,23 @@ while game_access == "fastest_disc":
                 if disky.rect.x == 0:
                     disky.kill()
                     disk_y_n -= 1
-                if pygame.sprite.collide_mask(tron,disky) != None:
-                    print(pygame.sprite.collide_mask(tron,disky))
+                if (pygame.sprite.collide_mask(tron,disky)) != None:
                     tron.kill()
+                    score_y += 1
                     tron_died = True
         if disk_b_n != 0:
-            disk_b.update(Time)
-            if disk_b.rect.x == 800:
-                disk_b.kill()
-                disk_b_n -= 1
-            if pygame.sprite.collide_mask(clu,disk_b) != None:
-                clu.kill()
-                clu_died = True
+            bdisks.draw(surface)
+            bdisks.update(Time)
+            for diskb in bdisks.sprites():
+                if (pygame.sprite.collide_mask(clu,diskb)) != None:
+                    clu.kill()
+                    score_b += 1
+                    clu_died = True
+        
 
         if clu_died:
-            score_b += 1
             break
         if tron_died:
-            score_y += 1
             break
 
         pygame.display.update()
