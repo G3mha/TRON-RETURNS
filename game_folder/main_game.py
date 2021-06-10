@@ -106,8 +106,6 @@ while True:
             break
         while True:
             time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
-            surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_disc_wars.png').convert_alpha(), (0,0))
-            pygame.draw.line(surface, BLUE_ICE, (400,60), (400,800), 5)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     pygame.quit()
@@ -115,40 +113,51 @@ while True:
                 if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                     blue.game_controls(event)
                     yellow.game_controls(event)
+                if event.type == pygame.KEYDOWN:
                     if event.type == pygame.KEYDOWN:
-                        if game_state == "PAUSED" and pygame.key == pygame.K_h:
-                            help(game_access, surface)
-                        if game_state == "PAUSED" and pygame.key == pygame.K_BACKSPACE:
+                        if event.key == pygame.K_BACKSPACE:
                             restart_game = True
-                        if event.key == pygame.K_p:
-                            if game_state != "PAUSED":
-                                pygame.mixer.music.pause()
-                                surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.png').convert_alpha(),(0,0))
-                                game_state = "PAUSED"
-                            else:
-                                pygame.mixer.music.unpause()
-                                game_state = "RUNNING"
-                        if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
-                            pressed_blue = True
-                        elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
-                            rect_b = blue.rect.midright
-                            b_disk = Disk(sprites, 'blue', rect_b, angle_index)
-                            b_disk_alive = True
-                            pressed_blue = False
-                        if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
-                            pressed_yellow = True
-                        
-                        elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
-                            rect_y = yellow.rect.midleft
-                            y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
-                            y_disk_alive = True
-                            pressed_yellow = False
+                            break
+                    if event.key == pygame.K_h:
+                        if game_state != "HELPING":
+                            pygame.mixer.music.pause()
+                            help(game_access, surface)
+                            game_state = "HELPING"
+                        else:
+                            pygame.mixer.music.unpause()
+                            game_state = "RUNNING"
+                    if event.key == pygame.K_p:
+                        if game_state != "PAUSED":
+                            pygame.mixer.music.pause()
+                            surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.png').convert_alpha(),(0,0))
+                            game_state = "PAUSED"
+                        else:
+                            pygame.mixer.music.unpause()
+                            game_state = "RUNNING"
+                    if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
+                        pressed_blue = True
+                    elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
+                        rect_b = blue.rect.midright
+                        b_disk = Disk(sprites, 'blue', rect_b, angle_index)
+                        b_disk_alive = True
+                        pressed_blue = False
+                    if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
+                        pressed_yellow = True
+                    
+                    elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
+                        rect_y = yellow.rect.midleft
+                        y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
+                        y_disk_alive = True
+                        pressed_yellow = False
 
             if restart_game:
                     break
-            if game_state == "PAUSED":
+            if game_state == "PAUSED" or game_state == "HELPING":
                 pygame.display.flip()
                 continue
+
+            surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_disc_wars.png').convert_alpha(), (0,0))
+            pygame.draw.line(surface, BLUE_ICE, (400,60), (400,800), 5)
                                 
             if pressed_blue == True and b_disk_alive != True:
                 v_15 = [int(angle_list_1[angle_index][0]*200), int(angle_list_1[angle_index][1]*200)]
@@ -231,10 +240,17 @@ while True:
                         pygame.quit()
                         sys.exit()
                 if event.type == pygame.KEYDOWN: 
-                    if game_state == "PAUSED" and pygame.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_BACKSPACE:
                         restart_game = True
-                    if game_state == "PAUSED" and pygame.key == pygame.K_h:
-                        help(game_access, surface)
+                        break
+                    if event.key == pygame.K_h:
+                        if game_state != "HELPING":
+                            pygame.mixer.music.pause()
+                            help(game_access, surface)
+                            game_state = "HELPING"
+                        else:
+                            pygame.mixer.music.unpause()
+                            game_state = "RUNNING"
                     if event.key == pygame.K_LEFT:
                         blue.update_direction("LEFT")
                     elif event.key == pygame.K_RIGHT:
@@ -268,7 +284,7 @@ while True:
 
             if restart_game:
                 break
-            if game_state == "PAUSED":
+            if game_state == "PAUSED" or game_state == "HELPING":
                 pygame.display.flip()
                 continue
 
@@ -381,11 +397,17 @@ while True:
                         pygame.quit()
                         sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if game_state == "PAUSED" and pygame.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_BACKSPACE:
                         restart_game = True
                         break
-                    if pygame.key == pygame.K_h:
-                        help(game_access, surface)
+                    if event.key == pygame.K_h:
+                        if game_state != "HELPING":
+                            pygame.mixer.music.pause()
+                            help(game_access, surface)
+                            game_state = "HELPING"
+                        else:
+                            pygame.mixer.music.unpause()
+                            game_state = "RUNNING"
                     if event.key == pygame.K_s:
                         tron.duck()
                     if event.key == pygame.K_w:
@@ -425,8 +447,8 @@ while True:
 
             if restart_game:
                 break
-            if game_state == "PAUSED":
-                pygame.display.flip()
+            if game_state == "PAUSED" or game_state == "HELPING":
+                pygame.display.update()
                 continue
 
             surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_boss_fight.jpg').convert_alpha(), (0,0))
