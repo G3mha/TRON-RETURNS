@@ -6,7 +6,6 @@ Data: 18/05/2021
 
 
 import sys
-from typing import Tuple
 import pygame
 from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score, Disk, Player, Disk_BF, CLU_BF, TRON_BF, help
 
@@ -29,6 +28,11 @@ while True:
     b_score = 0
     y_score = 0
 
+    # Rotinas de aúdio
+    pygame.mixer.music.load('AUDIO/DerezzedSong.ogg')
+    pygame.mixer.music.set_volume(0.04)
+    pygame.mixer.music.play(-1)
+    
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
     pygame.display.set_caption("TRON vs CLU") # título da surface do jogo
     surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
@@ -68,10 +72,6 @@ while True:
                     choose_screen = False
         pygame.display.update()
 
-    # Rotinas de aúdio
-    pygame.mixer.music.load('AUDIO/DerezzedSong.ogg')
-    pygame.mixer.music.set_volume(0.04)
-    pygame.mixer.music.play(-1)
 
 
     y_score = 0
