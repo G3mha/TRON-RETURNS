@@ -7,7 +7,7 @@ Data: 18/05/2021
 import random
 import sys
 import pygame
-from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score
+from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score, Disk, Player
 
 
 # Algumas variáveis essenciais para a aplicação
@@ -71,13 +71,121 @@ pygame.mixer.music.load('AUDIO/DerezzedSong.ogg')
 pygame.mixer.music.set_volume(0.04)
 pygame.mixer.music.play(-1)
 
-# variável que declara o clock do jogo
-clock = pygame.time.Clock()
+
+while game_access == "disc_wars":
+    screen_size = (800,800) # Largura e altura da tela
+    page_title = "Disc Wars" # Define o nome desta página
+    surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    pygame.display.set_caption(page_title) # título da janela do jogo
+
+    # variável que declara o clock do jogo
+    clock = pygame.time.Clock()
+
+    # cria sprite dos Paddles
+    sprites = pygame.sprite.Group()
+    yellow = Player(sprites, "yellow")
+    blue = Player(sprites, "blue")
+
+    # Variáveis para regular processos
+    b_disk_alive = False
+    y_disk_alive = False
+    pressed_blue = False
+    pressed_yellow = False
+    y_score = 0
+    b_score = 0
+    angle_index = 0
+    sub_angle_index = 0
+    v=0.2
+    angle_list_1 = [(v,-v), (v,-v/2), (v,0), (v,v/2), (v,v)]
+    angle_list_2 = [(-v,-v), (-v,-v/2), (-v,0), (-v,v/2), (-v,v)]
+
+
+    while True:
+        time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
+        surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_disc_wars.png').convert_alpha(), (0,0))
+        pygame.draw.line(surface, BLUE_ICE, (400,60), (400,800), 5)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                pygame.quit()
+                sys.exit()
+            if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                blue.game_controls(event)
+                yellow.game_controls(event)
+                if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
+                            pressed_blue = True
+                        elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
+                            rect_b = blue.rect.midright
+                            b_disk = Disk(sprites, 'blue', rect_b, angle_index)
+                            b_disk_alive = True
+                            pressed_blue = False
+                        if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
+                            pressed_yellow = True
+                        
+                        elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
+                            rect_y = yellow.rect.midleft
+                            y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
+                            y_disk_alive = True
+                            pressed_yellow = False
+
+                            
+        if pressed_blue == True and b_disk_alive != True:
+            v_15 = [int(angle_list_1[angle_index][0]*200), int(angle_list_1[angle_index][1]*200)]
+            end_pos = ((list(blue.rect.center)[0] + v_15[0]),(list(blue.rect.center)[1] + v_15[1]))
+            pygame.draw.line(surface, WHITE, blue.rect.center, end_pos, 5)
+
+        if pressed_yellow == True and y_disk_alive != True:
+            v_15_ = [int(angle_list_2[angle_index][0]*200), int(angle_list_2[angle_index][1]*200)]
+            end_pos1 = ((list(yellow.rect.center)[0] + v_15_[0]),(list(yellow.rect.center)[1] + v_15_[1]))
+            pygame.draw.line(surface, WHITE, yellow.rect.center, end_pos1, 5)
+
+        sub_angle_index += 1
+        if sub_angle_index == 12:
+            sub_angle_index = 0
+            angle_index += 1
+        if angle_index > 4:
+            angle_index = 0
+
+        blue.update()
+        yellow.update()
+
+        if y_disk_alive == True:
+            y_disk.update(time)
+            if pygame.sprite.collide_mask(yellow,y_disk) != None:
+                y_disk.kill()
+                y_disk_alive = False    
+            if pygame.sprite.collide_mask(blue,y_disk) != None:
+                y_score += 1
+                blue.kill()
+                blue = Player(sprites, "blue")
+        if b_disk_alive == True:
+            b_disk.update(time)
+            if pygame.sprite.collide_mask(blue,b_disk) != None:
+                b_disk.kill()
+                b_disk_alive = False
+            if pygame.sprite.collide_mask(yellow,b_disk) != None:
+                b_score += 1
+                yellow.kill()
+                yellow = Player(sprites, "yellow")
+
+        sprites.draw(surface)
+        score(y_score, b_score, surface)
+        pygame.display.update()
+
+
 
 # Breve tutorial de instruções deste modo de jogo
 tutorial_screen(surface)
 
 while game_access == "lightcicle_run":
+    screen_size = (800,800) # Largura e altura da tela
+    page_title = "Lightcicle Chase" # Define o nome desta página
+    surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    pygame.display.set_caption(page_title) # título da janela do jogo
+
+    # variável que declara o clock do jogo
+    clock = pygame.time.Clock()
+    
     # cria sprite das Motos
     sprites = pygame.sprite.Group()
     yellow = yellowLightCicle(sprites)
