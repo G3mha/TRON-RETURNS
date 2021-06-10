@@ -13,6 +13,35 @@ pygame.init()
 
 
 class Disk(pygame.sprite.Sprite):
+    """
+    Uma classe usada para representar um disco azul ou amarelo
+
+    ...
+
+    Atributos
+    ----------
+    self.mask : pygame.Mask
+        a máscara da imagem do objeto
+    colour : str
+        a cor do disco
+    self.image : pygame.Image
+        a imagem do objeto
+    self.angle_list : list
+        a lista de velocidades angulares possíveis do objeto
+    self.v : float
+        a variável fria para ser utilizada no self.angle_list, facilitando a manutenção do código
+    self.rect : pygame.Rect
+        a posição e tamanho da imagem do objeto
+    height, width: int
+        respectivamente, a largura e altura da tela 
+
+    Métodos
+    -------
+    set_velocity(self, vx, vy)
+        Define a velocidade do objeto
+    update(self, time)
+        Define a nova posição, utilizando a velocidade e o tempo que passou desde a última chamada
+    """
     def __init__(self, group, colour, rect, angle_index):
         super().__init__(group)
         self.v = 0.2
