@@ -406,6 +406,13 @@ class Disk_BF(pygame.sprite.Sprite):
         self.rect = pygame.Rect(rect[0], rect[1], 31, 28)
     
     def set_position(self, x, y):
+
+        """
+        Parameters
+        ----------
+        midbottom:
+        """
+
         self.rect.midbottom = pygame.math.Vector2(x, y)
     
     def set_velocity(self, vx, vy):
@@ -415,10 +422,25 @@ class Disk_BF(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
 
     def update(self, time):
+        """
+        Parameters
+        ----------
+        rect.center:
+        """
         self.rect.center += self.velocity * time
 
 class CLU_BF(pygame.sprite.Sprite):
+    """
+    Uma class usada para representar o CLU
+    """
     def __init__(self, group):
+
+        """
+        Parameters
+        ----------
+        rect.center:
+        """
+
         super().__init__(group)
         self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (40,90)) # TODO: mudar para um valor fixo
