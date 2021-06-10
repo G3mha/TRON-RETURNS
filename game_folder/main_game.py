@@ -87,6 +87,7 @@ while game_access == "disc_wars":
     blue = Player(sprites, "blue")
 
     # Variáveis para regular processos
+    game_state = "RUNNING"
     b_disk_alive = False
     y_disk_alive = False
     pressed_blue = False
@@ -112,6 +113,14 @@ while game_access == "disc_wars":
                 blue.game_controls(event)
                 yellow.game_controls(event)
                 if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        if game_state != "PAUSED":
+                            pygame.mixer.music.pause()
+                            surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
+                            game_state = "PAUSED"
+                        else:
+                            pygame.mixer.music.unpause()
+                            game_state = "RUNNING"
                         if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
                             pressed_blue = True
                         elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
@@ -128,6 +137,9 @@ while game_access == "disc_wars":
                             y_disk_alive = True
                             pressed_yellow = False
 
+            if game_state == "PAUSED":
+                pygame.display.flip()
+                continue
                             
         if pressed_blue == True and b_disk_alive != True:
             v_15 = [int(angle_list_1[angle_index][0]*200), int(angle_list_1[angle_index][1]*200)]
@@ -174,8 +186,8 @@ while game_access == "disc_wars":
 
 
 
-# Breve tutorial de instruções deste modo de jogo
-tutorial_screen(surface)
+# # Breve tutorial de instruções deste modo de jogo
+# tutorial_screen(surface)
 
 while game_access == "lightcicle_run":
     screen_size = (800,800) # Largura e altura da tela
@@ -311,111 +323,124 @@ while game_access == "lightcicle_run":
 
         pygame.display.update() # atualiza o display
     
-    while game_access == "fastest_disc":
-        PageTitle = "The Fastest Disc in the Grid" # Titulo da pagina
-        screen_size = (800,800)
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
-        pygame.display.set_caption(PageTitle) # título da janela do jogo
+while game_access == "fastest_disc":
+    PageTitle = "The Fastest Disc in the Grid" # Titulo da pagina
+    screen_size = (800,800)
+    surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    pygame.display.set_caption(PageTitle) # título da janela do jogo
 
 
-        sprites = pygame.sprite.Group()
-        ydisks = pygame.sprite.Group()
-        clu = CLU_BF(sprites)
-        tron = TRON_BF(sprites)
-        can_y_launch = True
-        can_b_launch = True
-        disk_y_n = 0
-        disk_b_n = 0
-        tron_died = False
-        clu_died = False
-        score_y = 0
-        score_b = 0
+    sprites = pygame.sprite.Group()
+    ydisks = pygame.sprite.Group()
+    clu = CLU_BF(sprites)
+    tron = TRON_BF(sprites)
+    can_y_launch = True
+    can_b_launch = True
+    disk_y_n = 0
+    disk_b_n = 0
+    tron_died = False
+    clu_died = False
+    score_y = 0
+    score_b = 0
+    game_state = "RUNNING"
 
-        ADD_YDISK = pygame.USEREVENT + 1
-        pygame.time.set_timer(ADD_YDISK, 1000)
-        ADD_BDISK = pygame.USEREVENT
-        pygame.time.set_timer(ADD_BDISK, 3000)
+    ADD_YDISK = pygame.USEREVENT + 1
+    pygame.time.set_timer(ADD_YDISK, 1000)
+    ADD_BDISK = pygame.USEREVENT
+    pygame.time.set_timer(ADD_BDISK, 3000)
 
+    clock = pygame.time.Clock()
 
-        clock = pygame.time.Clock()
+    while True:    #True
+        Time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
+        # Adquire todos os eventos e os testa para casos desejados
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    tron.duck()
+                if event.key == pygame.K_w:
+                    tron.jump()
+                if event.key == pygame.K_d and can_b_launch:
+                    can_b_launch = False
+                    disk_b = Disk_BF(sprites, "blue", (170,568))
+                    disk_b_n += 1
+                if event.key == pygame.K_i and can_y_launch:
+                    can_y_launch = False
+                    disk_y = Disk_BF(sprites, "yellow", (580,538))
+                    ydisks.add(disk_y)
+                    disk_y_n += 1
+                if event.key == pygame.K_k and can_y_launch:
+                    can_y_launch = False
+                    disk_y = Disk_BF(sprites, "yellow", (580,568))
+                    ydisks.add(disk_y)
+                    disk_y_n += 1
+                if event.key == pygame.K_m and can_y_launch:
+                    can_y_launch = False
+                    disk_y = Disk_BF(sprites, "yellow", (580,598))
+                    ydisks.add(disk_y)
+                    disk_y_n += 1
+                if event.key == pygame.K_p:
+                    if game_state != "PAUSED":
+                        pygame.mixer.music.pause()
+                        surface.blit(pygame.image.load('SOLID GAME SCREEN/pause_menu_screen.jpeg').convert_alpha(),(0,0))
+                        game_state = "PAUSED"
+                    else:
+                        pygame.mixer.music.unpause()
+                        game_state = "RUNNING"
 
-        while True:    #True
-            Time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
-            # Adquire todos os eventos e os testa para casos desejados
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE): # quebra o loop
-                        pygame.quit()
-                        sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_s:
-                        tron.duck()
-                    if event.key == pygame.K_w:
-                        tron.jump()
-                    if event.key == pygame.K_d and can_b_launch:
-                        can_b_launch = False
-                        disk_b = Disk_BF(sprites, "blue", (170,568))
-                        disk_b_n += 1
-                    if event.key == pygame.K_i and can_y_launch:
-                        can_y_launch = False
-                        disk_y = Disk_BF(sprites, "yellow", (580,538))
-                        ydisks.add(disk_y)
-                        disk_y_n += 1
-                    if event.key == pygame.K_k and can_y_launch:
-                        can_y_launch = False
-                        disk_y = Disk_BF(sprites, "yellow", (580,568))
-                        ydisks.add(disk_y)
-                        disk_y_n += 1
-                    if event.key == pygame.K_m and can_y_launch:
-                        can_y_launch = False
-                        disk_y = Disk_BF(sprites, "yellow", (580,598))
-                        ydisks.add(disk_y)
-                        disk_y_n += 1
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_s:
-                        tron.stand()
-                if event.type == ADD_BDISK:
-                    can_b_launch = True
-                if event.type == ADD_YDISK:
-                    can_y_launch = True
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_s:
+                    tron.stand()
+            if event.type == ADD_BDISK:
+                can_b_launch = True
+            if event.type == ADD_YDISK:
+                can_y_launch = True
 
-            surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_boss_fight.jpg').convert_alpha(), (0,0))
+        if game_state == "PAUSED":
+            pygame.display.flip()
+            continue
 
-            score(score_y, score_b, surface)
-            tron.update(Time)
-            sprites.draw(surface)
-            
-            if disk_b_n != 0 and disk_y_n != 0: # Se a contagem for 0, não faz sentido verificar a colisãom
-                if pygame.sprite.collide_mask(disk_b,disk_y) != None:
-                    disk_b.kill()
-                    disk_b_n -= 1
-                    disk_y.kill()
-                    disk_y_n -= 1
+        surface.blit(pygame.image.load('SPRITES_BOSS/wallpaper_boss_fight.jpg').convert_alpha(), (0,0))
 
-            if disk_y_n != 0:
-                ydisks.update(Time)
-                if disk_y.rect.x == 0:
-                    disk_y.kill()
-                    disk_y_n -= 1
-                for disky in ydisks.sprites():
-                    if pygame.sprite.collide_mask(tron,disky) != None:
-                        tron.kill()
-                        tron_died = True
-            if disk_b_n != 0:
-                disk_b.update(Time)
-                if disk_b.rect.x == 800:
-                    disk_b.kill()
-                    disk_b_n -= 1
-                if pygame.sprite.collide_mask(clu,disk_b) != None:
-                    print(pygame.sprite.collide_mask(clu,disk_b))
-                    clu.kill()
-                    clu_died = True
+        score(score_y, score_b, surface)
+        tron.update(Time)
+        sprites.draw(surface)
+        
+        if disk_b_n != 0 and disk_y_n != 0: # Se a contagem for 0, não faz sentido verificar a colisãom
+            if pygame.sprite.collide_mask(disk_b,disk_y) != None:
+                disk_b.kill()
+                disk_b_n -= 1
+                disk_y.kill()
+                disk_y_n -= 1
 
-            if clu_died:
-                score_b += 1
-                break
-            if tron_died:
-                score_y += 1
-                break
+        if disk_y_n != 0:
+            ydisks.update(Time)
+            if disk_y.rect.x == 0:
+                disk_y.kill()
+                disk_y_n -= 1
+            for disky in ydisks.sprites():
+                if pygame.sprite.collide_mask(tron,disky) != None:
+                    tron.kill()
+                    tron_died = True
+        if disk_b_n != 0:
+            disk_b.update(Time)
+            if disk_b.rect.x == 800:
+                disk_b.kill()
+                disk_b_n -= 1
+            if pygame.sprite.collide_mask(clu,disk_b) != None:
+                print(pygame.sprite.collide_mask(clu,disk_b))
+                clu.kill()
+                clu_died = True
 
-            pygame.display.update()
+        if clu_died:
+            score_b += 1
+            break
+        if tron_died:
+            score_y += 1
+            break
+
+        pygame.display.update()

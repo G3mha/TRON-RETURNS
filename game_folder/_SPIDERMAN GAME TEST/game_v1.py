@@ -184,3 +184,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+if game_state == "PAUSED"
