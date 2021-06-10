@@ -348,7 +348,21 @@ def tutorial_screen(surface):
 ##############################################################################
 
 class Disk_BF(pygame.sprite.Sprite):
+     """
+    Uma class usada para representar od dois discos
+    """
     def __init__(self, group, colour, rect):
+        """
+        Parameters
+        ----------
+        image:
+
+        velocity:
+
+        mask:
+        """
+
+
         super().__init__(group)
         self.colour = colour
         if self.colour == "yellow":
