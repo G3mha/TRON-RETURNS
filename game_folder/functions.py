@@ -348,6 +348,13 @@ class Disk_BF(pygame.sprite.Sprite):
         self.rect = pygame.Rect(rect[0], rect[1], 31, 28)
     
     def set_position(self, x, y):
+
+        """
+        Parameters
+        ----------
+        midbottom:
+        """
+
         self.rect.midbottom = pygame.math.Vector2(x, y)
     
     def set_velocity(self, vx, vy):
