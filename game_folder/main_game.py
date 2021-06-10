@@ -30,7 +30,7 @@ while True:
 
     # Rotinas de aúdio
     pygame.mixer.music.load('AUDIO/DerezzedSong.ogg')
-    pygame.mixer.music.set_volume(0.04)
+    pygame.mixer.music.set_volume(0.4)
     pygame.mixer.music.play(-1)
     
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
