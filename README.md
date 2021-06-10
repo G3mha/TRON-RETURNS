@@ -5,6 +5,7 @@ Sprites, backgrounds, telas estaticas, desenhados por por Enricco Gemha atravez 
 
 Rascunhos e algumas iterações do projeto podem ser encontradas na pasta "Rascunhos", sendo resultado de multiplas discuções e troca de informações entre os membros do grupo
 
+link video: https://youtu.be/EX758f9ydiY
 
 fontes: 
 https://hipwallpaper.com/view/quU6SY (SPRITE TRON LIGHTCICLE yellow)
