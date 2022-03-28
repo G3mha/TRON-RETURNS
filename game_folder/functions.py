@@ -212,26 +212,17 @@ class yellowLightCicle(pygame.sprite.Sprite):
             self.explode = True
 
     def slow_down(self):
-        if self.direction == "UP":
-            if self.velocity == (0,0.2):
-                self.set_velocity(0,0.1)
-            elif self.velocity == (0,0.1):
-                self.set_velocity(0,0.2)
-        if self.direction == "DOWN":
-            if self.velocity == (0,-0.2):
-                self.set_velocity(0,-0.1)
-            elif self.velocity == (0,-0.1):
-                self.set_velocity(0,-0.2)
-        if self.direction == "LEFT":
-            if self.velocity == (-0.2,0):
-                self.set_velocity(-0.1,0)
-            elif self.velocity == (-0.1,0):
-                self.set_velocity(-0.2,0)
-        if self.direction == "RIGHT":
-            if self.velocity == (0.2,0):
-                self.set_velocity(0.1,0)
-            elif self.velocity == (0.1,0):
-                self.set_velocity(0.2,0)
+        vel_fast, vel_low = 0.2, 0.1
+        if self.direction == "DOWN" or self.direction == "LEFT":
+            vel_fast, vel_low = -vel_fast, -vel_low
+        vel_new = []
+        for vel in self.velocity:
+            if vel == vel_fast:
+                vel = vel_low
+            elif vel == vel_low:
+                vel = vel_fast
+            vel_new.append(vel)
+        self.velocity = tuple(vel_new)
 
 class blueLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -292,26 +283,17 @@ class blueLightCicle(pygame.sprite.Sprite):
             self.explode = True
     
     def slow_down(self):
-        if self.direction == "UP":
-            if self.velocity == (0,0.2):
-                self.set_velocity(0,0.1)
-            elif self.velocity == (0,0.1):
-                self.set_velocity(0,0.2)
-        if self.direction == "DOWN":
-            if self.velocity == (0,-0.2):
-                self.set_velocity(0,-0.1)
-            elif self.velocity == (0,-0.1):
-                self.set_velocity(0,-0.2)
-        if self.direction == "LEFT":
-            if self.velocity == (-0.2,0):
-                self.set_velocity(-0.1,0)
-            elif self.velocity == (-0.1,0):
-                self.set_velocity(-0.2,0)
-        if self.direction == "RIGHT":
-            if self.velocity == (0.2,0):
-                self.set_velocity(0.1,0)
-            elif self.velocity == (0.1,0):
-                self.set_velocity(0.2,0)
+        vel_fast, vel_low = 0.2, 0.1
+        if self.direction == "DOWN" or self.direction == "LEFT":
+            vel_fast, vel_low = -vel_fast, -vel_low
+        vel_new = []
+        for vel in self.velocity:
+            if vel == vel_fast:
+                vel = vel_low
+            elif vel == vel_low:
+                vel = vel_fast
+            vel_new.append(vel)
+        self.velocity = tuple(vel_new)
 
 def tutorial_screen(surface):
     line_text = [
