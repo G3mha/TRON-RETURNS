@@ -451,18 +451,11 @@ class TRON_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.images = []
-        self.i = pygame.image.load('SPRITES_BOSS/normal_sem_disco.png').convert_alpha()
-        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
-        self.images.append(self.i)
-        self.i = pygame.image.load('SPRITES_BOSS/agachado.png').convert_alpha()
-        self.i = pygame.transform.scale(self.i, (40,60)) # TODO: mudar para um valor fixo
-        self.images.append(self.i)
-        self.i = pygame.image.load('SPRITES_BOSS/desfazendo_1.png').convert_alpha()
-        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
-        self.images.append(self.i)
-        self.i = pygame.image.load('SPRITES_BOSS/desfazendo_2.png').convert_alpha()
-        self.i = pygame.transform.scale(self.i, (40,90)) # TODO: mudar para um valor fixo
-        self.images.append(self.i)
+        for i in ['SPRITES_BOSS/normal_sem_disco.png', 'SPRITES_BOSS/agachado.png', 'SPRITES_BOSS/desfazendo_1.png', 'SPRITES_BOSS/desfazendo_2.png']:
+            size = (40,90) # height and width
+            if i == 'SPRITES_BOSS/agachado.png':
+                size = (40,60)
+            self.images.append(pygame.transform.scale(pygame.image.load(i).convert_alpha(), size))
         self.image = self.images[0]
         self.rect = pygame.Rect(150, 535, 40, 90) # TODO: testar valores
         self.og_x = self.rect.x
