@@ -19,8 +19,7 @@ def tutorial_screen(surface):
         "Que os jogos começem!"
     ]
     command = "...(pressione ENTER para continuar)"
-    font_instructions = pygame.font.Font(pygame.font.get_default_font(), 20)
-    
+    font_instructions = pygame.font.Font(pygame.font.get_default_font(), 20)    
     for line in line_text:
         command_pressed = True
         while command_pressed:
@@ -38,3 +37,61 @@ def tutorial_screen(surface):
             surface.blit(line_image,(20,100))
             surface.blit(command_image,(20,700))
             pygame.display.flip()
+
+def score(y_score, b_score, surface):
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text = font.render("Placar TRON: {}".format(b_score), True, BLUE_ICE)
+    surface.blit(text, (310,7))
+    font1 = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text1 = font1.render("Placar CLU: {}".format(y_score), True, YELLOW_GOLD)
+    surface.blit(text1, (310,30))
+
+def help(game_access, surface):
+    font = pygame.font.Font(pygame.font.get_default_font(), 18)
+    text=[]
+    text.append("Quais teclas usar ?")
+    text.append("ESC = fechar o jogo")
+    text.append("P = pausar/despausar o jogo")
+    text.append("H = pedir ajuda (quando pausado)")
+    text.append("BACKSPACE = reinicia o jogo (quando pausado)")
+    if game_access == "fastest_disc":
+        text.append("Tron")
+        text.append("W = pula")
+        text.append("S = abaixa")
+        text.append("D = atira disco")
+        text.append("CLU")
+        text.append("I = Atira disco alto")
+        text.append("M = Atira disco baixo")
+        text.append("K = Atira disco central")
+    if game_access == "disc_wars":
+        text.append("Tron")
+        text.append("W = sobe")
+        text.append("S = desce")
+        text.append("D = vai para a direita")
+        text.append("A = vai para a esquerda")
+        text.append("E = atira o disco")
+        text.append("CLU")
+        text.append("seta_cima = sobe")
+        text.append("seta_baixo = desce")
+        text.append("seta_direita = vai para a direita")
+        text.append("seta_esquerda = vai para a esquerda")
+        text.append("ENTER ou RETURN = Atira disco")
+    if game_access == "lightcicle_run":
+        text.append("Tron")
+        text.append("seta_cima = sobe")
+        text.append("seta_baixo = desce")
+        text.append("seta_direita = vai para a direita")
+        text.append("seta_esquerda = vai para a esquerda")
+        text.append("ENTER ou RETURN = Atira disco")
+        text.append("CLU")
+        text.append("W = sobe")
+        text.append("S = desce")
+        text.append("D = vai para a direita")
+        text.append("A = vai para a esquerda")
+        text.append("E = atira o disco")
+    surface.fill(BLACK)
+    i=0
+    for t in text:
+        text1 = font.render(t, True, YELLOW_GOLD)
+        surface.blit(text1, (30,(30+20*i)))
+        i+=1
