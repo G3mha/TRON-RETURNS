@@ -7,10 +7,6 @@ from classes_game2 import *
 from functions import *
 
 
-VELOCITY_FAST, VELOCITY_LOW = 0.2, 0.1
-SIZE_HORIZ, SIZE_VERT = (80,32), (32,80)
-
-
 class LightCicle(pygame.sprite.Sprite):
     def __init__(self, group, direction, color, position, velocity):
         super().__init__(group)

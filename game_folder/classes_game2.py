@@ -21,8 +21,6 @@ class Disk(pygame.sprite.Sprite):
         a imagem do objeto
     self.angle_list : list
         a lista de velocidades angulares possíveis do objeto
-    self.v : float
-        a variável fria para ser utilizada no self.angle_list, facilitando a manutenção do código
     self.rect : pygame.Rect
         a posição e tamanho da imagem do objeto
     height, width: int
@@ -36,16 +34,15 @@ class Disk(pygame.sprite.Sprite):
     """
     def __init__(self, group, colour, rect, angle_index):
         super().__init__(group)
-        self.v = 0.2
         if colour == "yellow":
             self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.angle_list = [(-self.v,-self.v), (-self.v,-self.v/2), (-self.v,0), (-self.v,self.v/2), (-self.v,self.v)]
+            self.angle_list = [(-VELOCITY_FAST,-VELOCITY_FAST), (-VELOCITY_FAST,-VELOCITY_FAST/2), (-VELOCITY_FAST,0), (-VELOCITY_FAST,VELOCITY_FAST/2), (-VELOCITY_FAST,VELOCITY_FAST)]
             self.rect = pygame.Rect(rect[0]-31, rect[1]-20, 31, 28)
         if colour == "blue":
             self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
-            self.angle_list = [(self.v,-self.v), (self.v,-self.v/2), (self.v,0), (self.v,self.v/2), (self.v,self.v)]
+            self.angle_list = [(VELOCITY_FAST,-VELOCITY_FAST), (VELOCITY_FAST,-VELOCITY_FAST/2), (VELOCITY_FAST,0), (VELOCITY_FAST,VELOCITY_FAST/2), (VELOCITY_FAST,VELOCITY_FAST)]
             self.rect = pygame.Rect(rect[0]+31, rect[1]+20, 31, 28)
         self.set_velocity(self.angle_list[angle_index][0], self.angle_list[angle_index][1])
         self.mask = pygame.mask.from_surface(self.image)

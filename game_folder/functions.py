@@ -7,8 +7,9 @@ from classes_game2 import *
 from classes_game3 import *
 
 
-# Define o código RGB das cores utilizadas
-BLACK = (0,0,0)
+VELOCITY_FAST, VELOCITY_LOW = 0.2, 0.1
+SIZE_HORIZ, SIZE_VERT = (80,32), (32,80)
+BLACK = (0,0,0) # Define o código RGB das cores utilizadas
 BLUE = (12,12,100)
 BLUE_MIDNIGHT = (0,0,30)
 BLUE_ICE = (0,255,251)
