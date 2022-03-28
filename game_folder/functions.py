@@ -7,6 +7,15 @@ from classes_game2 import *
 from classes_game3 import *
 
 
+# Define o código RGB das cores utilizadas
+BLACK = (0,0,0)
+BLUE = (12,12,100)
+BLUE_MIDNIGHT = (0,0,30)
+BLUE_ICE = (0,255,251)
+WHITE = (255,255,255)
+YELLOW_GOLD = (255,215,0)
+
+
 def tutorial_screen(surface):
     line_text = [
         "Olá programa! Aqui você testará suas habilidades com motos.",

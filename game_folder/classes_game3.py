@@ -7,6 +7,9 @@ from classes_game2 import *
 from functions import *
 
 
+VELOCITY_FAST, VELOCITY_LOW = 0.2, 0.1
+
+
 class yellowLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
@@ -16,7 +19,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, self.size_horiz)
         self.rect = self.image.get_rect()
         self.set_position(400,200)
-        self.set_velocity(-0.2,0)
+        self.set_velocity(-VELOCITY_FAST, 0)
         self.direction = "LEFT"
         self.trace = []
         self.explode = False
@@ -33,24 +36,16 @@ class yellowLightCicle(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
     
     def update_direction(self, direction):
-        if direction != self.direction:
+        if direction != self.direction: # direção mudou
             position = self.rect.center
-            if direction == "UP":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png').convert_alpha()
-                self.image = pygame.transform.scale(self.image, self.size_vert)
-                self.set_velocity(0,0.2)
-            if direction == "DOWN":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png').convert_alpha()
-                self.image = pygame.transform.scale(self.image, self.size_vert)
-                self.set_velocity(0,-0.2)
-            if direction == "LEFT":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowLEFT.png').convert_alpha()
+            position_dict = {"UP":'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowDOWN.png', "DOWN":'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowUP.png', "LEFT":'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowLEFT.png', "RIGHT":'SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png'}
+            velocity_dict = {"UP":[0, VELOCITY_FAST], "DOWN":[0, -VELOCITY_FAST], "LEFT":[-VELOCITY_FAST, 0], "RIGHT":[VELOCITY_FAST, 0]}
+            self.image = pygame.image.load(position_dict[direction]).convert_alpha()
+            if direction == "LEFT" or direction == "RIGHT":
                 self.image = pygame.transform.scale(self.image, self.size_horiz)
-                self.set_velocity(-0.2,0)
-            if direction == "RIGHT":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_yellowRIGHT.png').convert_alpha()
-                self.image = pygame.transform.scale(self.image, self.size_horiz)
-                self.set_velocity(0.2,0)
+            else:
+                self.image = pygame.transform.scale(self.image, self.size_vert)
+            self.set_velocity(velocity_dict[0], velocity_dict[1])
             self.rect = self.image.get_rect()
             self.rect.center = position
             self.direction = direction
@@ -71,7 +66,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
             self.explode = True
 
     def slow_down(self):
-        vel_fast, vel_low = 0.2, 0.1
+        vel_fast, vel_low = VELOCITY_FAST, VELOCITY_LOW
         if self.direction == "DOWN" or self.direction == "LEFT":
             vel_fast, vel_low = -vel_fast, -vel_low
         vel_new = []
@@ -81,7 +76,8 @@ class yellowLightCicle(pygame.sprite.Sprite):
             elif vel == vel_low:
                 vel = vel_fast
             vel_new.append(vel)
-        self.velocity = vel_new
+        self.set_velocity(vel_new[0], vel_new[1])
+
 
 class blueLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -104,24 +100,16 @@ class blueLightCicle(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(vx, vy)
     
     def update_direction(self, direction):
-        if direction != self.direction:
+        if direction != self.direction: # direção mudou
             position = self.rect.center
-            if direction == "UP":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueDOWN.png').convert_alpha()
-                self.image = pygame.transform.scale(self.image, self.size_vert)
-                self.set_velocity(0,0.2)
-            if direction == "DOWN":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueUP.png').convert_alpha()
-                self.image = pygame.transform.scale(self.image, self.size_vert)
-                self.set_velocity(0,-0.2)
-            if direction == "LEFT":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueLEFT.png').convert_alpha()
+            position_dict = {"UP":'SPRITES/SPRITE_TRON_LIGHTCICLE_blueDOWN.png', "DOWN":'SPRITES/SPRITE_TRON_LIGHTCICLE_blueUP.png', "LEFT":'SPRITES/SPRITE_TRON_LIGHTCICLE_blueLEFT.png', "RIGHT":'SPRITES/SPRITE_TRON_LIGHTCICLE_blueRIGHT.png'}
+            velocity_dict = {"UP":[0, VELOCITY_FAST], "DOWN":[0, -VELOCITY_FAST], "LEFT":[-VELOCITY_FAST, 0], "RIGHT":[VELOCITY_FAST, 0]}
+            self.image = pygame.image.load(position_dict[direction]).convert_alpha()
+            if direction == "LEFT" or direction == "RIGHT":
                 self.image = pygame.transform.scale(self.image, self.size_horiz)
-                self.set_velocity(-0.2,0)
-            if direction == "RIGHT":
-                self.image = pygame.image.load('SPRITES/SPRITE_TRON_LIGHTCICLE_blueRIGHT.png').convert_alpha()
-                self.image = pygame.transform.scale(self.image, self.size_horiz)
-                self.set_velocity(0.2,0)
+            else:
+                self.image = pygame.transform.scale(self.image, self.size_vert)
+            self.set_velocity(velocity_dict[0], velocity_dict[1])
             self.rect = self.image.get_rect()
             self.rect.center = position
             self.direction = direction
@@ -143,7 +131,7 @@ class blueLightCicle(pygame.sprite.Sprite):
             self.explode = True
     
     def slow_down(self):
-        vel_fast, vel_low = 0.2, 0.1
+        vel_fast, vel_low = VELOCITY_FAST, VELOCITY_LOW
         if self.direction == "DOWN" or self.direction == "LEFT":
             vel_fast, vel_low = -vel_fast, -vel_low
         vel_new = []
@@ -153,4 +141,4 @@ class blueLightCicle(pygame.sprite.Sprite):
             elif vel == vel_low:
                 vel = vel_fast
             vel_new.append(vel)
-        self.velocity = vel_new
+        self.set_velocity(vel_new[0], vel_new[1])
