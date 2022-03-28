@@ -10,17 +10,18 @@ from functions import *
 VELOCITY_FAST, VELOCITY_LOW = 0.2, 0.1
 SIZE_HORIZ, SIZE_VERT = (80,32), (32,80)
 
+
 class LightCicle(pygame.sprite.Sprite):
     def __init__(self, group, direction, color, position, velocity):
         super().__init__(group)
         self.direction = direction
         self.color = color
-        self.set_velocity(velocity[0], velocity[1])
-        self.set_position(position[0], position[1])
         self.sprite_label = f'SPRITES/SPRITE_TRON_LIGHTCICLE_{self.color}{self.direction}.png'
         self.image = pygame.image.load(self.sprite_label).convert_alpha()
-        self.image = pygame.transform.scale(self.image, self.size_horiz)
+        self.image = pygame.transform.scale(self.image, SIZE_HORIZ)
         self.rect = self.image.get_rect()
+        self.set_velocity(velocity[0], velocity[1])
+        self.set_position(position[0], position[1])
         self.trace = []
         self.explode = False
 
@@ -35,11 +36,11 @@ class LightCicle(pygame.sprite.Sprite):
         """
         self.velocity = pygame.math.Vector2(vx, vy)
 
-    def update_direction(self, direction, color):
+    def update_direction(self, direction):
         if direction != self.direction: # direção mudou
             position = self.rect.center
             velocity_dict = {"UP":[0, VELOCITY_FAST], "DOWN":[0, -VELOCITY_FAST], "LEFT":[-VELOCITY_FAST, 0], "RIGHT":[VELOCITY_FAST, 0]}
-            self.image = pygame.image.load(f'SPRITES/SPRITE_TRON_LIGHTCICLE_{color}{direction}.png').convert_alpha()
+            self.image = pygame.image.load(f'SPRITES/SPRITE_TRON_LIGHTCICLE_{self.color}{direction}.png').convert_alpha()
             if direction == "LEFT" or direction == "RIGHT":
                 self.image = pygame.transform.scale(self.image, SIZE_HORIZ)
             else:
