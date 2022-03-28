@@ -132,16 +132,14 @@ while True:
                     if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
                         pressed_blue = True
                     elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
-                        rect_b = blue.rect.midright
-                        b_disk = Disk(sprites, 'blue', rect_b, angle_index)
+                        b_disk = Disk(sprites, 'blue', blue.rect.midright, angle_index)
                         b_disk_alive = True
                         pressed_blue = False
                     if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
                         pressed_yellow = True
                     
                     elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
-                        rect_y = yellow.rect.midleft
-                        y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
+                        y_disk = Disk(sprites, 'yellow', yellow.rect.midleft, angle_index)
                         y_disk_alive = True
                         pressed_yellow = False
 

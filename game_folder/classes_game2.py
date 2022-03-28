@@ -6,6 +6,7 @@ from classes_game1 import *
 from classes_game3 import *
 from functions import *
 
+SIZE_DISK = (30,28) # tamanho da sprite
 
 class Disk(pygame.sprite.Sprite):
     """
@@ -32,18 +33,13 @@ class Disk(pygame.sprite.Sprite):
     update(self, time)
         Define a nova posição, utilizando a velocidade e o tempo que passou desde a última chamada
     """
-    def __init__(self, group, colour, rect, angle_index):
+    def __init__(self, group, colour, character_rect, angle_index):
         super().__init__(group)
-        if colour == "yellow":
-            self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
-            self.image = pygame.transform.scale(self.image, (31,28))
-            self.angle_list = [(-VELOCITY_FAST,-VELOCITY_FAST), (-VELOCITY_FAST,-VELOCITY_FAST/2), (-VELOCITY_FAST,0), (-VELOCITY_FAST,VELOCITY_FAST/2), (-VELOCITY_FAST,VELOCITY_FAST)]
-            self.rect = pygame.Rect(rect[0]-31, rect[1]-20, 31, 28)
-        if colour == "blue":
-            self.image = pygame.image.load('SPRITES_BOSS/disk_blue.png').convert_alpha()
-            self.image = pygame.transform.scale(self.image, (31,28))
-            self.angle_list = [(VELOCITY_FAST,-VELOCITY_FAST), (VELOCITY_FAST,-VELOCITY_FAST/2), (VELOCITY_FAST,0), (VELOCITY_FAST,VELOCITY_FAST/2), (VELOCITY_FAST,VELOCITY_FAST)]
-            self.rect = pygame.Rect(rect[0]+31, rect[1]+20, 31, 28)
+        self.image = pygame.image.load(f'SPRITES_BOSS/disk_{colour}.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, SIZE_DISK)
+        factor = {"yellow":-1, "blue":1}
+        self.rect = pygame.Rect(character_rect[0]+factor[colour]*SIZE_DISK[0], character_rect[1]+factor[colour]*SIZE_DISK[1], SIZE_DISK[0], SIZE_DISK[1])
+        self.angle_list = [(factor[colour]*VELOCITY_FAST,-VELOCITY_FAST), (factor[colour]*VELOCITY_FAST,-VELOCITY_FAST/2), (factor[colour]*VELOCITY_FAST,0), (factor[colour]*VELOCITY_FAST,VELOCITY_FAST/2), (factor[colour]*VELOCITY_FAST,VELOCITY_FAST)]
         self.set_velocity(self.angle_list[angle_index][0], self.angle_list[angle_index][1])
         self.mask = pygame.mask.from_surface(self.image)
 
