@@ -1,6 +1,7 @@
 import sys
 import pygame
 import random
+import numpy as np
 
 # Define o código RGB das cores utilizadas
 BLACK = (0,0,0)
@@ -197,7 +198,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
             self.direction = direction
 
     def update(self, time):
-        self.rect.center += self.velocity * time
+        self.rect.center = tuple(np.add(self.rect.center, tuple(np.array(self.velocity) * time)))
         self.trace.append(self.rect.center)
         width, height = pygame.display.get_surface().get_size()
         # regula o movimento do disco horizontalmente, para que ele não saia da tela
@@ -222,7 +223,7 @@ class yellowLightCicle(pygame.sprite.Sprite):
             elif vel == vel_low:
                 vel = vel_fast
             vel_new.append(vel)
-        self.velocity = tuple(vel_new)
+        self.velocity = vel_new
 
 class blueLightCicle(pygame.sprite.Sprite):
     def __init__(self, group):
@@ -268,7 +269,8 @@ class blueLightCicle(pygame.sprite.Sprite):
             self.direction = direction
 
     def update(self, time):
-        self.rect.center += self.velocity * time
+        print(self.velocity)
+        self.rect.center = tuple(np.add(self.rect.center, tuple(np.array(self.velocity) * time)))
         self.trace.append(self.rect.center)
         width, height = pygame.display.get_surface().get_size()
         # regula o movimento do disco horizontalmente, para que ele não saia da tela
@@ -293,7 +295,7 @@ class blueLightCicle(pygame.sprite.Sprite):
             elif vel == vel_low:
                 vel = vel_fast
             vel_new.append(vel)
-        self.velocity = tuple(vel_new)
+        self.velocity = vel_new
 
 def tutorial_screen(surface):
     line_text = [

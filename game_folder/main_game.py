@@ -175,7 +175,6 @@ while True:
                 angle_index += 1
             if angle_index > 4:
                 angle_index = 0
-
             blue.update(time)
             yellow.update(time)
 
