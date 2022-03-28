@@ -7,7 +7,11 @@ Data: 18/05/2021
 
 import sys
 import pygame
-from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score, Disk, Player, Disk_BF, CLU_BF, TRON_BF, help
+from classes_game1 import *
+from classes_game2 import *
+from classes_game3 import *
+from functions import *
+
 
 while True:
     restart_game = False
