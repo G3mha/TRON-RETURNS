@@ -214,9 +214,8 @@ while True:
         
         # cria sprite das Motos
         sprites = pygame.sprite.Group()
-        yellow = yellowLightCicle(sprites)
-        blue = blueLightCicle(sprites)
-
+        yellow = LightCicle(sprites, "LEFT", "yellow", (400, 200), (-VELOCITY_FAST, 0))
+        blue = LightCicle(sprites, "RIGHT", "blue", (100, 400), (VELOCITY_FAST, 0))
         # Variáveis para regular processos
         stop_sound = True
         game_state = "RUNNING"
