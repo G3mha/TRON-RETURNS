@@ -85,13 +85,13 @@ class Player(pygame.sprite.Sprite):
         if self.colour == "blue":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
-                    self.set_velocity(self.velocity[0], 0.2)
+                    self.set_velocity(self.velocity[0], VELOCITY_FAST)
                 if event.key == pygame.K_w:
-                    self.set_velocity(self.velocity[0], -0.2)
+                    self.set_velocity(self.velocity[0], -VELOCITY_FAST)
                 if event.key == pygame.K_a:
-                    self.set_velocity(-0.2, self.velocity[1])
+                    self.set_velocity(-VELOCITY_FAST, self.velocity[1])
                 if event.key == pygame.K_d:
-                    self.set_velocity(0.2, self.velocity[1])
+                    self.set_velocity(VELOCITY_FAST, self.velocity[1])
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_s or event.key == pygame.K_w:
                     self.set_velocity(self.velocity[0], 0)
@@ -100,13 +100,13 @@ class Player(pygame.sprite.Sprite):
         if self.colour == "yellow":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
-                    self.set_velocity(self.velocity[0], 0.2)
+                    self.set_velocity(self.velocity[0], VELOCITY_FAST)
                 if event.key == pygame.K_UP:
-                    self.set_velocity(self.velocity[0], -0.2)
+                    self.set_velocity(self.velocity[0], -VELOCITY_FAST)
                 if event.key == pygame.K_LEFT:
-                    self.set_velocity(-0.2, self.velocity[1])
+                    self.set_velocity(-VELOCITY_FAST, self.velocity[1])
                 if event.key == pygame.K_RIGHT:
-                    self.set_velocity(0.2, self.velocity[1])
+                    self.set_velocity(VELOCITY_FAST, self.velocity[1])
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                     self.set_velocity(self.velocity[0], 0)

@@ -91,9 +91,8 @@ while True:
         pressed_yellow = False
         angle_index = 0
         sub_angle_index = 0
-        v=0.2
-        angle_list_1 = [(v,-v), (v,-v/2), (v,0), (v,v/2), (v,v)]
-        angle_list_2 = [(-v,-v), (-v,-v/2), (-v,0), (-v,v/2), (-v,v)]
+        angle_list_1 = [(VELOCITY_FAST,-VELOCITY_FAST), (VELOCITY_FAST,-VELOCITY_FAST/2), (VELOCITY_FAST,0), (VELOCITY_FAST,VELOCITY_FAST/2), (VELOCITY_FAST,VELOCITY_FAST)]
+        angle_list_2 = [(-VELOCITY_FAST,-VELOCITY_FAST), (-VELOCITY_FAST,-VELOCITY_FAST/2), (-VELOCITY_FAST,0), (-VELOCITY_FAST,VELOCITY_FAST/2), (-VELOCITY_FAST,VELOCITY_FAST)]
 
         if restart_game:
             break
