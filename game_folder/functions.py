@@ -7,6 +7,7 @@ from classes_game2 import *
 from classes_game3 import *
 
 
+GRAVITY = pygame.math.Vector2(0, 0.1)
 SIZE_SCREEN = (800,800) # Largura e altura da tela
 VELOCITY_FAST, VELOCITY_LOW = 0.2, 0.1
 SIZE_HORIZ, SIZE_VERT = (80,32), (32,80)

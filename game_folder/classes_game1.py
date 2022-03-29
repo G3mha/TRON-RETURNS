@@ -98,7 +98,7 @@ class CLU_BF(pygame.sprite.Sprite):
         """
 
         super().__init__(group)
-        self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
+        self.image = pygame.image.load('SPRITES_BOSS/sem_disco_yellow.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (40,90)) # TODO: mudar para um valor fixo
         self.rect = pygame.Rect(600, 535, 40, 90) # TODO: testar valores
         self.mask = pygame.mask.from_surface(self.image)
@@ -107,7 +107,7 @@ class TRON_BF(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.images = []
-        for i in ['SPRITES_BOSS/normal_sem_disco.png', 'SPRITES_BOSS/agachado.png', 'SPRITES_BOSS/desfazendo_1.png', 'SPRITES_BOSS/desfazendo_2.png']:
+        for i in ['SPRITES_BOSS/sem_disco_blue.png', 'SPRITES_BOSS/agachado.png', 'SPRITES_BOSS/desfazendo_1.png', 'SPRITES_BOSS/desfazendo_2.png']:
             size = (40,90) # height and width
             if i == 'SPRITES_BOSS/agachado.png':
                 size = (40,60)
@@ -118,7 +118,6 @@ class TRON_BF(pygame.sprite.Sprite):
         self.og_y = self.rect.y
         self.mask = pygame.mask.from_surface(self.image)
         self.state = "STANDING"
-        self.gravity = pygame.math.Vector2(0, 0.1) # TODO: testar valores
         self.set_velocity(0,0)
 
     def set_position(self, x, y):
@@ -161,5 +160,5 @@ class TRON_BF(pygame.sprite.Sprite):
         if self.velocity == (0,1):
             self.stand()
         if self.state == "JUMPING":
-            self.velocity += self.gravity
+            self.velocity += GRAVITY * time
             self.rect.midbottom += self.velocity * time
