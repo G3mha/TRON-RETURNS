@@ -53,7 +53,7 @@ class Disk_BF(pygame.sprite.Sprite):
         super().__init__(group)
         self.colour = colour
         if self.colour == "yellow":
-            self.image = pygame.image.load('SPRITES_BOSS/disk_orange.png').convert_alpha()
+            self.image = pygame.image.load('SPRITES_BOSS/disk_yellow.png').convert_alpha()
             self.image = pygame.transform.scale(self.image, (31,28))
             self.set_velocity(-0.3,0) # TODO: mudar para um valor fixo
         if self.colour == "blue":
@@ -160,5 +160,5 @@ class TRON_BF(pygame.sprite.Sprite):
         if self.velocity == (0,1):
             self.stand()
         if self.state == "JUMPING":
-            self.velocity += GRAVITY * time
+            self.velocity += GRAVITY
             self.rect.midbottom += self.velocity * time
