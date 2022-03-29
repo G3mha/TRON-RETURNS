@@ -6,7 +6,9 @@ from classes_game1 import *
 from classes_game3 import *
 from functions import *
 
-SIZE_DISK = (30,28) # tamanho da sprite
+SIZE_DISK = (30,28) # tamanho da sprite do Disco
+WIDTH_TOON, HEIGHT_TOON = (50,88) # tamanho da sprite do Personagem
+WIDTH_SCREEN, HEIGHT_SCREEN = SIZE_SCREEN
 
 class Disk(pygame.sprite.Sprite):
     """
@@ -68,16 +70,11 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, group, colour):
         super().__init__(group)
         self.colour = colour
-        if colour == "yellow":
-            self.image = pygame.image.load('SPRITES_BOSS/boss_sem_disco.png').convert_alpha()
-            self.image = pygame.transform.scale(self.image, (50,88))
-            self.rect = self.image.get_rect()
-            self.rect.center = (random.randint(500,700),random.randint(100,700))
-        if colour == "blue":
-            self.image = pygame.image.load('SPRITES_BOSS/normal_sem_disco.png').convert_alpha()
-            self.image = pygame.transform.scale(self.image, (50,88))
-            self.rect = self.image.get_rect()
-            self.rect.center = (random.randint(100,300),random.randint(100,700))
+        self.image = pygame.image.load(f'SPRITES_BOSS/sem_disco_{colour}.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (WIDTH_TOON, HEIGHT_TOON))
+        self.rect = self.image.get_rect()
+        position_init = {"yellow":((WIDTH_TOON+(WIDTH_SCREEN/2), WIDTH_SCREEN-WIDTH_TOON), (HEIGHT_TOON, HEIGHT_SCREEN-HEIGHT_TOON)), "blue":((WIDTH_TOON, (WIDTH_SCREEN/2)-WIDTH_TOON), (HEIGHT_TOON, HEIGHT_SCREEN-HEIGHT_TOON))}
+        self.rect.center = (random.randint(position_init[colour][0][0],position_init[colour][0][1]),random.randint(position_init[colour][1][0],position_init[colour][1][1]))
         self.mask = pygame.mask.from_surface(self.image)
         self.set_velocity(0,0)
     

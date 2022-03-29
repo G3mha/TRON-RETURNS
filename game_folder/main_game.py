@@ -16,7 +16,6 @@ from functions import *
 while True:
     restart_game = False
     # Algumas variáveis essenciais para a aplicação
-    screen_size = (800,800) # Largura e altura da tela
     pygame.init()  # inicializa as rotinas do PyGame
     clock = pygame.time.Clock()
 
@@ -30,7 +29,7 @@ while True:
     
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
     pygame.display.set_caption("TRON vs CLU") # título da surface do jogo
-    surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
 
     initial_screen = True
     i=0
@@ -72,9 +71,8 @@ while True:
     y_score = 0
     b_score = 0
     while game_access == "disc_wars":
-        screen_size = (800,800) # Largura e altura da tela
         page_title = "Disc Wars" # Define o nome desta página
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+        surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
         pygame.display.set_caption(page_title) # título da janela do jogo
 
         # variável que declara o clock do jogo
@@ -202,9 +200,8 @@ while True:
     y_score = 0
     b_score = 0
     while game_access == "lightcicle_run":
-        screen_size = (800,800) # Largura e altura da tela
         page_title = "Lightcicle Chase" # Define o nome desta página
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+        surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
         pygame.display.set_caption(page_title) # título da janela do jogo
 
         # variável que declara o clock do jogo
@@ -282,11 +279,11 @@ while True:
             # Desenha o Background
             surface.fill(BLUE)
             thickness = 10
-            distance = screen_size[0]/8 # espaço entre cada quadrado
+            distance = SIZE_SCREEN[0]/8 # espaço entre cada quadrado
             i = 0
             while i < 9:
-                pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
-                pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
+                pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (SIZE_SCREEN[0],(i*distance)), thickness) # Desenha linha horizontal
+                pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),SIZE_SCREEN[0]), thickness) # Desenha linha vertical
                 i+=1
 
             # Desenha o rastro, que cessa quando há uma explosão
@@ -352,8 +349,7 @@ while True:
     score_b = 0
     while game_access == "fastest_disc":
         PageTitle = "The Fastest Disc in the Grid" # Titulo da pagina
-        screen_size = (800,800)
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+        surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
         pygame.display.set_caption(PageTitle) # título da janela do jogo
 
 
