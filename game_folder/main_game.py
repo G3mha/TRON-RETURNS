@@ -7,23 +7,17 @@ Data: 18/05/2021
 
 import sys
 import pygame
-from functions import yellowLightCicle, blueLightCicle, tutorial_screen, score, Disk, Player, Disk_BF, CLU_BF, TRON_BF, help
+from classes_game1 import *
+from classes_game2 import *
+from classes_game3 import *
+from functions import *
+
 
 while True:
     restart_game = False
     # Algumas variáveis essenciais para a aplicação
-    screen_size = (800,800) # Largura e altura da tela
     pygame.init()  # inicializa as rotinas do PyGame
     clock = pygame.time.Clock()
-
-
-    # Define o código RGB das cores utilizadas
-    BLACK = (0,0,0)
-    BLUE_MIDNIGHT = (0,0,30)
-    BLUE = (12,12,100)
-    BLUE_ICE = (0,255,251)
-    YELLOW_GOLD = (255,215,0)
-    WHITE = (255,255,255)
 
     b_score = 0
     y_score = 0
@@ -35,7 +29,7 @@ while True:
     
     time = clock.tick(60) # segura a taxa de quadros em 60 por segundo
     pygame.display.set_caption("TRON vs CLU") # título da surface do jogo
-    surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+    surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
 
     initial_screen = True
     i=0
@@ -77,9 +71,8 @@ while True:
     y_score = 0
     b_score = 0
     while game_access == "disc_wars":
-        screen_size = (800,800) # Largura e altura da tela
         page_title = "Disc Wars" # Define o nome desta página
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+        surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
         pygame.display.set_caption(page_title) # título da janela do jogo
 
         # variável que declara o clock do jogo
@@ -98,9 +91,8 @@ while True:
         pressed_yellow = False
         angle_index = 0
         sub_angle_index = 0
-        v=0.2
-        angle_list_1 = [(v,-v), (v,-v/2), (v,0), (v,v/2), (v,v)]
-        angle_list_2 = [(-v,-v), (-v,-v/2), (-v,0), (-v,v/2), (-v,v)]
+        angle_list_1 = [(VELOCITY_FAST,-VELOCITY_FAST), (VELOCITY_FAST,-VELOCITY_FAST/2), (VELOCITY_FAST,0), (VELOCITY_FAST,VELOCITY_FAST/2), (VELOCITY_FAST,VELOCITY_FAST)]
+        angle_list_2 = [(-VELOCITY_FAST,-VELOCITY_FAST), (-VELOCITY_FAST,-VELOCITY_FAST/2), (-VELOCITY_FAST,0), (-VELOCITY_FAST,VELOCITY_FAST/2), (-VELOCITY_FAST,VELOCITY_FAST)]
 
         if restart_game:
             break
@@ -137,16 +129,14 @@ while True:
                     if event.key == pygame.K_e and not pressed_blue and b_disk_alive != True:
                         pressed_blue = True
                     elif event.key == pygame.K_e and pressed_blue == True and b_disk_alive != True:
-                        rect_b = blue.rect.midright
-                        b_disk = Disk(sprites, 'blue', rect_b, angle_index)
+                        b_disk = Disk(sprites, 'blue', blue.rect.midright, angle_index)
                         b_disk_alive = True
                         pressed_blue = False
                     if event.key == pygame.K_RETURN and not pressed_yellow and y_disk_alive != True:
                         pressed_yellow = True
                     
                     elif event.key == pygame.K_RETURN and pressed_yellow == True and y_disk_alive != True:
-                        rect_y = yellow.rect.midleft
-                        y_disk = Disk(sprites, 'yellow', rect_y, angle_index)
+                        y_disk = Disk(sprites, 'yellow', yellow.rect.midleft, angle_index)
                         y_disk_alive = True
                         pressed_yellow = False
 
@@ -175,7 +165,6 @@ while True:
                 angle_index += 1
             if angle_index > 4:
                 angle_index = 0
-
             blue.update(time)
             yellow.update(time)
 
@@ -210,9 +199,8 @@ while True:
     y_score = 0
     b_score = 0
     while game_access == "lightcicle_run":
-        screen_size = (800,800) # Largura e altura da tela
         page_title = "Lightcicle Chase" # Define o nome desta página
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+        surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
         pygame.display.set_caption(page_title) # título da janela do jogo
 
         # variável que declara o clock do jogo
@@ -220,9 +208,8 @@ while True:
         
         # cria sprite das Motos
         sprites = pygame.sprite.Group()
-        yellow = yellowLightCicle(sprites)
-        blue = blueLightCicle(sprites)
-
+        yellow = LightCicle(sprites, "LEFT", "yellow", (400, 200), (-VELOCITY_FAST, 0))
+        blue = LightCicle(sprites, "RIGHT", "blue", (100, 400), (VELOCITY_FAST, 0))
         # Variáveis para regular processos
         stop_sound = True
         game_state = "RUNNING"
@@ -291,11 +278,11 @@ while True:
             # Desenha o Background
             surface.fill(BLUE)
             thickness = 10
-            distance = screen_size[0]/8 # espaço entre cada quadrado
+            distance = SIZE_SCREEN[0]/8 # espaço entre cada quadrado
             i = 0
             while i < 9:
-                pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (screen_size[0],(i*distance)), thickness) # Desenha linha horizontal
-                pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),screen_size[0]), thickness) # Desenha linha vertical
+                pygame.draw.line(surface, BLUE_MIDNIGHT, (0,(i*distance)), (SIZE_SCREEN[0],(i*distance)), thickness) # Desenha linha horizontal
+                pygame.draw.line(surface, BLUE_MIDNIGHT, ((i*distance),0), ((i*distance),SIZE_SCREEN[0]), thickness) # Desenha linha vertical
                 i+=1
 
             # Desenha o rastro, que cessa quando há uma explosão
@@ -361,8 +348,7 @@ while True:
     score_b = 0
     while game_access == "fastest_disc":
         PageTitle = "The Fastest Disc in the Grid" # Titulo da pagina
-        screen_size = (800,800)
-        surface = pygame.display.set_mode(screen_size) # cria a tela do jogo com tamanho personalizado
+        surface = pygame.display.set_mode(SIZE_SCREEN) # cria a tela do jogo com tamanho personalizado
         pygame.display.set_caption(PageTitle) # título da janela do jogo
 
 
